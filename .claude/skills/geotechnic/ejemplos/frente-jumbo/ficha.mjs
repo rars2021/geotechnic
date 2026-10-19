@@ -17,7 +17,8 @@ export default {
     { id: "progreso", etiqueta: "Avance de la perforación", min: 0, max: 100, paso: 1, valor: 0, salida: "0 %" },
     { id: "vel", etiqueta: "Velocidad de la animación", min: 1, max: 6, paso: 1, valor: 1, salida: "×1" },
     { html: `<label class="geo-control" for="xray"><span>Ver taladros en el macizo</span><input type="checkbox" id="xray" style="justify-self:start"><output></output></label>` },
-    { html: `<label class="geo-control" for="lamina"><span>Lámina (aristas en tinta)</span><input type="checkbox" id="lamina" style="justify-self:start"><output></output></label>` },
+    { html: `<label class="geo-control" for="corte"><span>Corte lateral</span><input type="checkbox" id="corte" checked style="justify-self:start"><output></output></label>` },
+    { html: `<label class="geo-control" for="lamina"><span>Lámina (aristas en tinta)</span><input type="checkbox" id="lamina" checked style="justify-self:start"><output></output></label>` },
   ],
   piezas: [
     { id: "alivios", numero: 1, nombre: "Alivios", definicion: "4 taladros vacíos de 102 mm en el centro: son la cara libre hacia donde rompe el arranque." },
@@ -48,11 +49,14 @@ export default {
   extra: seccionComoSeHizo("jumbo"),
   referencias: {
     abiertas: [
-      abierta("jumbo", "rocket_boomer_e2c_1.jpg", { titulo: "Boomer E2C (dos brazos)", recorte: [0, 0.2, 1, 0.9], vista: { progreso: 0.3, objetivo: [-5.5, 1.9, 0], az: 300, el: 9, dist: 7.5, recorte: [0, 0.2, 1, 0.9] } }),
-      abierta("jumbo", "rocket_boomer_e2c_2.jpg", { titulo: "Boomer E2C, brazos y vigas", recorte: [0, 0.15, 1, 0.95], vista: { objetivo: [-3.5, 2.0, 0], az: 235, el: 7, dist: 6.5, recorte: [0, 0.15, 1, 0.95] } }),
-      abierta("jumbo", "bohrwagen_sprengvortrieb.jpg", { titulo: "Jumbo al aire libre, brazos en alto", recorte: [0, 0.15, 1, 0.8], vista: { galeria: false, progreso: 0.12, objetivo: [-8, 2.0, 0], az: 122, el: 6, dist: 11, recorte: [0, 0.15, 1, 0.85] } }),
-      abierta("jumbo", "natm.jpg", { titulo: "Frente de túnel con jumbo", vista: { objetivo: [-2, 1.9, 0], az: 268, el: 4, dist: 13, progreso: 0.7 } }),
-      abierta("jumbo", "mine_site_3.jpg", { titulo: "Jumbo en el portal de una mina", recorte: [0, 0.35, 1, 0.95], vista: { galeria: false, progreso: 0.12, objetivo: [-6.5, 1.6, 0], az: 98, el: 4, dist: 9.5, recorte: [0, 0.25, 1, 0.9] } }),
+      // la foto muestra el jumbo entero de costado (en un túnel ancho): en la galería de 4 m no cabe, se compara al aire libre
+      abierta("jumbo", "rocket_boomer_e2c_1.jpg", { titulo: "Boomer E2C (dos brazos)", recorte: [0, 0, 1, 1], vista: { galeria: false, progreso: 0.3, objetivo: [-8, 1.6, 0], az: 8, el: 2, dist: 18, recorte: [0.14, 0.36, 0.87, 0.62] } }),
+      // brazos y vigas desde abajo, llenando el cuadro (en la galería, bajo los brazos)
+      abierta("jumbo", "rocket_boomer_e2c_2.jpg", { titulo: "Boomer E2C, brazos y vigas", recorte: [0, 0, 1, 1], vista: { progreso: 0.2, objetivo: [-3.8, 2.4, 0.6], az: 330, el: -28, dist: 2.1, recorte: [0, 0, 1, 1] } }),
+      abierta("jumbo", "bohrwagen_sprengvortrieb.jpg", { titulo: "Jumbo al aire libre, brazos en alto", recorte: [0.3, 0, 1, 0.7], vista: { galeria: false, progreso: 0.12, objetivo: [-8, 2.0, 0], az: 58, el: 6, dist: 9.5, recorte: [0, 0.2, 0.8, 0.8] } }),
+      abierta("jumbo", "natm.jpg", { titulo: "Frente de túnel con jumbo", vista: { objetivo: [-2, 1.9, 0], az: 270, el: 3, dist: 20, progreso: 0.7 } }),
+      // la máquina de costado, grande en el recorte, como en la foto del portal
+      abierta("jumbo", "mine_site_3.jpg", { titulo: "Jumbo en el portal de una mina", recorte: [0, 0.5, 1, 0.95], vista: { galeria: false, progreso: 0.5, objetivo: [-8, 1.6, 0], az: 170, el: 2, dist: 16, recorte: [0.09, 0.4, 0.9, 0.62] } }),
     ],
     estudio: [
       estudio("jumbo", "2021_zanabria_mejia_analisis_del_monitor_p26.jpg"),

@@ -18,6 +18,8 @@ import { colorRoca } from "./volumenes.js";
  *       aspereza: { amplitud (m) por JRC 10, longitud (m) } — rugosidad fina de la cara,
  *       litologia: ["#hex", …], alteracion: [{ f: zona(...), paleta, peso }],
  *       agua: { base (0..1), juntas (0..1), piso (0..1), zonas: [{ f, peso }] }, polvo: { color, fuerza },
+ *       calma (0..1): 0 = como v2; 1 = estudio (color 50 % hacia su gris de luminancia, variación de tono por bloque y
+ *       oscurecido por junta a la mitad; el relieve geométrico no cambia),
  *       fuentes: { familias, ruido, … } (texto de la tabla de fuentes) }
  */
 export function macizo(op = {}) {
@@ -29,7 +31,13 @@ export function macizo(op = {}) {
   const jrc = (op.familias || []).map((f) => f.jrc ?? 8);
   // ondulación de cada plano de junta: desplaza su posición a lo largo de la normal (ruido explícito)
   const ondula = ruido.amplitud > 0 ? (x, y, z, fi) => ruido.amplitud * fbm(nOnd, x / ruido.longitud + fi * 17.3, y / ruido.longitud, z / ruido.longitud, ruido.octavas) : null;
-  const color = colorRoca(op.litologia || ["#7e7a71", "#716d65", "#8a857b"], op.alteracion || [], sem + 5);
+  const color0 = colorRoca(op.litologia || ["#7e7a71", "#716d65", "#8a857b"], op.alteracion || [], sem + 5);
+  // calma de estudio: solo color (la geometría y el contrato no cambian)
+  const calma = clamp(op.calma ?? 0);
+  const color = calma > 0 ? (x, y, z) => {
+    const c = color0(x, y, z), L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+    return mezcla(c, [L, L, L], 0.5 * calma);
+  } : color0;
   const agua = { base: 0.05, juntas: 0.45, piso: 0.55, ...(op.agua || {}) };
   /** Relieve de la cara en (x, y, z): { d (m, negativo = hacia el macizo), dist (a la junta más cercana), familia, tono }. */
   function relieve(x, y, z, amp = 1) {
@@ -50,6 +58,7 @@ export function macizo(op = {}) {
     { metodo: "Ondulación de juntas (ruido fractal)", parametros: `amplitud ${ruido.amplitud} m · longitud de onda ${ruido.longitud} m · ${ruido.octavas} octavas`, fuente: op.fuentes?.ruido || "estimado (parámetro de dibujo)" },
     { metodo: "Aspereza ∝ JRC (Barton)", parametros: `${asp.amplitud} m por JRC 10 · ${asp.longitud} m · JRC ${jrc.join(" / ")}`, fuente: op.fuentes?.jrc || "estimado" },
     { metodo: "Alteración gradacional", parametros: `${(op.alteracion || []).length} zonas con franja de transición`, fuente: op.fuentes?.alteracion || "ilustrativo" },
+    { metodo: "Calma de estudio (solo color)", parametros: `calma ${calma} · color ${Math.round(50 * calma)} % hacia su gris de luminancia · tono por bloque y oscurecido por junta ×${1 - 0.5 * calma}`, fuente: op.fuentes?.calma || "references/estudio.md (pedido v3: dibujo limpio)" },
   ];
-  return { dfn, relieve, color, humedad, ondula, ruido, aspereza: asp, metodologia, op };
+  return { dfn, relieve, color, humedad, ondula, ruido, aspereza: asp, calma, metodologia, op };
 }

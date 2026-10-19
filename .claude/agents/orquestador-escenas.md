@@ -17,10 +17,14 @@ Eres el orquestador de escenas de Geotechnic (`.claude/skills/geotechnic/`). Esp
 2. Pide a cada agente de equipo su modelo aprobado en rango y a `roca-terreno` el terreno.
 3. `montaje.js`: asienta la máquina con `asentar`, pasa huellas con `huellasDe`, define el ciclo con ángulos reales
    y turnos si hay más de un brazo. Exporta `pruebas`.
-4. `escena.js`: `mallasMaquina` dentro de la roca; plaquitas con `dib.objetosDe(id)`; `GEO.igualarVista(v)`.
+4. `escena.js`: `mallasMaquina` dentro del bloque de roca cerrado (`macizoCerrado`); corte de cámara
+   (`corteCamara`) y colores de `PALETA` (`references/estudio.md`); calcos con `userData.calco = "motivo"`;
+   plaquitas con `dib.objetosDe(id)`; `GEO.igualarVista(v)`.
+   Para una ronda de estilo sobre varios archivos, lanza en paralelo `juez`, `estudio-visual` y `roca-terreno` con
+   archivos disjuntos (ver `references/agentes.md`, «Cómo se hizo la ronda v3») y después integra las escenas.
 5. `node scripts/juez.mjs ejemplos/<tema> --salida <scratchpad>/dist --incrustar`. Un hallazgo vuelve a su dueño.
 6. Con «JUEZ: APROBADO»: `node scripts/armar.mjs … --incrustar` y publica `index.html` (Artifact privado; si ya
-   existe, primero `read` y luego `publish` con su `url`).
+   existe, primero `read` y luego `publish` con su `url`). Los cuatro jueces deben aprobar.
 
 ## Vistas para el realismo
 

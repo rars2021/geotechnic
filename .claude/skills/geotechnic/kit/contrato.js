@@ -6,6 +6,7 @@
 //
 // `libre(p)` es la distancia con signo (m) del punto p a la roca: positiva dentro de la labor, negativa dentro del
 // macizo. El juez la usa para «ningún equipo atraviesa la roca»; las cavidades (taladros ya perforados) se exceptúan.
+// Con `caja` (kit/labor.js → cajaBloque, la misma del macizo cerrado), fuera del bloque de roca también es aire.
 import { VA } from "../motorA/modelo.js";
 
 /** Distancia con signo de (z, y) a un polígono cerrado [[z, y], …] (positiva dentro). */
@@ -24,7 +25,8 @@ function distPoligono(pol, z, y) {
 
 /**
  * Terreno de una galería (motor B) para el motor A y el juez.
- * gal: resultado de galeria(); op: { frente: superficieFrente(...) o null, xFrente, cavidades: [{ a, d, largo, r }] }
+ * gal: resultado de galeria(); op: { frente: superficieFrente(...) o null, xFrente, cavidades: [{ a, d, largo, r }],
+ *                                 caja: { min, max } (cajaBloque(gal): fuera de ella libre ≥ 0; sin caja, como v2) }
  */
 export function terrenoGaleria(gal, op = {}) {
   const P = gal.geometria.attributes.position.array;
@@ -37,8 +39,19 @@ export function terrenoGaleria(gal, op = {}) {
   }
   const fila = (x) => filas[Math.max(0, Math.min(nx - 1, Math.round(((x - inicio) / largo) * (nx - 1))))];
   const cavidades = op.cavidades || [];
+  const caja = op.caja || null;
+  /** Distancia con signo a la caja del bloque (positiva fuera). */
+  const fueraCaja = (p) => {
+    let afuera = 0, adentro = -Infinity;
+    for (let q = 0; q < 3; q++) {
+      const c = (caja.min[q] + caja.max[q]) / 2, h = (caja.max[q] - caja.min[q]) / 2, e = Math.abs(p[q] - c) - h;
+      if (e > 0) afuera += e * e;
+      adentro = Math.max(adentro, e);
+    }
+    return afuera > 0 ? Math.sqrt(afuera) : adentro;
+  };
   const T = {
-    gal, cavidades,
+    gal, cavidades, caja,
     /** Polígono (z, y) de la sección en x (con la sobreexcavación real). */
     contorno: (x) => fila(x).pol,
     /** Cota del piso en (x, z): el borde más bajo del contorno que cruza esa z. */
@@ -54,11 +67,12 @@ export function terrenoGaleria(gal, op = {}) {
     },
     /** Superficie del frente x(y, z), o Infinity si la galería no tiene frente. */
     frenteX: (y, z) => (op.frente ? op.frente(y, z).x : Infinity),
-    /** Distancia con signo a la roca (contorno de la sección y frente). */
+    /** Distancia con signo a la roca (contorno de la sección, frente y, si hay, caja del bloque). */
     libre(p) {
       let d = distPoligono(fila(p[0]).pol, p[2], p[1]);
       if (op.frente) d = Math.min(d, op.frente(p[1], p[2]).x - p[0]);
       if (p[0] < inicio) d = Math.min(d, p[0] - inicio + 50); // fuera del tramo dibujado: sin roca hacia atrás
+      if (caja) d = Math.max(d, fueraCaja(p)); // roca = caja ∖ labor: fuera del bloque es aire
       return d;
     },
     /** ¿Está el punto dentro de un taladro ya perforado? (barra y broca pueden entrar ahí) */

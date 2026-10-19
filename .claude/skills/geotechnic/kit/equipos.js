@@ -8,6 +8,7 @@ import * as THREE from "three";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 import { materialPintura, MATERIALES } from "./materiales.js";
+import { sinDegenerados } from "./estudio.js";
 import { azar, ruido3, rgb } from "./nucleo.js";
 
 // ───────── piezas comunes ─────────
@@ -60,10 +61,13 @@ export function baranda(pts, alto, mat, cada = 1.2) {
 
 /**
  * Llanta de minería: banda con tacos en chevrón, flancos redondeados y aro con pernos. Eje de giro: Z.
+ * Sólidos cerrados y orientados (references/estudio.md): el perfil del neumático vuelve por dentro a lo largo del
+ * asiento del aro (radio Ra), y el aro es un disco con espesor, cóncavo a los dos lados. Mismo tamaño exterior (R, W).
  * diam, ancho, aro (diámetro del aro, fracción), tacos (cantidad), surco (profundidad del taco, m).
+ * colorAro: token de PALETA o hex. materiales: { goma, aro, perno } para compartirlos (motor A).
  */
 const _cacheLlanta = new Map();
-export function llanta({ diam = 1.75, ancho = 0.62, aro = 0.56, tacos = 28, surco = 0.05, colorAro = "#d1a227", barro = 0.6 } = {}) {
+export function llanta({ diam = 1.75, ancho = 0.62, aro = 0.56, tacos = 28, surco = 0.05, colorAro = "pintura", barro = 0.6, materiales = null } = {}) {
   const clave = [diam, ancho, aro, tacos, surco].join();
   let geo = _cacheLlanta.get(clave);
   if (!geo) {
@@ -75,14 +79,17 @@ export function llanta({ diam = 1.75, ancho = 0.62, aro = 0.56, tacos = 28, surc
     for (let k = 1; k < 10; k++) pf.push([R, -W + r + ((2 * W - 2 * r) * k) / 10]);
     for (let a = 0; a <= 8; a++) { const t = (a / 8) * (Math.PI / 2); pf.push([R - r + r * Math.cos(t), W - r + r * Math.sin(t)]); }
     pf.push([Ra, W * 0.92]);
+    // vuelta por dentro (asiento del aro) hasta el primer punto: perfil cerrado. El punto repetido corta las normales.
+    pf.push([Ra, W * 0.92], [Ra, 0], [Ra, -W * 0.92]);
     const seg = Math.max(72, tacos * 4);
-    const g = new THREE.LatheGeometry(pf.map(([x, y]) => new THREE.Vector2(x, y)), seg);
+    // el cambio (x, y, z) → (x, z, y) invierte el giro: el perfil va al revés para que la cara delantera mire afuera
+    const g = new THREE.LatheGeometry(pf.reverse().map(([x, y]) => new THREE.Vector2(x, y)), seg);
     // lathe gira alrededor de Y: hay que pasar el eje a Z
     const P = g.attributes.position.array;
     for (let i = 0; i < P.length; i += 3) {
       const x = P[i], y = P[i + 1], z = P[i + 2];
       const rr = Math.hypot(x, z), th = Math.atan2(z, x);
-      // tacos: solo en la banda (rr cerca de R)
+      // tacos: solo en la banda (rr cerca de R); el asiento del aro (rr = Ra) no se mueve
       const enBanda = Math.max(0, (rr - (R - r * 1.2)) / (r * 1.2));
       const lat = y / W;
       const fase = ((th / (2 * Math.PI)) * tacos + Math.abs(lat) * 0.9 + (lat > 0 ? 0.5 : 0)) % 1;
@@ -91,29 +98,35 @@ export function llanta({ diam = 1.75, ancho = 0.62, aro = 0.56, tacos = 28, surc
       P[i] = x * k; P[i + 1] = z * k; P[i + 2] = y; // (x, z, y): eje de giro = Z
     }
     g.computeVertexNormals();
-    geo = { g, R, Ra, W };
+    sinDegenerados(g);
+    // aro: disco con espesor, cara cóncava a cada lado, llena el asiento del neumático (cerrado: toca el eje)
+    const pAro = [[0, -W * 0.5], [Ra * 0.38, -W * 0.5], [Ra * 0.55, -W * 0.7], [Ra * 0.98, -W * 0.86], [Ra, -W * 0.92], [Ra, -W * 0.92],
+      [Ra, W * 0.92], [Ra, W * 0.92], [Ra * 0.98, W * 0.86], [Ra * 0.55, W * 0.7], [Ra * 0.38, W * 0.5], [0, W * 0.5]];
+    const ga = sinDegenerados(new THREE.LatheGeometry(pAro.map(([x, y]) => new THREE.Vector2(x, y)), 40).rotateX(Math.PI / 2));
+    const gp = new THREE.CylinderGeometry(Ra * 0.035, Ra * 0.035, 0.04, 6).rotateX(Math.PI / 2);
+    geo = { g, ga, gp, R, Ra, W };
     _cacheLlanta.set(clave, geo);
   }
   const grupo = new THREE.Group();
-  const goma = materialPintura("#1f1e1c", { rugosidad: 0.9, metal: 0, barro: "#6e6252", alturaBarro: diam * 0.55, suciedad: barro });
+  const mt = materiales || {};
+  const goma = mt.goma || materialPintura("goma", { rugosidad: 0.9, metal: 0, barro: "barro", alturaBarro: diam * 0.3, suciedad: barro * 0.5 });
   const neum = new THREE.Mesh(geo.g, goma);
   neum.castShadow = neum.receiveShadow = true;
   grupo.add(neum);
-  // aro: disco cóncavo con pernos
-  const pAro = [[0, -geo.W * 0.5], [geo.Ra * 0.38, -geo.W * 0.5], [geo.Ra * 0.55, -geo.W * 0.7], [geo.Ra * 0.98, -geo.W * 0.86], [geo.Ra * 1.0, -geo.W * 0.92]];
-  const ga = new THREE.LatheGeometry(pAro.map(([x, y]) => new THREE.Vector2(x, y)), 40);
-  ga.rotateX(Math.PI / 2);
-  const matAro = materialPintura(colorAro, { rugosidad: 0.55, metal: 0.3, suciedad: barro * 0.9, alturaBarro: diam * 0.5 });
-  for (const lado of [1, -1]) {
-    const m = new THREE.Mesh(ga, matAro);
-    m.scale.z = lado; m.castShadow = true;
-    grupo.add(m);
-    const nP = 16;
-    const pern = new THREE.InstancedMesh(new THREE.CylinderGeometry(geo.Ra * 0.035, geo.Ra * 0.035, 0.04, 6).rotateX(Math.PI / 2), MATERIALES.negro(), nP);
-    const d = new THREE.Object3D();
-    for (let k = 0; k < nP; k++) { const a = (k / nP) * Math.PI * 2; d.position.set(Math.cos(a) * geo.Ra * 0.3, Math.sin(a) * geo.Ra * 0.3, lado * (geo.W * 0.5 + 0.02)); d.updateMatrix(); pern.setMatrixAt(k, d.matrix); }
-    grupo.add(pern);
+  const matAro = mt.aro || materialPintura(colorAro, { rugosidad: 0.6, metal: 0.1, barro: "barro", suciedad: barro * 0.45, alturaBarro: diam * 0.25 });
+  const disco = new THREE.Mesh(geo.ga, matAro);
+  disco.castShadow = disco.receiveShadow = true;
+  grupo.add(disco);
+  // pernos de rueda (16 por lado), asentados en la cara plana del aro
+  const matPerno = mt.perno || materialPintura("acero", { rugosidad: 0.55, metal: 0.35, suciedad: 0.2 });
+  const nP = 16, d = new THREE.Object3D();
+  const pern = new THREE.InstancedMesh(geo.gp, matPerno, 2 * nP);
+  for (const [l, lado] of [[0, 1], [1, -1]]) for (let k = 0; k < nP; k++) {
+    const a = (k / nP) * Math.PI * 2;
+    d.position.set(Math.cos(a) * geo.Ra * 0.3, Math.sin(a) * geo.Ra * 0.3, lado * (geo.W * 0.5 + 0.02)); d.updateMatrix(); pern.setMatrixAt(l * nP + k, d.matrix);
   }
+  pern.castShadow = true;
+  grupo.add(pern);
   grupo.userData.radio = geo.R;
   return grupo;
 }
@@ -174,14 +187,27 @@ export function cabina(w, h, d, matPintura, op = {}) {
 
 /** Montón de roca suelta (carga de tolva o cucharón): semiesfera aplastada con bloques en superficie. */
 export function monton({ ancho = 4, largo = 6, alto = 1.5, semilla = 3, color = "#8e8b84", bloques = 120 } = {}) {
-  const g = new THREE.SphereGeometry(1, 40, 20, 0, Math.PI * 2, 0, Math.PI / 2);
+  const g0 = new THREE.SphereGeometry(1, 40, 20, 0, Math.PI * 2, 0, Math.PI / 2);
   const n = ruido3(semilla);
-  const P = g.attributes.position.array;
-  for (let i = 0; i < P.length; i += 3) {
-    const x = P[i], y = P[i + 1], z = P[i + 2];
+  const P0 = g0.attributes.position.array;
+  for (let i = 0; i < P0.length; i += 3) {
+    const x = P0[i], y = P0[i + 1], z = P0[i + 2];
     const k = 1 + 0.18 * n(x * 2.5, y * 2.5, z * 2.5) + 0.08 * n(x * 7, y * 7, z * 7);
-    P[i] = x * (largo / 2) * k; P[i + 1] = Math.pow(y, 0.85) * alto * k; P[i + 2] = z * (ancho / 2) * k;
+    P0[i] = x * (largo / 2) * k; P0[i + 1] = Math.pow(y, 0.85) * alto * k; P0[i + 2] = z * (ancho / 2) * k;
   }
+  // base: el borde (y = 0, última fila de la semiesfera) se cierra con un abanico hacia abajo → sólido cerrado y orientado
+  const ws = 40, fila = 20 * (ws + 1), nv = P0.length / 3;
+  const P = new Float32Array((nv + ws + 2) * 3); P.set(P0);
+  for (let i = 0; i <= ws; i++) for (let q = 0; q < 3; q++) P[(nv + i) * 3 + q] = P0[(fila + i) * 3 + q];
+  const cb = nv + ws + 1; // centro de la base en (0, 0, 0)
+  const I = Array.from(g0.index.array);
+  for (let i = 0; i < ws; i++) {
+    const a = nv + i, b = a + 1, ny = (P[a * 3 + 2] * P[b * 3] - P[a * 3] * P[b * 3 + 2]); // (a × b)·ŷ desde el centro
+    if (ny < 0) I.push(cb, a, b); else I.push(cb, b, a);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.BufferAttribute(P, 3));
+  g.setIndex(I);
   g.computeVertexNormals();
   const c = new THREE.Color(color);
   const mat = new THREE.MeshStandardMaterial({ color: c, roughness: 0.96, flatShading: true });

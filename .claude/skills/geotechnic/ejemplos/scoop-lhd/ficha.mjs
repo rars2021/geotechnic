@@ -12,7 +12,7 @@ export default {
   titulo: "Scoop en la galería",
   ceja: "Geotechnic · equipos · escala labor",
   resumen: "Un scoop de 6 yd³ (clase CAT R1600G) limpiando el mineral disparado en una galería de 4,0 × 4,0 m. Cada pieza es un sólido con su pasador: la barra en Z inclina el cucharón, los cilindros van de pasador a pasador y las mangueras de racor a racor. Un juez automático probó todo el ciclo antes de publicar: sin piezas que se atraviesen ni equipo dentro de la roca.",
-  alt: "Modelo 3D de un scoop amarillo en una galería subterránea iluminada por sus faros, con pernos, shotcrete y manga de ventilación.",
+  alt: "Modelo 3D de un scoop en tonos papel, con contornos finos, en una galería subterránea iluminada por sus faros, con pernos, shotcrete y manga de ventilación.",
   equipos: ["scoop"],
   modos: ["completo", "blanco"],
   barra: `<button type="button" id="ciclo" aria-pressed="false">Animar ciclo</button>`,
@@ -21,8 +21,8 @@ export default {
     { id: "levante", etiqueta: "Brazo (levante)", min: 0, max: 1, paso: 0.01, valor: 0.17, salida: "−20°" },
     { id: "volteo", etiqueta: "Cucharón (descarga ↔ recogido)", min: -1, max: 1, paso: 0.01, valor: 0.9, salida: "40°" },
     { html: `<label class="geo-control" for="ver-galeria"><span>Ver galería</span><input type="checkbox" id="ver-galeria" checked style="justify-self:start"><output></output></label>` },
-    { html: `<label class="geo-control" for="corte"><span>Corte lateral</span><input type="checkbox" id="corte" style="justify-self:start"><output></output></label>` },
-    { html: `<label class="geo-control" for="lamina"><span>Lámina (aristas en tinta)</span><input type="checkbox" id="lamina" style="justify-self:start"><output></output></label>` },
+    { html: `<label class="geo-control" for="corte"><span>Corte lateral</span><input type="checkbox" id="corte" checked style="justify-self:start"><output></output></label>` },
+    { html: `<label class="geo-control" for="lamina"><span>Lámina (aristas en tinta)</span><input type="checkbox" id="lamina" checked style="justify-self:start"><output></output></label>` },
   ],
   piezas: [
     { id: "cucharon", numero: 1, nombre: "Cucharón", definicion: "6 yd³ colmado (≈ 4,5 m³ al ras más colmo). Labio con 6 dientes; penetra el montón y se recoge para no derramar." },
@@ -54,10 +54,10 @@ export default {
   referencias: {
     abiertas: [
       abierta("scoop", "sandvik_lh517_lhd.jpg", { titulo: "Sandvik LH517 de perfil", recorte: [0.0, 0.3, 1.0, 0.72], vista: { ...lado(0), az: 0, el: 4, dist: 9.5, recorte: [0.0, 0.3, 1.0, 0.72] } }),
-      abierta("scoop", "load_haul_dump_cobar_2017_01.jpg", { titulo: "LHD en Cobar, cucharón gastado", recorte: [0.0, 0.18, 1.0, 0.95], vista: { ...lado(0), objetivo: [2.6, 0.95, 0.3], az: 128, el: 8, dist: 6.0, recorte: [0.1, 0.25, 0.95, 0.95] } }),
+      abierta("scoop", "load_haul_dump_cobar_2017_01.jpg", { titulo: "LHD en Cobar, cucharón gastado", recorte: [0.0, 0.375, 0.8, 0.825], vista: { ...lado(0), objetivo: [0.4, 1.0, 0], az: 56, el: 8, dist: 9.0, recorte: [0.0, 0.38, 0.675, 0.744] } }),
       abierta("scoop", "lhd_sandvik_lh410.jpg", { titulo: "Sandvik LH410", recorte: [0.0, 0.35, 1.0, 0.75], vista: { ...lado(0), az: 0, el: 2, dist: 10, recorte: [0.05, 0.3, 0.95, 0.7] } }),
-      abierta("scoop", "vkg_ojamaa_kaevandus.jpg", { titulo: "LHD bajo tierra con sus faros", vista: { galeria: true, anim: false, x: -8, objetivo: [-6.8, 1.3, 0.2], az: 78, el: 8, dist: 7.2, estado: { brazo: -20, cucharon: 60 }, carga: true } }),
-      abierta("scoop", "d_ln_naklada.jpg", { titulo: "Cargador de mina en exhibición", recorte: [0.08, 0.38, 1.0, 0.95], vista: { ...lado(0), objetivo: [2.2, 1.1, 0.3], az: 132, el: 5, dist: 6.6, recorte: [0.1, 0.3, 0.95, 0.95] } }),
+      abierta("scoop", "vkg_ojamaa_kaevandus.jpg", { titulo: "LHD bajo tierra con sus faros", vista: { galeria: true, anim: false, x: -8, objetivo: [-6.8, 1.3, 0], az: 88, el: 8, dist: 8, estado: { brazo: -20, cucharon: 60 }, carga: true } }),
+      abierta("scoop", "d_ln_naklada.jpg", { titulo: "Cargador de mina en exhibición", recorte: [0.2, 0.37, 0.69, 0.63], vista: { ...lado(0), objetivo: [0.2, 1.1, 0], az: 50, el: 6, dist: 9.0, recorte: [0.0, 0.35, 0.75, 0.75] } }),
     ],
     estudio: [
       estudio("scoop", "2021_osorio_bazan_analisis_tecnico_econo_p34.jpg"),

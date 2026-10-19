@@ -1,7 +1,7 @@
 // Ejemplo frente-jumbo · montaje (puro): macizo, galería con frente, malla real, jumbo y ciclo de perforación.
 // Lo usan la escena (página) y el juez (Node).
 import { macizo } from "../../kit/macizo.js";
-import { seccionBaul, galeria, superficieFrente } from "../../kit/labor.js";
+import { seccionBaul, galeria, superficieFrente, cajaBloque } from "../../kit/labor.js";
 import { terrenoGaleria, emboquillesMalla, huellasDe, asentar } from "../../kit/contrato.js";
 import { MALLAS, ordenPerforacion } from "../../kit/procesos.js";
 import { modeloJumbo, apuntarJumbo } from "../../equipos/jumbo/modelo.js";
@@ -13,6 +13,7 @@ export function montajeJumbo(op = {}) {
   const XF = 0, X0 = -26;
   const M = modeloJumbo();
   const mac = macizo({
+    calma: 1, // estudio: color calmo (references/estudio.md); el relieve no cambia
     familias: [
       { nombre: "F1", buz: 71, dirBuz: 242, kappa: 40, espaciado: 0.8, persistencia: 2.4, relieve: 0.2, jrc: 10, maxDiscos: 600 },
       { nombre: "F2", buz: 40, dirBuz: 43, kappa: 35, espaciado: 1.0, persistencia: 2.6, relieve: 0.18, jrc: 8, maxDiscos: 500 },
@@ -32,7 +33,9 @@ export function montajeJumbo(op = {}) {
   // leídos con ±0,1 m (Zanabria Mejía 2021, fig. 5), así que 0,20 m queda dentro de esa lectura
   const mallaUsada = { ...malla, taladros: malla.taladros.map((t) => (t.grupo === "arrastre" ? { ...t, y: 0.2 } : t)) };
   const taladros = emboquillesMalla(mallaUsada, supFrente);
-  const ter = terrenoGaleria(gal, { frente: supFrente });
+  // bloque de roca cerrado (motor B): la misma caja para el dibujo y para «libre» (fuera del bloque es aire)
+  const caja = cajaBloque(gal);
+  const ter = terrenoGaleria(gal, { frente: supFrente, caja });
   // posición del jumbo: la máquina se estaciona en el eje, a la distancia que deja todos los taladros al alcance
   const xMaq = op.xMaquina ?? XF - 11.0;
   const base = asentar(M, {}, ter, { x: xMaq, z: 0, rumbo: 0 });
@@ -150,7 +153,7 @@ export function montajeJumbo(op = {}) {
     }
     return { valores, hecho, cavidades, activos };
   }
-  return { M, mac, gal, ter, supFrente, malla, taladros, listas, turnos, objetivo, estado, T, XF, X0, base, gatas, inv, porTal, T_MOVER, T_PERF, T_SACAR };
+  return { M, mac, gal, ter, caja, supFrente, malla, taladros, listas, turnos, objetivo, estado, T, XF, X0, base, gatas, inv, porTal, T_MOVER, T_PERF, T_SACAR };
 }
 
 /** Lo que juzga el juez: el ciclo de perforación de los dos brazos y el rango de movimiento del modelo. */

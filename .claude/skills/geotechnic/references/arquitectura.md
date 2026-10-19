@@ -33,8 +33,9 @@ La crítica a la v1, mirando el jumbo y el scoop:
 | Motor A · equipos y mecanismos | `motorA/modelo.js` (puro), `motorA/mallas.js` (three.js), `equipos/<equipo>/` | Geometría convexa, grupos (fijo, bisagra, desliza), pasadores, cilindros, mangueras, ruedas, cadenas cerradas |
 | Motor B · roca y terreno | `kit/macizo.js`, `kit/labor.js`, `kit/terreno.js`, `kit/fracturas.js`, `kit/volumenes.js`, `kit/materiales.js` | Macizo (DFN, facetas, ruido, alteración, agua, polvo), galerías, frentes, taludes |
 | Contrato | `kit/contrato.js` | Lo que cada motor le da al otro (abajo) |
-| Juez | `juez/fisica.mjs`, `juez/fidelidad.mjs`, `juez/realismo.py`, `scripts/juez.mjs` | Aprueba o bloquea la publicación |
-| Agentes | `.claude/agents/*.md` del repo | Un dueño por equipo, más roca, escenas y juez |
+| Estudio | `kit/estudio.js` (paleta papel, tapas, corte de cámara) · `references/estudio.md` | Dibujo limpio para estudiar, sin defectos a la vista |
+| Juez | `juez/fisica.mjs`, `juez/fidelidad.mjs`, `juez/realismo.py`, `juez/limpieza.*`, `scripts/juez.mjs` | Aprueba o bloquea la publicación |
+| Agentes | `.claude/agents/*.md` del repo | Un dueño por equipo, más roca, estudio visual, escenas y juez |
 
 ## Decisión: el 3D de Anatomy no va dentro de la escena de roca
 
@@ -78,7 +79,8 @@ construye la roca; ambos se dibujan con la misma luz y la misma cámara. El modo
 
 ## Juez
 
-Ver `juez.md`. Tres líneas (física, fidelidad, realismo); `armar` no escribe `index.html` sin su sello.
+Ver `juez.md`. Cuatro jueces (física, fidelidad, realismo y, desde v3, limpieza: dibujo de estudio sin defectos a
+la vista, ver `estudio.md`); `armar` no escribe `index.html` sin su sello.
 
 ## Agentes
 

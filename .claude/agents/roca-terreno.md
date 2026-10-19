@@ -26,3 +26,5 @@ Eres el agente de roca y terreno de Geotechnic (`.claude/skills/geotechnic/`). E
 | Facetas, no lija | El relieve sale de bloques entre planos de junta |
 | Frente | Relieve ±0,2 m; si el equipo no llega, se ajusta el ciclo, no se aplana la roca sin decirlo |
 | Contrato | `libre(p)` positiva en la labor, negativa en el macizo; `piso(x, z)` en todo el ancho |
+| Sólido cerrado | La roca de una labor es `macizoCerrado` (cerrado y orientado, caras al aire); su caja es la del contrato (`cajaBloque`) |
+| Calma | `macizo({ calma })` solo toca el color; el relieve y el contrato no cambian |

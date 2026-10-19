@@ -1,6 +1,8 @@
 // Geotechnic · materiales: roca con relieve fino procedural, pintura sucia, acero gastado, goma, shotcrete.
 // La roca y la pintura llevan ruido 3D en el shader (coordenadas de mundo): no hay texturas que bajar.
+// Todo material sale tapado (kit/estudio.js → tapar): el corte de un sólido cerrado se lee como sección llena.
 import * as THREE from "three";
+import { tapar, tono } from "./estudio.js";
 
 // Ruido simplex 3D en GLSL (Ashima Arts / Stefan Gustavson, MIT).
 export const GLSL_RUIDO = `
@@ -30,10 +32,11 @@ vec3 gradRuido(vec3 p){ float e=.12; float n=snoise(p);
 /**
  * Parcha un MeshStandardMaterial para: relieve fino de roca (normal perturbada en mundo, 2 escalas),
  * variación de color, humedad (atributo "humedad": oscurece y da brillo) y región resaltada (atributo "region").
- * op: { escala (1/m), fuerza, escala2, fuerza2, variacion, humedad: bool, regiones: bool, polvo: [r,g,b] para caras que miran arriba }
+ * op: { escala (1/m), fuerza, escala2, fuerza2, variacion, humedad: bool, regiones: bool, polvo: [r,g,b] para caras que miran arriba,
+ *       apagar: 0..1 (mezcla del color hacia su gris; estudio: 0,5) }
  */
 export function parcharRoca(material, op = {}) {
-  const { escala = 0.9, fuerza = 0.3, escala2 = 3.2, fuerza2 = 0.07, variacion = 0.1, humedad = false, regiones = false, polvo = null, polvoFuerza = 0.0 } = op;
+  const { escala = 0.9, fuerza = 0.3, escala2 = 3.2, fuerza2 = 0.07, variacion = 0.1, humedad = false, regiones = false, polvo = null, polvoFuerza = 0.0, apagar = 0 } = op;
   material.userData.uniforms = {
     uRegion: { value: -1 }, uTinte: { value: new THREE.Color("#e2483d") }, uAtenuar: { value: 0 },
     uPolvo: { value: new THREE.Color().setRGB(...(polvo || [0.6, 0.55, 0.48])) }, uPolvoF: { value: polvoFuerza },
@@ -54,6 +57,7 @@ export function parcharRoca(material, op = {}) {
       .replace("#include <color_fragment>", `#include <color_fragment>
         float nv = snoise(vPosM * ${(escala * 0.35).toFixed(3)}) * 0.6 + snoise(vPosM * ${(escala2 * 0.8).toFixed(3)}) * 0.4;
         diffuseColor.rgb *= 1. + nv * ${variacion.toFixed(3)} * (1. - 0.5 * smoothstep(0.6, 0.9, vNorM.y));
+        ${apagar > 0 ? `diffuseColor.rgb = mix(diffuseColor.rgb, vec3(dot(diffuseColor.rgb, vec3(.2126, .7152, .0722))), ${apagar.toFixed(3)});` : ""}
         float arriba = smoothstep(0.55, 0.9, vNorM.y);
         diffuseColor.rgb = mix(diffuseColor.rgb, uPolvo, uPolvoF * arriba * (0.6 + 0.4 * snoise(vPosM * 0.5)));
         ${humedad ? "diffuseColor.rgb *= 1. - 0.42 * clamp(vHum, 0., 1.);" : ""}
@@ -68,24 +72,27 @@ export function parcharRoca(material, op = {}) {
         vec3 gV = (viewMatrix * vec4(gW, 0.)).xyz;
         normal = normalize(normal - (gV - dot(gV, normal) * normal) * 0.5);`);
   };
-  material.customProgramCacheKey = () => `roca-${escala}-${fuerza}-${escala2}-${fuerza2}-${humedad}-${regiones}-${!!polvo}`;
+  material.customProgramCacheKey = () => `roca-${escala}-${fuerza}-${escala2}-${fuerza2}-${variacion}-${apagar}-${humedad}-${regiones}-${!!polvo}`;
   return material;
 }
 
-/** Roca con colores por vértice. */
+/** Roca con colores por vértice. Tapada salvo op.tapa === false. */
 export function materialRoca(op = {}) {
   const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: op.rugosidad ?? 0.93, metalness: 0, flatShading: !!op.facetado });
-  return parcharRoca(m, op);
+  parcharRoca(m, op);
+  return op.tapa === false ? m : tapar(m);
 }
 
 /**
  * Pintura de equipo con suciedad: más polvo y barro abajo (bajo `alturaBarro` m sobre el piso de la máquina)
  * y en cantos; regla tomada de fotos de LHD y camiones (references/reglas-equipos.md).
+ * `color` y `op.barro` pueden ser un hex o un token de PALETA (kit/estudio.js). Tapada salvo op.tapa === false.
  */
 export function materialPintura(color, op = {}) {
   const { rugosidad = 0.5, metal = 0.15, barro = "#6d604f", alturaBarro = 0.9, suciedad = 0.5, desgaste = 0 } = op;
-  const m = new THREE.MeshStandardMaterial({ color, roughness: rugosidad, metalness: metal });
-  m.userData.uniforms = { uBase: { value: 0 }, uBarro: { value: new THREE.Color(barro) } };
+  const m = new THREE.MeshStandardMaterial({ color: tono(color), roughness: rugosidad, metalness: metal });
+  if (typeof color === "string" && color[0] !== "#") m.userData.token = color;
+  m.userData.uniforms = { uBase: { value: 0 }, uBarro: { value: new THREE.Color(tono(barro)) } };
   m.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, m.userData.uniforms);
     sh.vertexShader = sh.vertexShader
@@ -105,17 +112,18 @@ export function materialPintura(color, op = {}) {
       .replace("#include <roughnessmap_fragment>", "#include <roughnessmap_fragment>\nroughnessFactor = clamp(roughnessFactor + 0.4 * (1. - smoothstep(0., 1.2, vPosM.y - uBase)), 0., 1.);");
   };
   m.customProgramCacheKey = () => `pintura-${alturaBarro}-${suciedad}-${desgaste}`;
-  return m;
+  return op.tapa === false ? m : tapar(m);
 }
 
+// todos tapados (el vidrio es transparente: tapar lo deja igual)
 export const MATERIALES = {
-  goma: () => new THREE.MeshStandardMaterial({ color: "#1d1c1b", roughness: 0.92, metalness: 0 }),
+  goma: () => tapar(new THREE.MeshStandardMaterial({ color: "#1d1c1b", roughness: 0.92, metalness: 0 })),
   aceroGastado: () => materialPintura("#5b5650", { rugosidad: 0.6, metal: 0.6, suciedad: 0.45, desgaste: 0.5 }),
-  cromo: () => new THREE.MeshStandardMaterial({ color: "#d9dcdf", roughness: 0.18, metalness: 1 }),
+  cromo: () => tapar(new THREE.MeshStandardMaterial({ color: "#d9dcdf", roughness: 0.18, metalness: 1 })),
   vidrio: () => new THREE.MeshStandardMaterial({ color: "#26323a", roughness: 0.08, metalness: 0.6, transparent: true, opacity: 0.82 }),
-  negro: () => new THREE.MeshStandardMaterial({ color: "#222120", roughness: 0.7, metalness: 0.2 }),
-  luz: (c = "#fff6df") => new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 2.5 }),
-  shotcrete: () => { const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.97 }); return parcharRoca(m, { escala: 3, fuerza: 0.18, escala2: 14, fuerza2: 0.12, variacion: 0.08 }); },
+  negro: () => tapar(new THREE.MeshStandardMaterial({ color: "#222120", roughness: 0.7, metalness: 0.2 })),
+  luz: (c = "#fff6df") => tapar(new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 2.5 })),
+  shotcrete: () => { const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.97 }); return tapar(parcharRoca(m, { escala: 3, fuerza: 0.18, escala2: 14, fuerza2: 0.12, variacion: 0.08 })); },
 };
 
 /** Paletas de color medidas sobre fotos (sRGB). Ver references/reglas-roca.md: cada una con su fuente. */

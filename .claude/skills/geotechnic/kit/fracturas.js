@@ -78,6 +78,9 @@ export function relieveBloques(dfn, x, y, z, amp = 1, ondula = null) {
 /**
  * Trazas de los discos sobre una malla (BufferGeometry indexada). Devuelve por familia un array de segmentos [x,y,z,x,y,z,...]
  * y marca en `cercania` (Float32Array por vértice, opcional) la distancia a la traza más próxima (para halos y surcos).
+ * `desplazar` (m) despega la traza a lo largo de la normal del vértice. Las normales miran al AIRE (galeria, frente de
+ * macizoCerrado, talud): `desplazar` va POSITIVO (≈ 0,02 m en labores, 0,03–0,05 m en taludes). Negativo mete la traza
+ * en la roca y se dibuja sobre la tapa de corte.
  */
 export function trazasSobreMalla(dfn, geom, op = {}) {
   const { celda = 4, desplazar = 0.04, minLargo = 0.3, maxNormalY = 0.72 } = op;

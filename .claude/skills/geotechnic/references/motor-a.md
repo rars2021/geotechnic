@@ -32,12 +32,24 @@ Mundo de la máquina: metros, x adelante, y arriba, z izquierda, origen en el pi
 | `M.cadena(nombre, fn)` | Cierre de una cadena (barra en Z): resuelve grupos dependientes y devuelve el residuo |
 | `M.dimensionar(muestras)` · `M.dimensionarMangueras(muestras)` · `M.orientarPuertos(pose)` | Cilindros y mangueras dimensionados para el rango de trabajo; codos apuntados al otro extremo |
 | `M.posar(valores)` → `{ T, raiz, cil, mang, mundo(g, p) }` · `M.cascos(pose)` | Pose y cascos en el mundo (lo que juzga el juez) |
-| `mallasMaquina(M, { color })` → `{ raiz, poner(v), objetosDe(id), grupo(n), mundo(g, p), lamina(on), cascos(on) }` | Dibujo three.js de exactamente esa geometría |
+| `mallasMaquina(M, { lamina, estudio })` → `{ raiz, poner(v), objetosDe(id), grupo(n), mundo(g, p), lamina(on), cascos(on) }` | Dibujo three.js de exactamente esa geometría |
+
+## Acabado de estudio (v3)
+
+Ver `references/estudio.md`. `materialesA` toma los colores de `PALETA` (`kit/estudio.js`): `pintura`, `pinturaB`
+(material `rojo`), `acero`, `goma`, `manguera`, `gris`, `aluminio` (también `cromo`), `vidrio` (opaco), `laton`,
+`negro`. El `color` / `colorAro` / `colorPerforadora` de la ficha solo cuentan con `estudio: false`. Suciedad y barro a
+la mitad, sin óxido. Todo material va tapado (`tapar`). La lámina (aristas en tinta, opacidad 0,35, umbral 32°) está
+encendida por defecto; `lamina(false)` la apaga.
+
+Toda malla es cerrada y orientada (lo prueba el juez de limpieza, `revisarCerradas`): el redondo pierde sus triángulos
+degenerados del polo (`sinDegenerados`), la llanta es neumático cerrado + aro macizo, y cada manguera lleva tapa en los
+dos extremos. No se cambia ninguna forma: lo que se ve es lo que juzga la física.
 
 ## Taller
 
 `node scripts/taller.mjs <equipo>` arma `taller-<equipo>.html`: el equipo solo, sobre un piso, con
-`TALLER.poner({...})`, `TALLER.cascos(true)` (lo que ve el juez) y `TALLER.lamina(true)`. Es el banco de cada agente.
+`TALLER.poner({...})`, `TALLER.cascos(true)` (lo que ve el juez) y `TALLER.lamina(on)` (encendida por defecto). Es el banco de cada agente.
 
 ## Equipos hechos en el motor A
 

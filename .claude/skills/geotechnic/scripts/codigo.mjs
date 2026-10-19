@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 export const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const THREE_VER = "0.160.0";
 /** Orden de concatenación: núcleo, motor B (roca y terreno), contrato, motor A, escena y señalar. */
-export const KIT = ["kit/nucleo", "kit/materiales", "kit/fracturas", "kit/volumenes", "kit/macizo", "kit/terreno", "kit/equipos", "kit/labor", "kit/procesos",
+export const KIT = ["kit/nucleo", "kit/materiales", "kit/estudio", "kit/fracturas", "kit/volumenes", "kit/macizo", "kit/terreno", "kit/equipos", "kit/labor", "kit/procesos",
   "motorA/modelo", "motorA/mallas", "kit/contrato", "kit/escena", "kit/senalar"];
 
 /** Quita import/export para concatenar módulos en uno solo. */

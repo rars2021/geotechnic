@@ -16,8 +16,9 @@ motores que se alimentan entre sí**, los prueba un **juez** antes de publicar y
 | Motor A · equipos y mecanismos | Sólidos convexos con grupos, pasadores, cilindros de pasador a pasador y mangueras de racor a racor. Disciplina de Anatomy (wheresryan22/anatomy, MIT, copia en `anatomia/`) | `motorA/`, `equipos/<equipo>/` · `references/motor-a.md` |
 | Motor B · roca y terreno | Macizo con DFN, facetas, ruido explícito, alteración gradacional, agua y polvo; galerías, frentes, taludes | `kit/macizo.js`, `kit/labor.js`, `kit/terreno.js` · `references/motor-b.md` |
 | Contrato | B → A: piso, contorno, `libre(p)`, frente, emboquilles. A → B: huellas, polvo, taladros, carga | `kit/contrato.js` · `references/arquitectura.md` |
-| Juez | Física (interpenetración, rangos, cierres, cilindros, mangueras, ruedas, roca), fidelidad (medidas con fuente) y realismo (capturas contra fotos). **Sin su aprobación, `armar` no escribe `index.html`** | `juez/`, `scripts/juez.mjs` · `references/juez.md` |
-| Agentes | Uno por equipo (scoop, jumbo, camión, pala, perforadora, empernador, shotcrete, volquete, cargador), roca y terreno, orquestador de escenas, juez | `.claude/agents/` del repo · `references/agentes.md` |
+| Estudio (v3) | Dibujo limpio para estudiar, Anatomy a medias: equipos en colores papel, un solo acento, contornos finos, roca calma; toda malla cerrada, tapas de sección y corte real de cámara; el macizo es un bloque cerrado | `kit/estudio.js` · `references/estudio.md` |
+| Juez | Física (interpenetración, rangos, cierres, cilindros, mangueras, ruedas, roca), fidelidad (medidas con fuente), realismo (capturas contra fotos) y limpieza (mallas cerradas, corte de cámara, paleta, ruido). **Sin su aprobación, `armar` no escribe `index.html`** | `juez/`, `scripts/juez.mjs` · `references/juez.md` |
+| Agentes | Uno por equipo (scoop, jumbo, camión, pala, perforadora, empernador, shotcrete, volquete, cargador), roca y terreno, estudio visual, orquestador de escenas, juez | `.claude/agents/` del repo · `references/agentes.md` |
 
 Por qué el equipo no se dibuja con el 3D SVG de Anatomy dentro de la roca (cámara fija, sin z-buffer contra WebGL,
 otra luz, auditoría de horas): `references/arquitectura.md`. Se trae su modelo, su disciplina y su separador de planos;
@@ -104,7 +105,8 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `motorA/modelo.js` · `motorA/mallas.js` | Motor A: modelo puro de máquinas (Node y página) y su dibujo three.js |
 | `equipos/<equipo>/` | Un agente por equipo: `medidas.js` (con fuente) y, en el motor A, `modelo.js` (scoop y jumbo hoy) |
 | `kit/equipos.js` | v1 heredada: llanta (la usa el motor A), y camión, pala, perforadora, cargador, empernador, shotcrete, volquete hasta que sus agentes los pasen al motor A |
-| `juez/` · `scripts/juez.mjs` | Juez: física, fidelidad, realismo; informe y sello |
+| `juez/` · `scripts/juez.mjs` | Juez: física, fidelidad, realismo, limpieza; informe y sello |
+| `kit/estudio.js` | Paleta papel (tokens claro/oscuro), `tapar`, `planoCorte`, `corteCamara` |
 | `scripts/taller.mjs` | Banco de un equipo solo (cascos y lámina) para su agente |
 | `scripts/codigo.mjs` | Junta kit, motores y equipos en el módulo de la página; sello de fuentes |
 | `anatomia/` | Copia sin cambios del kit, scripts y referencias de Anatomy (MIT, `LICENSE-anatomy`) |
@@ -118,4 +120,4 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `ejemplos/talud-tajo` | Corte de talud de tajo (Antamina) · [publicado](https://claude.ai/artifact/9yawDfHqMnZNYZ8oQcCBgz) |
 | `ejemplos/scoop-lhd` | Scoop CAT R1600G (motor A, 260 piezas) en galería, con ciclo de carguío juzgado · [publicado](https://claude.ai/artifact/NYN2ccWp45UG4kF4R9D2cn) |
 | `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 244 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
-| `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |
+| `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `estudio.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |

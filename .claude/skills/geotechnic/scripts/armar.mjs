@@ -7,6 +7,7 @@
 //
 // BLOQUEO DEL JUEZ: sin --borrador, index.html solo se escribe si <salida>/<tema>/juez/informe.json dice «aprobado» y
 // su sello coincide con las fuentes actuales (kit, motor A, equipos, ficha, montaje, escena). Si no: sale con código 2.
+// Tampoco abre con un informe incompleto: parcial (--sin-realismo) o sin las líneas de realismo y limpieza.
 //
 // Salida en <salida>/<tema>/:
 //   index.html   página sin doctype (el Artifact pone el esqueleto): es la que se publica
@@ -138,7 +139,10 @@ function juezHtml(inf) {
   for (const [n, l] of Object.entries(L)) {
     if (n.startsWith("fisica")) filas.push(`<tr><td>Física · ${n === "fisicaRango" ? "rango del modelo" : "ciclo en la labor"}</td><td>${l.poses} poses</td><td>${Object.entries(l.lineas).map(([k, v]) => `${k} ${v.ok ? "✓" : "✗"}`).join(" · ")}</td></tr>`);
     else if (n.startsWith("fidelidad")) filas.push(`<tr><td>Fidelidad · ${esc(n.slice(10))}</td><td>${l.filas.filter((f) => f.fuente).length} con fuente</td><td>${l.filas.filter((f) => f.fuente).map((f) => `${esc(f.dato)} ${f.medido === null ? "—" : (f.error >= 0 ? "+" : "") + (f.error * 100).toFixed(1) + " %"}`).join(" · ")}</td></tr>`);
-    else if (n === "realismo") filas.push(`<tr><td>Realismo</td><td>${l.pasan} de ${l.pares} fotos</td><td>luminancia, contraste, bordes y colorido de cada captura dentro del rango de su foto · consola ${l.consolaLimpia ? "limpia" : "con errores"}</td></tr>`);
+    else if (n === "realismo") filas.push(l.informativo
+      ? `<tr><td>Realismo: informativo (v3.1)</td><td>${l.pares} fotos</td><td>Se mide y no bloquea: ninguna métrica distingue bien la foto correcta de las otras del tema (AUC correcto/cruzado ${Object.entries(l.metricas || {}).map(([k, m]) => `${esc(k)} ${m.auc == null ? "—" : m.auc.toFixed(2)}`).join(" · ")}; hace falta ≥ 0,8 y acuerdo con el usuario). Por la regla completa pasarían ${l.pasan} de ${l.pares}.</td></tr>`
+      : `<tr><td>Realismo (v3.1)</td><td>${l.pares} fotos</td><td>bloquea con ${(l.bloqueantes || []).map(esc).join(", ")} (AUC ≥ 0,8 y Spearman ≥ 0,5)</td></tr>`);
+    else if (n === "limpieza") filas.push(`<tr><td>Limpieza</td><td>${l.cerradas?.mallas ?? 0} mallas · ${l.corte?.camaras ?? 0} cámaras · ${l.imagen?.filas?.length ?? 0} capturas</td><td>mallas cerradas y orientadas${l.cerradas?.calcos?.length ? ` (${l.cerradas.calcos.length} calcos declarados)` : ""} · corte de cámara ${l.corte?.noAplica ? "no aplica" : "con tapa"} · paleta papel (saturación p90 ≤ ${l.imagen?.topes?.saturacion}) · ruido ≤ ${l.imagen?.topes?.ruido} · consola ${l.consola ? "limpia" : "con errores"}</td></tr>`);
   }
   return `<section class="geo-seccion geo-solo-completo"><h2>Lo que probó el juez</h2><p style="margin:0;max-width:72ch">Aprobado el ${esc(inf.fecha.slice(0, 10))} · sello <code>${esc(inf.sello)}</code>. Sin esta aprobación la página no se arma.</p>
 <div style="overflow-x:auto"><table class="geo-tabla"><thead><tr><th>Línea</th><th>Alcance</th><th>Resultado</th></tr></thead><tbody>${filas.join("")}</tbody></table></div></section>`;
@@ -186,8 +190,11 @@ async function main() {
   const fInf = join(salida, "juez", "informe.json");
   const inf = existsSync(fInf) ? JSON.parse(readFileSync(fInf, "utf8")) : null;
   if (!borrador) {
-    if (!inf || !inf.aprobado || inf.sello !== sello) {
-      console.error(`BLOQUEADO por el juez: ${!inf ? "no hay informe" : !inf.aprobado ? "el informe reprueba" : "las fuentes cambiaron desde el informe"} (${fInf}).`);
+    // un informe parcial (--sin-realismo) o sin las líneas de realismo y limpieza no abre la publicación. El realismo
+    // puede ser informativo (no bloquea), pero la línea tiene que existir: prueba que el juez corrió el navegador
+    const incompleto = inf && (inf.parcial || !inf.lineas?.limpieza || !inf.lineas?.realismo);
+    if (!inf || !inf.aprobado || incompleto || inf.sello !== sello) {
+      console.error(`BLOQUEADO por el juez: ${!inf ? "no hay informe" : !inf.aprobado ? "el informe reprueba" : incompleto ? "el informe está incompleto (sin navegador: faltan las líneas de realismo o limpieza)" : "las fuentes cambiaron desde el informe"} (${fInf}).`);
       console.error(`Corre: node scripts/juez.mjs ${args.find((a) => !a.startsWith("--"))} --salida ${opt("salida", join(RAIZ, "dist"))}`);
       process.exit(2);
     }

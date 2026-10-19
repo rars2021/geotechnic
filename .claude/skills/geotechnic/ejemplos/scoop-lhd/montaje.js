@@ -2,7 +2,7 @@
 // Lo usan la escena (página) y el juez (Node): lo que se anima es exactamente lo que se juzga.
 import { macizo } from "../../kit/macizo.js";
 import { zona } from "../../kit/volumenes.js";
-import { seccionBaul, galeria, superficieFrente } from "../../kit/labor.js";
+import { seccionBaul, galeria, superficieFrente, cajaBloque } from "../../kit/labor.js";
 import { terrenoGaleria, huellasDe, asentar } from "../../kit/contrato.js";
 import { modeloScoop } from "../../equipos/scoop/modelo.js";
 import { clamp, lerp } from "../../kit/nucleo.js";
@@ -13,6 +13,7 @@ export function montajeScoop() {
   // motor B: macizo de Retamas (MARSA) con ruido explícito y una zona de óxidos húmeda
   const oxidos = zona({ tipo: "elipsoide", centro: [4, 3, 2], radios: [6, 3, 4], transicion: 2.5, ruido: 1.5, escalaRuido: 0.25, semilla: 2 });
   const mac = macizo({
+    calma: 1, // estudio: color calmo (references/estudio.md); el relieve no cambia
     familias: [
       { nombre: "F1", buz: 71, dirBuz: 242, kappa: 40, espaciado: 0.7, persistencia: 2.2, relieve: 0.22, jrc: 10, maxDiscos: 700 },
       { nombre: "F2", buz: 40, dirBuz: 43, kappa: 35, espaciado: 0.9, persistencia: 2.6, relieve: 0.2, jrc: 8, maxDiscos: 600 },
@@ -31,7 +32,9 @@ export function montajeScoop() {
     region: (x, tipo, enShot) => (enShot ? 3 : tipo === "piso" ? 4 : 2),
   });
   const supFrente = superficieFrente(gal, { x: XF, macizo: mac });
-  const ter = terrenoGaleria(gal, { frente: supFrente });
+  // bloque de roca cerrado (motor B): la misma caja para el dibujo y para «libre» (fuera del bloque es aire)
+  const caja = cajaBloque(gal);
+  const ter = terrenoGaleria(gal, { frente: supFrente, caja });
   // ciclo de carguío: ángulos reales del brazo y del cucharón (envolvente de la barra en Z); duraciones ilustrativas
   const aLo = M.dims.rango.brazo[0];
   const lipNivel = (() => { const p = M.posar({ brazo: aLo, cucharon: -aLo }); let x = -Infinity; for (const c of M.cascos(p)) if (c.p.nombre.startsWith("diente")) for (const q of c.puntos) x = Math.max(x, q[0]); return x; })();
@@ -69,7 +72,7 @@ export function montajeScoop() {
     if (b.fase === "Descarga") emisores.push({ tipo: "descarga", grupo: "cucharon", punto: [M.dims.K0[0] + 1.6, M.dims.K0[1], 0], tasa: 4 });
     return { valores, fase: b.fase, carga: u < 0.5 ? a.carga : b.carga, emisores, x };
   }
-  return { M, mac, gal, ter, supFrente, estado, T, X0, XF, LARGO, X_ECH, MONTON, fases, lipNivel };
+  return { M, mac, gal, ter, caja, supFrente, estado, T, X0, XF, LARGO, X_ECH, MONTON, fases, lipNivel };
 }
 
 /** Lo que juzga el juez: el ciclo entero, muestreado, y el rango de movimiento del modelo. */

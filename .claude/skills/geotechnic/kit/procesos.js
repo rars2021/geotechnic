@@ -1,6 +1,7 @@
 // Geotechnic · procesos: mallas de perforación, secuencia de salida, líneas de tiempo y simulación de flota (dispatch).
 // Todo es dato + lógica: el dibujo lo hacen las escenas con el kit.
 import { azar, clamp } from "./nucleo.js";
+import { tono } from "./estudio.js";
 
 /**
  * Malla de perforación de un frente. Cada taladro: { id, z, y (m, origen en el centro del piso), grupo, retardo, cargado, diam (m) }.
@@ -31,11 +32,15 @@ export const MALLAS = {
   },
 };
 
-/** Colores por grupo (los de la figura original, para que se reconozcan). */
-export const COLORES_GRUPO = {
-  alivio: "#3b6fd1", arranque: "#d8342a", "1ra ayuda": "#2fae3b", "2da ayuda": "#9b3fb8", "3ra ayuda": "#e2b31f", "4ta ayuda": "#2e5bd8",
-  cuadrador: "#e07b2a", corona: "#58b7d6", arrastre: "#333333",
-};
+/**
+ * Colores por grupo de salida (kit/estudio.js → tokens `codigo` y `vacio`): el orden de salida se lee por claridad,
+ * del arranque (más oscuro) al arrastre (más claro), con S ≤ 0,45; el alivio (vacío, no sale) lleva el token `vacio`.
+ * Hue distinto entre vecinos para que la leyenda se distinga. El acento queda para la pieza señalada.
+ */
+export const COLORES_GRUPO = (() => {
+  const c = tono("codigo"), orden = ["arranque", "1ra ayuda", "2da ayuda", "3ra ayuda", "4ta ayuda", "cuadrador", "corona", "arrastre"];
+  return { alivio: tono("vacio"), ...Object.fromEntries(orden.map((g, i) => [g, c[i]])) };
+})();
 
 /** Orden de perforación para dos brazos: cada brazo toma su mitad (izquierda/derecha) de arriba hacia abajo. */
 export function ordenPerforacion(malla, brazos = 2) {

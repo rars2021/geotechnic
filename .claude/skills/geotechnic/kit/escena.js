@@ -2,6 +2,10 @@
 // three.js (WebGL) porque el realismo pide luz, sombra y volumen irregular. Ver references/motor.md.
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { corteCamara, tono } from "./estudio.js";
+
+/** ACES lleva el gris medio 0,18 a ≈ 0,21 y 0,5 a ≈ 0,56: en lineal, la misma exposición × 1,15 da medios tonos iguales. */
+export const EXPOSICION_LINEAL = 1.15;
 
 /** Color del cielo andino (zenit, horizonte) y de la bruma, medidos sobre fotos (references/reglas-luz.md). */
 export const CIELOS = {
@@ -38,18 +42,26 @@ function domoCielo(c, radio) {
  * Crea la escena en un contenedor (div con tamaño). Devuelve un objeto con todo lo necesario.
  * op.fondo: "cielo" | "subterraneo" | color.  op.sol: { az, alt } en grados (az desde el norte, horario).
  * op.extension: radio (m) que debe cubrir la sombra del sol.  op.niebla: [cerca, lejos] en m (bruma).
+ * op.corte: terreno con libre(p) (contrato B → A) → corte de cámara (kit/estudio.js); queda en api.corte.
+ *   Para margen / paso / max: op.corteOp. El recorte local (material.clippingPlanes) está siempre habilitado.
+ * op.estudio: true → acabado de estudio (references/estudio.md): mapeo de tonos lineal (ACES satura el papel en
+ *   sombra) y, bajo tierra, fondo del token `fondo` (api.fondo; retintar(scene) lo cambia con el tema).
+ *   op.mapeo: "aces" (por defecto) | "lineal" lo fija aparte. En lineal la exposición se multiplica por
+ *   EXPOSICION_LINEAL (≈ 1,15) para que los medios tonos queden como con ACES: la escena pasa el mismo número.
  */
 export function crearEscena(contenedor, op = {}) {
   const { fondo = "cielo", cielo = "andino", sol = { az: 300, alt: 38 }, extension = 120, niebla = null, exposicion = 1,
     fov = 38, cerca = 0.5, lejos = 20000, sombras = true, mapaSombra = 2048 } = op;
   const c = CIELOS[cielo] || CIELOS.andino;
-  const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, powerPreference: "high-performance" });
+  const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true, stencil: true, powerPreference: "high-performance" }); // stencil: tapa del corte
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = exposicion;
+  const mapeo = op.mapeo || (op.estudio ? "lineal" : "aces");
+  renderer.toneMapping = mapeo === "lineal" ? THREE.LinearToneMapping : THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = exposicion * (mapeo === "lineal" ? EXPOSICION_LINEAL : 1);
   renderer.shadowMap.enabled = sombras;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.localClippingEnabled = true; // planos locales (corte lateral) junto al corte de cámara
   renderer.domElement.style.display = "block";
   renderer.domElement.style.width = "100%";
   renderer.domElement.style.height = "100%";
@@ -83,8 +95,10 @@ export function crearEscena(contenedor, op = {}) {
     scene.add(luzSol, luzSol.target);
     if (niebla) scene.fog = typeof niebla === "number" ? new THREE.FogExp2(c.bruma, niebla) : new THREE.Fog(c.bruma, niebla[0], niebla[1]);
   } else if (fondo === "subterraneo") {
-    scene.background = new THREE.Color("#050505");
-    scene.add(new THREE.AmbientLight("#4a443c", 0.06));
+    // estudio: fondo papel (token `fondo` = lienzo de la página): lo que queda fuera del bloque no se lee como hueco
+    scene.background = new THREE.Color(op.estudio ? tono("fondo") : "#050505");
+    if (op.estudio) scene.userData.tokenFondo = true;
+    scene.add(new THREE.AmbientLight(tono("ambiente"), 0.06));
     if (niebla) scene.fog = new THREE.Fog("#0b0a09", niebla[0], niebla[1]);
   } else {
     scene.background = new THREE.Color(fondo);
@@ -107,7 +121,7 @@ export function crearEscena(contenedor, op = {}) {
   controls.addEventListener("change", () => { sucio = true; pedir(); });
 
   const api = {
-    THREE, renderer, scene, camera, controls, luzSol, dirSol, domo, cielo: c, quieto,
+    THREE, renderer, scene, camera, controls, luzSol, dirSol, domo, cielo: c, quieto, mapeo, fondo: op.estudio ? tono("fondo") : null,
     /** fn(dt, t) se llama en cada cuadro; devuelve true si necesita seguir animando. */
     alAnimar(fn) { tareas.add(fn); pedir(); return () => tareas.delete(fn); },
     marcar() { sucio = true; pedir(); },
@@ -122,6 +136,7 @@ export function crearEscena(contenedor, op = {}) {
     },
     renderizar() { renderer.render(scene, camera); sucio = false; },
   };
+  api.corte = op.corte ? corteCamara(api, op.corte, op.corteOp) : null;
   function pedir() { if (!cuadro) cuadro = requestAnimationFrame(paso); }
   function paso(ahora) {
     cuadro = 0;
