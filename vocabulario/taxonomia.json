@@ -1,0 +1,3485 @@
+{
+  "nombre": "taxonomia-geotechnic",
+  "version": "0.1",
+  "fecha": "2026-10-18",
+  "estado": "borrador para revisión del usuario (G1)",
+  "descripcion": "Vocabulario de condiciones del terreno minero para el catálogo de fuentes y la skill geotechnic. Cada valor genera el tag geo:<dimensión>:<valor>. 'es' y 'en' son términos de búsqueda (título, resumen, palabras clave, texto); 'preferir' son palabras que aparecen en leyendas de figuras (si falta, se usan 'es' y 'en'); 'se_ve' es lo que la figura debería mostrar; 'numeros' son los parámetros que lo gobiernan.",
+  "normalizacion": "Se compara en minúsculas y sin tildes (tesis.norm de el catálogo de fuentes: NFKD sin diacríticos). Los términos se escriben con tildes para que se lean bien. figuras.capturar hoy compara 'preferir' solo en minúsculas: el modo atlas de G2 debe normalizar también las leyendas.",
+  "tag": "geo:<dimension>:<valor>",
+  "contexto": {
+    "nota": "Para etiquetar en G2 el documento debe tener además una de estas raíces (evita «Quebrada X», «Cerro de Pasco» como topónimos, carreteras, etc.). Se aplica a D10 y D11, y a cualquier valor con más de 1000 documentos.",
+    "aplica_a": [
+      "ambiente",
+      "topografia"
+    ],
+    "raices": [
+      "mina",
+      "miner",
+      "tajo",
+      "geomecan",
+      "geotecn",
+      "macizo",
+      "talud",
+      "excavac",
+      "subterran",
+      "yacimiento",
+      "relave",
+      "botadero",
+      "desmonte",
+      "lixiviac"
+    ]
+  },
+  "escalas": [
+    {
+      "clave": "region",
+      "nombre": "Región",
+      "es": [
+        "franja metalogenética",
+        "distrito minero",
+        "región"
+      ],
+      "en": [
+        "metallogenic belt",
+        "mining district",
+        "regional"
+      ],
+      "skill": "geotechnic",
+      "orden_m": "10 km – 100 km"
+    },
+    {
+      "clave": "cerro",
+      "nombre": "Cerro o yacimiento",
+      "es": [
+        "cerro",
+        "ladera",
+        "yacimiento",
+        "depósito"
+      ],
+      "en": [
+        "hillside",
+        "deposit",
+        "orebody"
+      ],
+      "skill": "geotechnic",
+      "orden_m": "500 m – 5 km"
+    },
+    {
+      "clave": "mina",
+      "nombre": "Tajo o mina",
+      "es": [
+        "tajo",
+        "tajo abierto",
+        "mina subterránea",
+        "nivel"
+      ],
+      "en": [
+        "open pit",
+        "underground mine",
+        "mine level"
+      ],
+      "skill": "geotechnic",
+      "orden_m": "100 m – 2 km"
+    },
+    {
+      "clave": "banco-labor",
+      "nombre": "Banco o labor",
+      "es": [
+        "banco",
+        "talud de banco",
+        "labor",
+        "galería",
+        "tajeo"
+      ],
+      "en": [
+        "bench",
+        "drift",
+        "stope",
+        "excavation"
+      ],
+      "skill": "geotechnic",
+      "orden_m": "5 m – 100 m"
+    },
+    {
+      "clave": "frente",
+      "nombre": "Frente o afloramiento",
+      "es": [
+        "frente",
+        "frente de avance",
+        "afloramiento",
+        "cara del talud",
+        "corona",
+        "hastial"
+      ],
+      "en": [
+        "face",
+        "heading",
+        "outcrop",
+        "rock face",
+        "sidewall",
+        "back"
+      ],
+      "skill": "geotechnic",
+      "orden_m": "1 m – 10 m"
+    },
+    {
+      "clave": "testigo",
+      "nombre": "Testigo",
+      "es": [
+        "testigo",
+        "caja de testigos",
+        "logueo",
+        "sondaje diamantino"
+      ],
+      "en": [
+        "drill core",
+        "core box",
+        "core logging"
+      ],
+      "skill": "ambas",
+      "orden_m": "1 cm – 5 m"
+    },
+    {
+      "clave": "probeta",
+      "nombre": "Probeta o laboratorio",
+      "es": [
+        "probeta",
+        "ensayo de laboratorio",
+        "compresión uniaxial",
+        "triaxial",
+        "corte directo"
+      ],
+      "en": [
+        "specimen",
+        "laboratory test",
+        "uniaxial compression",
+        "triaxial",
+        "direct shear"
+      ],
+      "skill": "anatomia",
+      "orden_m": "1 cm – 30 cm"
+    }
+  ],
+  "dimensiones": [
+    {
+      "id": "D1",
+      "clave": "yacimiento",
+      "nombre": "Yacimiento y litología",
+      "descripcion": "Qué cuerpo mineralizado es y en qué roca está. Define la forma, los contactos y qué alteraciones esperar.",
+      "valores": [
+        {
+          "grupo": "yacimiento",
+          "clave": "porfido-cu-mo",
+          "nombre": "Pórfido de Cu-Mo",
+          "es": [
+            "pórfido de cobre",
+            "pórfido cu-mo",
+            "pórfido cuprífero",
+            "cobre porfirítico"
+          ],
+          "en": [
+            "porphyry copper",
+            "porphyry cu-mo",
+            "porphyry deposit"
+          ],
+          "se_ve": "stock intrusivo con stockwork y zonación concéntrica de alteración",
+          "numeros": [
+            "ley de Cu",
+            "diámetro del sistema",
+            "profundidad de la zona de enriquecimiento"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "porfido-cu-au",
+          "nombre": "Pórfido de Cu-Au",
+          "es": [
+            "pórfido cu-au",
+            "pórfido de cobre-oro"
+          ],
+          "en": [
+            "porphyry cu-au",
+            "gold-rich porphyry"
+          ],
+          "se_ve": "como el Cu-Mo, con más magnetita y alteración potásica",
+          "numeros": [
+            "ley de Au",
+            "ley de Cu"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "epitermal-as",
+          "nombre": "Epitermal de alta sulfuración",
+          "es": [
+            "epitermal de alta sulfuración",
+            "alta sulfuración",
+            "sílice oquerosa"
+          ],
+          "en": [
+            "high sulfidation epithermal",
+            "high-sulphidation",
+            "vuggy silica"
+          ],
+          "preferir": [
+            "alta sulfuración",
+            "sílice oquerosa",
+            "vuggy"
+          ],
+          "se_ve": "cuerpos de sílice oquerosa con halo de argílica avanzada, sin vetas definidas",
+          "numeros": [
+            "ley de Au",
+            "espesor del cuerpo silíceo"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "epitermal-bs",
+          "nombre": "Epitermal de baja o intermedia sulfuración",
+          "es": [
+            "epitermal de baja sulfuración",
+            "sulfuración intermedia",
+            "vetas epitermales",
+            "veta de cuarzo"
+          ],
+          "en": [
+            "low sulfidation epithermal",
+            "intermediate sulfidation",
+            "epithermal vein"
+          ],
+          "se_ve": "vetas bandeadas de cuarzo y adularia o carbonatos, con roca caja propilitizada",
+          "numeros": [
+            "potencia de veta",
+            "buzamiento",
+            "ley de Au y Ag"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "skarn",
+          "nombre": "Skarn",
+          "es": [
+            "skarn",
+            "exoskarn",
+            "endoskarn",
+            "metasomatismo de contacto"
+          ],
+          "en": [
+            "skarn",
+            "exoskarn",
+            "endoskarn",
+            "contact metasomatism"
+          ],
+          "se_ve": "contacto intrusivo–caliza con granate y piroxeno zonados",
+          "numeros": [
+            "ley de Cu, Zn o Fe",
+            "ancho del frente de skarn"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "reemplazamiento-carbonatos",
+          "nombre": "Reemplazamiento en carbonatos (Ag-Pb-Zn)",
+          "es": [
+            "reemplazamiento en carbonatos",
+            "mantos y chimeneas",
+            "cuerpos de reemplazamiento",
+            "polimetálico",
+            "plata plomo zinc"
+          ],
+          "en": [
+            "carbonate replacement deposit",
+            "carbonate-hosted",
+            "manto deposit",
+            "polymetallic"
+          ],
+          "preferir": [
+            "reemplazamiento",
+            "cuerpo",
+            "manto",
+            "chimenea"
+          ],
+          "se_ve": "cuerpos irregulares que siguen fallas y estratos de caliza, con oquedades kársticas (tipo Uchucchacua)",
+          "numeros": [
+            "ley de Ag",
+            "ley de Pb y Zn",
+            "forma del cuerpo"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "vetas-mesotermales",
+          "nombre": "Vetas mesotermales u orogénicas de Au",
+          "es": [
+            "veta aurífera",
+            "oro orogénico",
+            "vetas mesotermales",
+            "cuarzo aurífero"
+          ],
+          "en": [
+            "orogenic gold",
+            "mesothermal vein",
+            "lode gold",
+            "shear-hosted gold"
+          ],
+          "se_ve": "vetas angostas de cuarzo en zonas de cizalla, en pizarras o intrusivos",
+          "numeros": [
+            "potencia de veta",
+            "ley de Au"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "vms",
+          "nombre": "Sulfuros masivos volcanogénicos",
+          "es": [
+            "sulfuros masivos volcanogénicos",
+            "sulfuros masivos",
+            "vms"
+          ],
+          "en": [
+            "volcanogenic massive sulfide",
+            "vms",
+            "massive sulphide"
+          ],
+          "se_ve": "lentes de sulfuro masivo sobre un stockwork de alimentación",
+          "numeros": [
+            "ley de Cu y Zn",
+            "espesor de la lente"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "iocg",
+          "nombre": "Óxidos de Fe-Cu-Au (IOCG)",
+          "es": [
+            "óxidos de hierro cobre oro",
+            "iocg",
+            "yacimiento de hierro",
+            "magnetita-apatito"
+          ],
+          "en": [
+            "iron oxide copper gold",
+            "iocg",
+            "iron ore deposit"
+          ],
+          "se_ve": "brechas y mantos de magnetita o hematita con calcopirita (tipo Marcona, Condestable)",
+          "numeros": [
+            "ley de Fe",
+            "ley de Cu"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "estratoligado",
+          "nombre": "Estratoligado",
+          "es": [
+            "estratoligado",
+            "manto estratiforme",
+            "sedimentario exhalativo"
+          ],
+          "en": [
+            "stratabound",
+            "stratiform",
+            "sedex"
+          ],
+          "se_ve": "capas mineralizadas concordantes con la estratificación",
+          "numeros": [
+            "potencia",
+            "buzamiento"
+          ]
+        },
+        {
+          "grupo": "yacimiento",
+          "clave": "placer",
+          "nombre": "Placer o aluvial",
+          "es": [
+            "placer",
+            "aurífero aluvial",
+            "depósito aluvial"
+          ],
+          "en": [
+            "placer",
+            "alluvial gold"
+          ],
+          "se_ve": "gravas sin consolidar con oro libre; sin macizo rocoso",
+          "numeros": [
+            "ley en g/m³",
+            "espesor de grava"
+          ]
+        },
+        {
+          "grupo": "litologia",
+          "clave": "intrusivo",
+          "nombre": "Roca intrusiva",
+          "es": [
+            "intrusivo",
+            "granodiorita",
+            "diorita",
+            "monzonita",
+            "tonalita",
+            "granito",
+            "pórfido"
+          ],
+          "en": [
+            "intrusive",
+            "granodiorite",
+            "diorite",
+            "monzonite",
+            "granite"
+          ],
+          "se_ve": "roca masiva granular, diaclasas en bloques",
+          "numeros": [
+            "UCS",
+            "mi"
+          ]
+        },
+        {
+          "grupo": "litologia",
+          "clave": "volcanico",
+          "nombre": "Roca volcánica",
+          "es": [
+            "andesita",
+            "dacita",
+            "riolita",
+            "toba",
+            "volcánico",
+            "volcanoclástico",
+            "brecha volcánica"
+          ],
+          "en": [
+            "andesite",
+            "dacite",
+            "rhyolite",
+            "tuff",
+            "volcanic",
+            "volcaniclastic"
+          ],
+          "se_ve": "coladas y tobas estratificadas, a menudo alteradas",
+          "numeros": [
+            "UCS",
+            "mi"
+          ]
+        },
+        {
+          "grupo": "litologia",
+          "clave": "carbonatado",
+          "nombre": "Roca carbonatada",
+          "es": [
+            "caliza",
+            "dolomita",
+            "mármol",
+            "margas"
+          ],
+          "en": [
+            "limestone",
+            "dolomite",
+            "marble",
+            "marl"
+          ],
+          "se_ve": "capas con disolución y karst, contactos con skarn o reemplazamiento",
+          "numeros": [
+            "UCS",
+            "mi",
+            "espaciado de estratos"
+          ]
+        },
+        {
+          "grupo": "litologia",
+          "clave": "clastico",
+          "nombre": "Roca sedimentaria clástica",
+          "es": [
+            "arenisca",
+            "lutita",
+            "limolita",
+            "conglomerado",
+            "cuarcita"
+          ],
+          "en": [
+            "sandstone",
+            "shale",
+            "siltstone",
+            "conglomerate",
+            "quartzite"
+          ],
+          "se_ve": "estratos alternados duros y blandos; las lutitas se degradan con el agua",
+          "numeros": [
+            "UCS",
+            "durabilidad (slake)"
+          ]
+        },
+        {
+          "grupo": "litologia",
+          "clave": "metamorfico",
+          "nombre": "Roca metamórfica",
+          "es": [
+            "pizarra",
+            "esquisto",
+            "filita",
+            "gneis",
+            "hornfels"
+          ],
+          "en": [
+            "slate",
+            "schist",
+            "phyllite",
+            "gneiss",
+            "hornfels"
+          ],
+          "se_ve": "foliación penetrativa que gobierna la falla",
+          "numeros": [
+            "UCS paralelo y normal a la foliación",
+            "anisotropía"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D2",
+      "clave": "alteracion",
+      "nombre": "Alteración hidrotermal",
+      "descripcion": "Cómo los fluidos cambiaron la roca. Es gradacional: se desvanece desde la veta o el centro del sistema. Baja la resistencia y cambia el comportamiento en planta.",
+      "modificadores": [
+        {
+          "clave": "intensidad",
+          "nombre": "Intensidad",
+          "valores": [
+            "débil",
+            "moderada",
+            "fuerte",
+            "intensa"
+          ],
+          "en": [
+            "weak",
+            "moderate",
+            "strong",
+            "intense"
+          ]
+        },
+        {
+          "clave": "estilo",
+          "nombre": "Estilo",
+          "valores": [
+            "pervasiva",
+            "selectiva",
+            "en venillas",
+            "en halos",
+            "en parches"
+          ],
+          "en": [
+            "pervasive",
+            "selective",
+            "veinlet-controlled",
+            "vein halo",
+            "patchy"
+          ]
+        }
+      ],
+      "valores": [
+        {
+          "clave": "potasica",
+          "nombre": "Potásica",
+          "es": [
+            "alteración potásica",
+            "feldespato potásico",
+            "biotita secundaria",
+            "biotitización"
+          ],
+          "en": [
+            "potassic alteration",
+            "k-feldspar",
+            "secondary biotite"
+          ],
+          "preferir": [
+            "potásica",
+            "potasica",
+            "potassic",
+            "biotita"
+          ],
+          "se_ve": "roca rosada o pardo oscura, venillas de cuarzo y feldespato K; núcleo del pórfido",
+          "numeros": [
+            "UCS (suele ser alto)",
+            "% de biotita secundaria"
+          ]
+        },
+        {
+          "clave": "filica",
+          "nombre": "Fílica o cuarzo-sericita-pirita",
+          "es": [
+            "alteración fílica",
+            "cuarzo sericita",
+            "sericitización",
+            "alteración sericítica",
+            "qsp"
+          ],
+          "en": [
+            "phyllic alteration",
+            "quartz-sericite-pyrite",
+            "sericitic alteration",
+            "qsp"
+          ],
+          "preferir": [
+            "fílica",
+            "filica",
+            "sericita",
+            "phyllic",
+            "qsp"
+          ],
+          "se_ve": "roca blanquecina a gris verdosa, blanda al tacto, con pirita diseminada",
+          "numeros": [
+            "UCS",
+            "GSI",
+            "% de sericita"
+          ]
+        },
+        {
+          "clave": "argilica",
+          "nombre": "Argílica intermedia",
+          "es": [
+            "alteración argílica",
+            "argilización",
+            "arcillas"
+          ],
+          "en": [
+            "argillic alteration",
+            "argillization",
+            "clay alteration"
+          ],
+          "preferir": [
+            "argílica",
+            "argilica",
+            "arcilla",
+            "argillic"
+          ],
+          "se_ve": "roca blanda, terrosa, que se deshace con el agua",
+          "numeros": [
+            "UCS",
+            "% de arcillas",
+            "durabilidad"
+          ]
+        },
+        {
+          "clave": "argilica-avanzada",
+          "nombre": "Argílica avanzada",
+          "es": [
+            "argílica avanzada",
+            "alunita",
+            "pirofilita",
+            "dickita",
+            "caolinita"
+          ],
+          "en": [
+            "advanced argillic",
+            "alunite",
+            "pyrophyllite",
+            "dickite"
+          ],
+          "preferir": [
+            "argílica avanzada",
+            "alunita",
+            "advanced argillic"
+          ],
+          "se_ve": "roca blanca, a veces silicificada en el núcleo; litocap",
+          "numeros": [
+            "UCS (muy variable)",
+            "% de alunita"
+          ]
+        },
+        {
+          "clave": "propilitica",
+          "nombre": "Propilítica",
+          "es": [
+            "alteración propilítica",
+            "clorita",
+            "epidota",
+            "calcita",
+            "cloritización"
+          ],
+          "en": [
+            "propylitic alteration",
+            "chlorite",
+            "epidote",
+            "chloritization"
+          ],
+          "preferir": [
+            "propilítica",
+            "propilitica",
+            "propylitic",
+            "clorita",
+            "epidota"
+          ],
+          "se_ve": "roca verdosa, halo externo amplio; casi no cambia la resistencia",
+          "numeros": [
+            "UCS",
+            "% de clorita"
+          ]
+        },
+        {
+          "clave": "silicificacion",
+          "nombre": "Silicificación",
+          "es": [
+            "silicificación",
+            "sílice",
+            "cuarzo masivo",
+            "sílice oquerosa"
+          ],
+          "en": [
+            "silicification",
+            "silica",
+            "vuggy silica"
+          ],
+          "preferir": [
+            "silicificación",
+            "silicificacion",
+            "sílice",
+            "silica"
+          ],
+          "se_ve": "roca dura, vítrea y frágil; fractura mucho al volar",
+          "numeros": [
+            "UCS (alto)",
+            "frecuencia de fracturas"
+          ]
+        },
+        {
+          "clave": "calcosilicatada",
+          "nombre": "Calcosilicatada (skarn)",
+          "es": [
+            "granate",
+            "piroxeno",
+            "wollastonita",
+            "calcosilicatos",
+            "skarnificación"
+          ],
+          "en": [
+            "calc-silicate",
+            "garnet",
+            "pyroxene",
+            "wollastonite"
+          ],
+          "se_ve": "bandas de granate pardo y piroxeno verde junto al contacto",
+          "numeros": [
+            "UCS",
+            "densidad"
+          ]
+        },
+        {
+          "clave": "carbonatos",
+          "nombre": "Dolomitización, marmolización y decarbonatación",
+          "es": [
+            "dolomitización",
+            "marmolización",
+            "recristalización",
+            "decarbonatación",
+            "rodocrosita"
+          ],
+          "en": [
+            "dolomitization",
+            "marbleization",
+            "decarbonation"
+          ],
+          "se_ve": "caliza recristalizada, blanqueada o con cavidades",
+          "numeros": [
+            "UCS",
+            "porosidad"
+          ]
+        },
+        {
+          "clave": "lixiviado",
+          "nombre": "Zona lixiviada",
+          "es": [
+            "zona lixiviada",
+            "capa lixiviada",
+            "lixiviación supergénica",
+            "limonitas",
+            "gossan"
+          ],
+          "en": [
+            "leached cap",
+            "leached zone",
+            "gossan",
+            "limonite"
+          ],
+          "preferir": [
+            "lixiviad",
+            "gossan",
+            "limonita",
+            "leached"
+          ],
+          "se_ve": "roca oxidada ocre a rojiza con cavidades de sulfuros disueltos",
+          "numeros": [
+            "espesor",
+            "tipo de limonita (goethita, jarosita, hematita)"
+          ]
+        },
+        {
+          "clave": "oxidos",
+          "nombre": "Zona de óxidos",
+          "es": [
+            "zona de óxidos",
+            "óxidos de cobre",
+            "malaquita",
+            "crisocola",
+            "oxidación"
+          ],
+          "en": [
+            "oxide zone",
+            "copper oxides",
+            "malachite",
+            "chrysocolla"
+          ],
+          "preferir": [
+            "óxido",
+            "oxido",
+            "oxide",
+            "malaquita"
+          ],
+          "se_ve": "verdes y azules de óxidos de cobre sobre roca oxidada",
+          "numeros": [
+            "ley de CuS (soluble)",
+            "espesor"
+          ]
+        },
+        {
+          "clave": "enriquecimiento",
+          "nombre": "Enriquecimiento secundario",
+          "es": [
+            "enriquecimiento secundario",
+            "sulfuros secundarios",
+            "calcosina",
+            "calcocita",
+            "covelita"
+          ],
+          "en": [
+            "supergene enrichment",
+            "secondary sulfides",
+            "chalcocite",
+            "covellite"
+          ],
+          "preferir": [
+            "enriquecimiento",
+            "supergén",
+            "calcosina",
+            "calcocita",
+            "enrichment"
+          ],
+          "se_ve": "manto bajo los óxidos con sulfuros negro azulados",
+          "numeros": [
+            "ley de Cu",
+            "espesor del manto"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D3",
+      "clave": "meteorizacion",
+      "nombre": "Meteorización y cobertura",
+      "descripcion": "Degradación desde la superficie. Gradacional, sin borde nítido. Escala ISRM W1 a W6.",
+      "valores": [
+        {
+          "clave": "w1",
+          "nombre": "W1 · Fresca",
+          "es": [
+            "roca fresca",
+            "roca sana",
+            "sin meteorización"
+          ],
+          "en": [
+            "fresh rock",
+            "unweathered"
+          ],
+          "se_ve": "sin decoloración",
+          "numeros": [
+            "UCS"
+          ]
+        },
+        {
+          "clave": "w2",
+          "nombre": "W2 · Ligeramente meteorizada",
+          "es": [
+            "ligeramente meteorizada",
+            "ligeramente alterada",
+            "decoloración en juntas"
+          ],
+          "en": [
+            "slightly weathered"
+          ],
+          "se_ve": "decoloración solo en las superficies de las juntas",
+          "numeros": [
+            "UCS"
+          ]
+        },
+        {
+          "clave": "w3",
+          "nombre": "W3 · Moderadamente meteorizada",
+          "es": [
+            "moderadamente meteorizada",
+            "moderadamente alterada"
+          ],
+          "en": [
+            "moderately weathered"
+          ],
+          "se_ve": "menos de la mitad de la roca descompuesta; núcleos sanos",
+          "numeros": [
+            "UCS",
+            "% de roca descompuesta"
+          ]
+        },
+        {
+          "clave": "w4",
+          "nombre": "W4 · Altamente meteorizada",
+          "es": [
+            "altamente meteorizada",
+            "muy meteorizada",
+            "fuertemente alterada"
+          ],
+          "en": [
+            "highly weathered"
+          ],
+          "se_ve": "más de la mitad descompuesta; bolones sueltos",
+          "numeros": [
+            "% de roca descompuesta"
+          ]
+        },
+        {
+          "clave": "w5",
+          "nombre": "W5 · Completamente meteorizada",
+          "es": [
+            "completamente meteorizada",
+            "saprolito",
+            "descompuesta"
+          ],
+          "en": [
+            "completely weathered",
+            "saprolite"
+          ],
+          "se_ve": "se conserva la textura pero es suelo",
+          "numeros": [
+            "parámetros de suelo (c, φ)"
+          ]
+        },
+        {
+          "clave": "w6",
+          "nombre": "W6 · Suelo residual",
+          "es": [
+            "suelo residual"
+          ],
+          "en": [
+            "residual soil"
+          ],
+          "se_ve": "suelo sin textura de la roca",
+          "numeros": [
+            "c, φ"
+          ]
+        },
+        {
+          "clave": "coluvial",
+          "nombre": "Depósito coluvial",
+          "es": [
+            "coluvial",
+            "coluvio",
+            "talud de detritos",
+            "escombros de ladera"
+          ],
+          "en": [
+            "colluvium",
+            "colluvial",
+            "scree",
+            "talus"
+          ],
+          "se_ve": "bloques angulosos en matriz, al pie de laderas",
+          "numeros": [
+            "c, φ",
+            "espesor"
+          ]
+        },
+        {
+          "clave": "glaciar",
+          "nombre": "Depósito glaciar (morrena)",
+          "es": [
+            "morrena",
+            "depósito glaciar",
+            "fluvioglaciar"
+          ],
+          "en": [
+            "moraine",
+            "glacial till",
+            "glacial deposit"
+          ],
+          "se_ve": "bloques redondeados en matriz fina; común sobre 4000 m",
+          "numeros": [
+            "c, φ",
+            "espesor"
+          ]
+        },
+        {
+          "clave": "aluvial",
+          "nombre": "Depósito aluvial o cuaternario",
+          "es": [
+            "aluvial",
+            "depósito cuaternario",
+            "gravas",
+            "material de cobertura"
+          ],
+          "en": [
+            "alluvium",
+            "quaternary cover",
+            "gravels",
+            "overburden"
+          ],
+          "se_ve": "gravas y arenas estratificadas",
+          "numeros": [
+            "c, φ",
+            "espesor"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D4",
+      "clave": "estructura",
+      "nombre": "Estructura y discontinuidades",
+      "descripcion": "Lo que separa el macizo en bloques. Siempre estadístico: una familia es una nube de orientaciones con espaciado y persistencia distribuidos, nunca tres planos perfectos.",
+      "modificadores": [
+        {
+          "clave": "espaciado",
+          "nombre": "Espaciado (ISRM)",
+          "valores": [
+            "extremadamente junto < 20 mm",
+            "muy junto 20–60 mm",
+            "junto 60–200 mm",
+            "moderado 200–600 mm",
+            "separado 0,6–2 m",
+            "muy separado 2–6 m",
+            "extremadamente separado > 6 m"
+          ],
+          "en": [
+            "spacing"
+          ]
+        },
+        {
+          "clave": "persistencia",
+          "nombre": "Persistencia (ISRM)",
+          "valores": [
+            "muy baja < 1 m",
+            "baja 1–3 m",
+            "media 3–10 m",
+            "alta 10–20 m",
+            "muy alta > 20 m"
+          ],
+          "en": [
+            "persistence"
+          ]
+        },
+        {
+          "clave": "abertura",
+          "nombre": "Abertura",
+          "valores": [
+            "cerrada",
+            "muy angosta < 0,1 mm",
+            "angosta 0,1–1 mm",
+            "abierta 1–5 mm",
+            "muy abierta > 5 mm"
+          ],
+          "en": [
+            "aperture"
+          ]
+        },
+        {
+          "clave": "relleno",
+          "nombre": "Relleno",
+          "valores": [
+            "limpio",
+            "óxidos",
+            "calcita",
+            "cuarzo",
+            "yeso",
+            "clorita",
+            "arcilla",
+            "panizo"
+          ],
+          "en": [
+            "clean",
+            "oxide coating",
+            "calcite",
+            "quartz",
+            "gypsum",
+            "chlorite",
+            "clay",
+            "gouge"
+          ]
+        },
+        {
+          "clave": "rugosidad",
+          "nombre": "Rugosidad (ISRM)",
+          "valores": [
+            "escalonada rugosa",
+            "escalonada lisa",
+            "escalonada estriada",
+            "ondulada rugosa",
+            "ondulada lisa",
+            "ondulada estriada",
+            "plana rugosa",
+            "plana lisa",
+            "plana estriada"
+          ],
+          "en": [
+            "roughness",
+            "JRC"
+          ]
+        },
+        {
+          "clave": "dispersion",
+          "nombre": "Dispersión de la familia",
+          "valores": [
+            "concentrada (K > 100)",
+            "moderada (K 20–100)",
+            "dispersa (K < 20)"
+          ],
+          "en": [
+            "Fisher K",
+            "dispersion"
+          ]
+        }
+      ],
+      "valores": [
+        {
+          "clave": "juntas",
+          "nombre": "Familia de juntas o diaclasas",
+          "es": [
+            "familia de discontinuidades",
+            "diaclasas",
+            "juntas",
+            "fracturas",
+            "sistema de discontinuidades",
+            "orientación de discontinuidades"
+          ],
+          "en": [
+            "joint set",
+            "joints",
+            "discontinuities",
+            "fracture set",
+            "discontinuity orientation"
+          ],
+          "preferir": [
+            "familia",
+            "diaclasa",
+            "discontinuidad",
+            "joint",
+            "estereograma",
+            "estereográfica"
+          ],
+          "se_ve": "trazas paralelas imperfectas que cortan la cara en bloques",
+          "numeros": [
+            "orientación (buzamiento/dirección de buzamiento)",
+            "K de Fisher",
+            "espaciado",
+            "persistencia",
+            "Jn"
+          ]
+        },
+        {
+          "clave": "estratificacion",
+          "nombre": "Estratificación",
+          "es": [
+            "estratificación",
+            "estratos",
+            "planos de estratificación"
+          ],
+          "en": [
+            "bedding",
+            "bedding planes",
+            "strata"
+          ],
+          "se_ve": "planos continuos que pueden gobernar la estabilidad del talud",
+          "numeros": [
+            "orientación",
+            "espesor de estrato"
+          ]
+        },
+        {
+          "clave": "foliacion",
+          "nombre": "Foliación o esquistosidad",
+          "es": [
+            "foliación",
+            "esquistosidad",
+            "clivaje"
+          ],
+          "en": [
+            "foliation",
+            "schistosity",
+            "cleavage"
+          ],
+          "se_ve": "planos muy juntos y penetrativos; roca anisótropa",
+          "numeros": [
+            "orientación",
+            "anisotropía de resistencia"
+          ]
+        },
+        {
+          "clave": "falla",
+          "nombre": "Falla",
+          "es": [
+            "falla",
+            "falla geológica",
+            "falla regional",
+            "falla principal",
+            "panizo"
+          ],
+          "en": [
+            "fault",
+            "fault zone",
+            "fault gouge"
+          ],
+          "preferir": [
+            "falla",
+            "fault",
+            "panizo"
+          ],
+          "se_ve": "zona con panizo, roca triturada y estrías; corta todo lo demás",
+          "numeros": [
+            "orientación",
+            "espesor de la zona",
+            "tipo de relleno",
+            "continuidad"
+          ]
+        },
+        {
+          "clave": "cizalla",
+          "nombre": "Zona de cizalla",
+          "es": [
+            "zona de cizalla",
+            "cizallamiento",
+            "milonita"
+          ],
+          "en": [
+            "shear zone",
+            "shearing",
+            "mylonite"
+          ],
+          "se_ve": "banda de roca deformada y fracturada, ancha y continua",
+          "numeros": [
+            "ancho",
+            "orientación"
+          ]
+        },
+        {
+          "clave": "brecha",
+          "nombre": "Brecha",
+          "es": [
+            "brecha",
+            "brecha hidrotermal",
+            "brecha tectónica",
+            "brecha de turmalina"
+          ],
+          "en": [
+            "breccia",
+            "hydrothermal breccia",
+            "tectonic breccia"
+          ],
+          "se_ve": "fragmentos angulosos en matriz o cemento",
+          "numeros": [
+            "% de matriz",
+            "UCS"
+          ]
+        },
+        {
+          "clave": "vetas",
+          "nombre": "Vetas y venillas",
+          "es": [
+            "veta",
+            "venillas",
+            "stockwork",
+            "enrejado"
+          ],
+          "en": [
+            "vein",
+            "veinlets",
+            "stockwork"
+          ],
+          "se_ve": "planos rellenos de cuarzo o sulfuros que pueden ser más débiles que la roca",
+          "numeros": [
+            "frecuencia de venillas",
+            "potencia de veta",
+            "relleno"
+          ]
+        },
+        {
+          "clave": "dique",
+          "nombre": "Dique",
+          "es": [
+            "dique",
+            "sill",
+            "intrusión tabular"
+          ],
+          "en": [
+            "dyke",
+            "dike",
+            "sill"
+          ],
+          "se_ve": "cuerpo tabular de otra roca con contactos fracturados",
+          "numeros": [
+            "espesor",
+            "orientación"
+          ]
+        },
+        {
+          "clave": "karst",
+          "nombre": "Karst y cavidades",
+          "es": [
+            "karst",
+            "cavidades",
+            "cavernas",
+            "disolución",
+            "oquedades"
+          ],
+          "en": [
+            "karst",
+            "cavities",
+            "dissolution",
+            "voids"
+          ],
+          "se_ve": "huecos irregulares en caliza, a veces con agua o arcilla",
+          "numeros": [
+            "tamaño de cavidad",
+            "frecuencia"
+          ]
+        },
+        {
+          "clave": "pliegue",
+          "nombre": "Pliegue",
+          "es": [
+            "pliegue",
+            "anticlinal",
+            "sinclinal",
+            "plegamiento"
+          ],
+          "en": [
+            "fold",
+            "anticline",
+            "syncline"
+          ],
+          "se_ve": "estratos curvados; juntas de tensión en la charnela",
+          "numeros": [
+            "eje y plano axial"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D5",
+      "clave": "calidad",
+      "nombre": "Calidad del macizo",
+      "descripcion": "Clasificaciones que resumen D1–D4 y D6 en un número. Son la entrada de los diseños empíricos.",
+      "modificadores": [
+        {
+          "clave": "clase",
+          "nombre": "Clase",
+          "valores": [
+            "muy buena",
+            "buena",
+            "regular",
+            "mala",
+            "muy mala"
+          ],
+          "en": [
+            "very good",
+            "good",
+            "fair",
+            "poor",
+            "very poor"
+          ]
+        }
+      ],
+      "valores": [
+        {
+          "clave": "rqd",
+          "nombre": "RQD",
+          "es": [
+            "rqd",
+            "designación de calidad de roca",
+            "índice de calidad de roca"
+          ],
+          "en": [
+            "rqd",
+            "rock quality designation"
+          ],
+          "se_ve": "caja de testigos con tramos ≥ 10 cm medidos",
+          "numeros": [
+            "RQD %",
+            "frecuencia de fracturas por metro"
+          ]
+        },
+        {
+          "clave": "rmr",
+          "nombre": "RMR (Bieniawski)",
+          "es": [
+            "rmr",
+            "valoración del macizo rocoso",
+            "clasificación de bieniawski",
+            "rock mass rating"
+          ],
+          "en": [
+            "rmr",
+            "rock mass rating",
+            "bieniawski"
+          ],
+          "se_ve": "planilla de mapeo con los cinco parámetros",
+          "numeros": [
+            "RMR89",
+            "RMR14",
+            "puntaje de agua",
+            "ajuste por orientación"
+          ]
+        },
+        {
+          "clave": "q",
+          "nombre": "Índice Q (Barton)",
+          "es": [
+            "índice q",
+            "sistema q",
+            "clasificación de barton",
+            "q de barton"
+          ],
+          "en": [
+            "q-system",
+            "q index",
+            "barton q"
+          ],
+          "preferir": [
+            "índice q",
+            "sistema q",
+            "barton"
+          ],
+          "se_ve": "ábaco de sostenimiento Q contra luz equivalente",
+          "numeros": [
+            "Q",
+            "Jn",
+            "Jr",
+            "Ja",
+            "Jw",
+            "SRF",
+            "ESR"
+          ]
+        },
+        {
+          "clave": "gsi",
+          "nombre": "GSI",
+          "es": [
+            "gsi",
+            "índice de resistencia geológica",
+            "índice geológico de resistencia"
+          ],
+          "en": [
+            "gsi",
+            "geological strength index"
+          ],
+          "se_ve": "la tabla GSI: estructura (bloques a desintegrada) contra condición de superficies",
+          "numeros": [
+            "GSI",
+            "D (factor de perturbación)"
+          ]
+        },
+        {
+          "clave": "mrmr",
+          "nombre": "MRMR (Laubscher)",
+          "es": [
+            "mrmr",
+            "laubscher",
+            "valoración minera del macizo"
+          ],
+          "en": [
+            "mrmr",
+            "mining rock mass rating",
+            "laubscher"
+          ],
+          "se_ve": "ábaco de hundibilidad por radio hidráulico",
+          "numeros": [
+            "IRMR",
+            "MRMR",
+            "ajustes"
+          ]
+        },
+        {
+          "clave": "smr",
+          "nombre": "SMR (Romana)",
+          "es": [
+            "smr",
+            "slope mass rating",
+            "romana"
+          ],
+          "en": [
+            "smr",
+            "slope mass rating"
+          ],
+          "se_ve": "talud con la familia desfavorable marcada",
+          "numeros": [
+            "SMR",
+            "F1–F4"
+          ]
+        },
+        {
+          "clave": "resistencia-intacta",
+          "nombre": "Resistencia de la roca intacta",
+          "es": [
+            "resistencia a la compresión uniaxial",
+            "carga puntual",
+            "martillo schmidt",
+            "esclerómetro",
+            "ensayo de compresión"
+          ],
+          "en": [
+            "uniaxial compressive strength",
+            "ucs",
+            "point load",
+            "schmidt hammer"
+          ],
+          "preferir": [
+            "compresión",
+            "carga puntual",
+            "schmidt",
+            "ucs"
+          ],
+          "se_ve": "ensayo de campo o de laboratorio (las figuras de laboratorio son de anatomía)",
+          "numeros": [
+            "UCS (MPa)",
+            "Is50",
+            "rebote R"
+          ]
+        },
+        {
+          "clave": "hoek-brown",
+          "nombre": "Criterio de Hoek-Brown",
+          "es": [
+            "hoek-brown",
+            "hoek y brown",
+            "criterio de rotura",
+            "envolvente de falla"
+          ],
+          "en": [
+            "hoek-brown",
+            "failure criterion",
+            "strength envelope"
+          ],
+          "se_ve": "envolvente curva σ1–σ3 del macizo frente a la roca intacta",
+          "numeros": [
+            "σci",
+            "mi",
+            "mb",
+            "s",
+            "a",
+            "D"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D6",
+      "clave": "agua",
+      "nombre": "Agua",
+      "descripcion": "Cambia el comportamiento y lo que se ve. Las cinco primeras son las condiciones del RMR y del Jw.",
+      "valores": [
+        {
+          "clave": "seco",
+          "nombre": "Seco",
+          "es": [
+            "completamente seco",
+            "condición seca"
+          ],
+          "en": [
+            "completely dry"
+          ],
+          "se_ve": "superficie mate, polvo",
+          "numeros": [
+            "puntaje 15 (RMR89)",
+            "Jw = 1"
+          ]
+        },
+        {
+          "clave": "humedo",
+          "nombre": "Húmedo",
+          "es": [
+            "condición húmeda",
+            "macizo húmedo",
+            "juntas húmedas"
+          ],
+          "en": [
+            "damp",
+            "damp conditions"
+          ],
+          "se_ve": "superficie oscurecida sin brillo",
+          "numeros": [
+            "puntaje 10"
+          ]
+        },
+        {
+          "clave": "mojado",
+          "nombre": "Mojado",
+          "es": [
+            "mojado",
+            "superficie mojada"
+          ],
+          "en": [
+            "wet"
+          ],
+          "se_ve": "brillo en juntas y superficies",
+          "numeros": [
+            "puntaje 7"
+          ]
+        },
+        {
+          "clave": "goteo",
+          "nombre": "Goteo",
+          "es": [
+            "goteo",
+            "goteando",
+            "filtración"
+          ],
+          "en": [
+            "dripping",
+            "seepage"
+          ],
+          "preferir": [
+            "goteo",
+            "filtración",
+            "filtracion",
+            "seepage"
+          ],
+          "se_ve": "gotas desde la corona, charcos en el piso",
+          "numeros": [
+            "puntaje 4",
+            "caudal por 10 m de túnel"
+          ]
+        },
+        {
+          "clave": "flujo",
+          "nombre": "Flujo",
+          "es": [
+            "flujo de agua",
+            "flujo continuo",
+            "agua a presión",
+            "irrupción de agua",
+            "inundación"
+          ],
+          "en": [
+            "flowing",
+            "water inflow",
+            "water inrush",
+            "flooding"
+          ],
+          "preferir": [
+            "flujo",
+            "irrupción",
+            "inflow",
+            "inundación"
+          ],
+          "se_ve": "chorros desde juntas o sondajes, piso inundado",
+          "numeros": [
+            "puntaje 0",
+            "Jw 0,05–0,5",
+            "caudal L/s"
+          ]
+        },
+        {
+          "clave": "nivel-freatico",
+          "nombre": "Nivel freático y presión de poros",
+          "es": [
+            "nivel freático",
+            "napa freática",
+            "presión de poros",
+            "piezometría",
+            "agua subterránea"
+          ],
+          "en": [
+            "water table",
+            "phreatic surface",
+            "pore pressure",
+            "groundwater"
+          ],
+          "preferir": [
+            "freático",
+            "freatico",
+            "presión de poros",
+            "piezómetro",
+            "water table"
+          ],
+          "se_ve": "línea freática dentro del talud que baja hacia la cara",
+          "numeros": [
+            "ru",
+            "altura del nivel",
+            "presión de poros"
+          ]
+        },
+        {
+          "clave": "drenaje",
+          "nombre": "Drenaje y despresurización",
+          "es": [
+            "drenaje",
+            "drenes horizontales",
+            "pozos de bombeo",
+            "despresurización",
+            "galería de drenaje",
+            "bombeo"
+          ],
+          "en": [
+            "drainage",
+            "horizontal drains",
+            "dewatering",
+            "depressurization",
+            "pumping wells"
+          ],
+          "se_ve": "drenes en abanico en la cara, pozas y bombas",
+          "numeros": [
+            "caudal",
+            "abatimiento"
+          ]
+        },
+        {
+          "clave": "agua-acida",
+          "nombre": "Agua ácida y eflorescencias",
+          "es": [
+            "drenaje ácido de mina",
+            "agua ácida",
+            "eflorescencias",
+            "sulfatos"
+          ],
+          "en": [
+            "acid mine drainage",
+            "acid rock drainage",
+            "efflorescence"
+          ],
+          "se_ve": "costras amarillas, blancas o rojizas; agua anaranjada",
+          "numeros": [
+            "pH",
+            "conductividad"
+          ]
+        },
+        {
+          "clave": "hielo",
+          "nombre": "Hielo y congelamiento",
+          "es": [
+            "congelamiento",
+            "hielo",
+            "permafrost",
+            "carámbanos",
+            "gelifracción",
+            "ciclos de hielo y deshielo"
+          ],
+          "en": [
+            "freezing",
+            "ice",
+            "permafrost",
+            "freeze-thaw",
+            "icicles"
+          ],
+          "se_ve": "carámbanos en la corona, hielo en juntas que abre bloques",
+          "numeros": [
+            "ciclos de hielo y deshielo al año",
+            "temperatura"
+          ]
+        },
+        {
+          "clave": "agua-termal",
+          "nombre": "Agua termal",
+          "es": [
+            "agua termal",
+            "aguas calientes",
+            "geotermia en mina"
+          ],
+          "en": [
+            "hot water",
+            "thermal water"
+          ],
+          "se_ve": "vapor en la labor",
+          "numeros": [
+            "temperatura del agua"
+          ]
+        },
+        {
+          "clave": "lluvia-erosion",
+          "nombre": "Lluvia y erosión superficial",
+          "es": [
+            "precipitación",
+            "escorrentía",
+            "erosión de taludes",
+            "huaico",
+            "temporada de lluvias"
+          ],
+          "en": [
+            "rainfall",
+            "runoff",
+            "slope erosion",
+            "debris flow"
+          ],
+          "se_ve": "cárcavas en la cara, flujos de detritos en quebradas",
+          "numeros": [
+            "precipitación mm/día"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D7",
+      "clave": "dano",
+      "nombre": "Esfuerzos, daño y modos de falla",
+      "descripcion": "Lo que le pasa a la excavación. La forma real después de excavar casi nunca es la de diseño.",
+      "valores": [
+        {
+          "grupo": "subterranea",
+          "clave": "planchones",
+          "nombre": "Caída de planchones y cuñas",
+          "es": [
+            "caída de rocas",
+            "planchones",
+            "cuña",
+            "desprendimiento",
+            "bloque inestable"
+          ],
+          "en": [
+            "rockfall",
+            "wedge failure",
+            "falls of ground",
+            "structurally controlled failure"
+          ],
+          "preferir": [
+            "planchón",
+            "planchon",
+            "cuña",
+            "cuna",
+            "caída de roca",
+            "wedge"
+          ],
+          "se_ve": "hueco en la corona con la forma de la intersección de familias",
+          "numeros": [
+            "tamaño de bloque",
+            "FS de la cuña"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "chispeo",
+          "nombre": "Chispeo y desprendimiento progresivo",
+          "es": [
+            "chispeo",
+            "desprendimiento progresivo",
+            "desmoronamiento"
+          ],
+          "en": [
+            "ravelling",
+            "raveling",
+            "progressive loosening"
+          ],
+          "se_ve": "pequeños fragmentos que caen de roca muy fracturada",
+          "numeros": [
+            "GSI bajo"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "lajamiento",
+          "nombre": "Lajamiento",
+          "es": [
+            "lajamiento",
+            "descostramiento",
+            "spalling"
+          ],
+          "en": [
+            "spalling",
+            "slabbing"
+          ],
+          "se_ve": "lajas paralelas al contorno en las zonas de mayor esfuerzo",
+          "numeros": [
+            "σmax/σci",
+            "profundidad"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "estallido",
+          "nombre": "Estallido de roca",
+          "es": [
+            "estallido de roca",
+            "estallido de rocas",
+            "sismicidad inducida"
+          ],
+          "en": [
+            "rockburst",
+            "strainburst",
+            "induced seismicity"
+          ],
+          "se_ve": "eyección violenta de roca, sostenimiento roto",
+          "numeros": [
+            "σ1/σci",
+            "magnitud sísmica",
+            "energía"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "convergencia",
+          "nombre": "Convergencia y roca expansiva",
+          "es": [
+            "convergencia",
+            "deformación",
+            "roca expansiva",
+            "hinchamiento",
+            "squeezing",
+            "roca fluyente"
+          ],
+          "en": [
+            "convergence",
+            "squeezing",
+            "swelling",
+            "large deformation"
+          ],
+          "se_ve": "sección que se cierra, cimbras dobladas, piso levantado",
+          "numeros": [
+            "% de convergencia",
+            "σcm/p0"
+          ]
+        },
+        {
+          "grupo": "voladura",
+          "clave": "sobrerotura",
+          "nombre": "Sobrerotura y daño por voladura",
+          "es": [
+            "sobrerotura",
+            "sobreexcavación",
+            "daño por voladura",
+            "zona de daño",
+            "vibraciones"
+          ],
+          "en": [
+            "overbreak",
+            "blast damage",
+            "damage zone",
+            "blast vibration",
+            "ppv"
+          ],
+          "preferir": [
+            "sobrerotura",
+            "sobreexcavación",
+            "daño",
+            "overbreak",
+            "ppv"
+          ],
+          "se_ve": "contorno irregular más allá de la línea de diseño; medias cañas ausentes",
+          "numeros": [
+            "% de sobrerotura",
+            "PPV (mm/s)",
+            "factor de carga"
+          ]
+        },
+        {
+          "grupo": "voladura",
+          "clave": "subexcavacion",
+          "nombre": "Subexcavación y tacos",
+          "es": [
+            "subexcavación",
+            "tacos",
+            "lomos",
+            "piso irregular"
+          ],
+          "en": [
+            "underbreak",
+            "toe",
+            "bootleg"
+          ],
+          "se_ve": "roca que queda dentro de la sección o en el pie del banco",
+          "numeros": [
+            "volumen",
+            "altura del pie"
+          ]
+        },
+        {
+          "grupo": "taludes",
+          "clave": "falla-planar",
+          "nombre": "Falla planar",
+          "es": [
+            "falla planar",
+            "deslizamiento planar",
+            "rotura plana"
+          ],
+          "en": [
+            "planar failure",
+            "plane failure"
+          ],
+          "se_ve": "bloque que desliza por una familia que aflora en la cara",
+          "numeros": [
+            "buzamiento del plano",
+            "φ",
+            "FS"
+          ]
+        },
+        {
+          "grupo": "taludes",
+          "clave": "falla-cuna",
+          "nombre": "Falla en cuña",
+          "es": [
+            "falla en cuña",
+            "rotura en cuña",
+            "deslizamiento en cuña"
+          ],
+          "en": [
+            "wedge failure"
+          ],
+          "se_ve": "cuña en V entre dos familias, a escala de banco",
+          "numeros": [
+            "inmersión de la intersección",
+            "FS"
+          ]
+        },
+        {
+          "grupo": "taludes",
+          "clave": "vuelco",
+          "nombre": "Vuelco",
+          "es": [
+            "vuelco",
+            "volteo",
+            "toppling",
+            "rotura por vuelco"
+          ],
+          "en": [
+            "toppling",
+            "flexural toppling",
+            "block toppling"
+          ],
+          "se_ve": "columnas que se inclinan hacia la cara",
+          "numeros": [
+            "buzamiento hacia el talud",
+            "espaciado"
+          ]
+        },
+        {
+          "grupo": "taludes",
+          "clave": "falla-circular",
+          "nombre": "Falla circular o del macizo",
+          "es": [
+            "falla circular",
+            "rotura circular",
+            "deslizamiento rotacional",
+            "inestabilidad global"
+          ],
+          "en": [
+            "circular failure",
+            "rotational failure",
+            "overall slope failure"
+          ],
+          "se_ve": "superficie curva que atraviesa varios bancos en roca muy fracturada o suelo",
+          "numeros": [
+            "FS global",
+            "altura del talud",
+            "GSI"
+          ]
+        },
+        {
+          "grupo": "taludes",
+          "clave": "caida-rocas",
+          "nombre": "Caída de rocas en talud",
+          "es": [
+            "caída de rocas",
+            "rodado de bloques",
+            "berma de contención"
+          ],
+          "en": [
+            "rockfall",
+            "rock fall catchment"
+          ],
+          "se_ve": "bloques que ruedan y saltan por los bancos",
+          "numeros": [
+            "ancho de berma",
+            "energía"
+          ]
+        },
+        {
+          "grupo": "hundimiento",
+          "clave": "subsidencia",
+          "nombre": "Subsidencia y hundimiento",
+          "es": [
+            "subsidencia",
+            "hundimiento",
+            "cráter",
+            "zona de quiebre"
+          ],
+          "en": [
+            "subsidence",
+            "caving crater",
+            "fracture zone"
+          ],
+          "se_ve": "cráter y grietas en superficie sobre una explotación",
+          "numeros": [
+            "ángulo de quiebre",
+            "radio hidráulico"
+          ]
+        },
+        {
+          "grupo": "hundimiento",
+          "clave": "falla-pilar",
+          "nombre": "Falla de pilar y de puente",
+          "es": [
+            "falla de pilar",
+            "colapso de pilar",
+            "puente de roca",
+            "losa"
+          ],
+          "en": [
+            "pillar failure",
+            "crown pillar",
+            "sill pillar"
+          ],
+          "se_ve": "pilar con lajas, reloj de arena, colapso",
+          "numeros": [
+            "FS del pilar",
+            "relación ancho/alto"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D8",
+      "clave": "excavacion",
+      "nombre": "Excavación",
+      "descripcion": "La geometría minera. Se dibuja la real (irregular), no la de catálogo.",
+      "valores": [
+        {
+          "grupo": "tajo",
+          "clave": "banco",
+          "nombre": "Banco (cara, cresta, pie)",
+          "es": [
+            "banco",
+            "cara del banco",
+            "cresta",
+            "pie del banco",
+            "altura de banco"
+          ],
+          "en": [
+            "bench",
+            "bench face",
+            "crest",
+            "toe",
+            "bench height"
+          ],
+          "se_ve": "cara con medias cañas, cresta redondeada por la voladura",
+          "numeros": [
+            "altura",
+            "ángulo de cara"
+          ]
+        },
+        {
+          "grupo": "tajo",
+          "clave": "berma",
+          "nombre": "Berma",
+          "es": [
+            "berma",
+            "berma de seguridad",
+            "berma de contención"
+          ],
+          "en": [
+            "berm",
+            "catch bench",
+            "safety berm"
+          ],
+          "se_ve": "plataforma con material caído en el borde interior",
+          "numeros": [
+            "ancho de berma"
+          ]
+        },
+        {
+          "grupo": "tajo",
+          "clave": "talud-interrampa",
+          "nombre": "Talud interrampa y global",
+          "es": [
+            "ángulo interrampa",
+            "talud global",
+            "ángulo de talud",
+            "diseño de taludes"
+          ],
+          "en": [
+            "inter-ramp angle",
+            "overall slope angle",
+            "slope design"
+          ],
+          "se_ve": "sucesión de bancos entre rampas, perfil global",
+          "numeros": [
+            "ángulo interrampa",
+            "ángulo global",
+            "altura"
+          ]
+        },
+        {
+          "grupo": "tajo",
+          "clave": "rampa-tajo",
+          "nombre": "Rampa del tajo",
+          "es": [
+            "rampa",
+            "vía de acarreo",
+            "camino de acarreo"
+          ],
+          "en": [
+            "haul road",
+            "ramp"
+          ],
+          "se_ve": "rampa que rompe la secuencia de bancos",
+          "numeros": [
+            "ancho",
+            "pendiente"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "bocamina",
+          "nombre": "Bocamina y portal",
+          "es": [
+            "bocamina",
+            "portal",
+            "socavón"
+          ],
+          "en": [
+            "portal",
+            "adit"
+          ],
+          "se_ve": "entrada en ladera con suelo y roca meteorizada",
+          "numeros": [
+            "cobertura"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "galeria",
+          "nombre": "Galería, crucero y subnivel",
+          "es": [
+            "galería",
+            "crucero",
+            "subnivel",
+            "by pass",
+            "labor horizontal",
+            "túnel"
+          ],
+          "en": [
+            "drift",
+            "crosscut",
+            "sublevel",
+            "tunnel",
+            "heading"
+          ],
+          "preferir": [
+            "galería",
+            "galeria",
+            "crucero",
+            "túnel",
+            "tunel",
+            "drift"
+          ],
+          "se_ve": "sección baúl o herradura con contorno irregular",
+          "numeros": [
+            "ancho",
+            "alto",
+            "luz"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "rampa-sub",
+          "nombre": "Rampa subterránea",
+          "es": [
+            "rampa",
+            "rampa en espiral",
+            "rampa principal"
+          ],
+          "en": [
+            "decline",
+            "ramp"
+          ],
+          "se_ve": "labor inclinada en curva",
+          "numeros": [
+            "pendiente",
+            "radio"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "chimenea",
+          "nombre": "Chimenea y pique",
+          "es": [
+            "chimenea",
+            "raise boring",
+            "pique",
+            "echadero",
+            "ore pass"
+          ],
+          "en": [
+            "raise",
+            "raise bore",
+            "shaft",
+            "ore pass"
+          ],
+          "se_ve": "labor vertical o muy inclinada",
+          "numeros": [
+            "diámetro",
+            "longitud"
+          ]
+        },
+        {
+          "grupo": "subterranea",
+          "clave": "tajeo",
+          "nombre": "Tajeo (cámara de explotación)",
+          "es": [
+            "tajeo",
+            "tajo subterráneo",
+            "cámara",
+            "stope"
+          ],
+          "en": [
+            "stope",
+            "open stope"
+          ],
+          "se_ve": "cavidad irregular con paredes de caja techo y caja piso",
+          "numeros": [
+            "radio hidráulico",
+            "luz",
+            "dilución"
+          ]
+        },
+        {
+          "grupo": "metodo",
+          "clave": "corte-relleno",
+          "nombre": "Corte y relleno",
+          "es": [
+            "corte y relleno",
+            "corte y relleno ascendente",
+            "breasting"
+          ],
+          "en": [
+            "cut and fill"
+          ],
+          "se_ve": "tajeo angosto que sube sobre su propio relleno",
+          "numeros": [
+            "ancho",
+            "altura de corte"
+          ]
+        },
+        {
+          "grupo": "metodo",
+          "clave": "sublevel-stoping",
+          "nombre": "Sublevel stoping / taladros largos",
+          "es": [
+            "sublevel stoping",
+            "taladros largos",
+            "tajeo por subniveles",
+            "bench and fill"
+          ],
+          "en": [
+            "sublevel stoping",
+            "long hole stoping",
+            "longhole open stoping"
+          ],
+          "se_ve": "tajeo alto abierto entre subniveles, abanicos de taladros",
+          "numeros": [
+            "radio hidráulico",
+            "Mathews N"
+          ]
+        },
+        {
+          "grupo": "metodo",
+          "clave": "camaras-pilares",
+          "nombre": "Cámaras y pilares",
+          "es": [
+            "cámaras y pilares",
+            "room and pillar"
+          ],
+          "en": [
+            "room and pillar"
+          ],
+          "se_ve": "cuadrícula de cámaras con pilares que sostienen el techo",
+          "numeros": [
+            "ancho de cámara",
+            "dimensión del pilar"
+          ]
+        },
+        {
+          "grupo": "metodo",
+          "clave": "hundimiento",
+          "nombre": "Hundimiento (block y sublevel caving)",
+          "es": [
+            "block caving",
+            "sublevel caving",
+            "hundimiento por bloques",
+            "hundimiento por subniveles"
+          ],
+          "en": [
+            "block caving",
+            "panel caving",
+            "sublevel caving"
+          ],
+          "se_ve": "material quebrado que baja, puntos de extracción",
+          "numeros": [
+            "radio hidráulico",
+            "MRMR"
+          ]
+        },
+        {
+          "grupo": "metodo",
+          "clave": "almacenamiento",
+          "nombre": "Almacenamiento provisional (shrinkage)",
+          "es": [
+            "almacenamiento provisional",
+            "shrinkage"
+          ],
+          "en": [
+            "shrinkage stoping"
+          ],
+          "se_ve": "tajeo lleno de mineral roto sobre el que se trabaja",
+          "numeros": [
+            "ancho de veta"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D9",
+      "clave": "sostenimiento",
+      "nombre": "Sostenimiento, relleno y control",
+      "descripcion": "Lo que se pone para que el macizo se sostenga y lo que se mide para saber si lo hace.",
+      "valores": [
+        {
+          "grupo": "sostenimiento",
+          "clave": "perno-helicoidal",
+          "nombre": "Perno helicoidal o barra cementada",
+          "es": [
+            "perno helicoidal",
+            "barra helicoidal",
+            "perno cementado",
+            "perno con resina"
+          ],
+          "en": [
+            "rebar bolt",
+            "resin-grouted bolt",
+            "fully grouted bolt"
+          ],
+          "se_ve": "cabezas con placa en patrón regular",
+          "numeros": [
+            "longitud",
+            "espaciado",
+            "capacidad (t)"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "split-set",
+          "nombre": "Split set",
+          "es": [
+            "split set",
+            "perno de fricción"
+          ],
+          "en": [
+            "split set",
+            "friction bolt"
+          ],
+          "se_ve": "tubo ranurado con placa",
+          "numeros": [
+            "longitud",
+            "espaciado"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "swellex",
+          "nombre": "Swellex",
+          "es": [
+            "swellex",
+            "perno inflable",
+            "perno expansivo"
+          ],
+          "en": [
+            "swellex",
+            "inflatable bolt"
+          ],
+          "se_ve": "perno inflado con placa",
+          "numeros": [
+            "longitud",
+            "espaciado"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "cable",
+          "nombre": "Cable bolt",
+          "es": [
+            "cable bolt",
+            "cables",
+            "cable de acero"
+          ],
+          "en": [
+            "cable bolt",
+            "cablebolt"
+          ],
+          "se_ve": "cables largos en abanico desde subniveles",
+          "numeros": [
+            "longitud",
+            "espaciado"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "malla",
+          "nombre": "Malla",
+          "es": [
+            "malla electrosoldada",
+            "malla de alambre",
+            "malla romboidal"
+          ],
+          "en": [
+            "welded mesh",
+            "wire mesh",
+            "chain-link mesh"
+          ],
+          "se_ve": "malla tensada bajo las placas, a veces cargada de roca",
+          "numeros": [
+            "abertura",
+            "calibre"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "shotcrete",
+          "nombre": "Shotcrete",
+          "es": [
+            "shotcrete",
+            "concreto lanzado",
+            "hormigón proyectado",
+            "fibra"
+          ],
+          "en": [
+            "shotcrete",
+            "sprayed concrete",
+            "fibre reinforced shotcrete"
+          ],
+          "se_ve": "capa gris que copia el contorno irregular, con fisuras",
+          "numeros": [
+            "espesor",
+            "resistencia",
+            "fibra kg/m³"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "cimbra",
+          "nombre": "Cimbra y marcos",
+          "es": [
+            "cimbra",
+            "cimbras metálicas",
+            "arcos de acero",
+            "marcos"
+          ],
+          "en": [
+            "steel sets",
+            "steel arches",
+            "lattice girders"
+          ],
+          "se_ve": "arcos cada 1–1,5 m con encostillado",
+          "numeros": [
+            "espaciado",
+            "perfil"
+          ]
+        },
+        {
+          "grupo": "sostenimiento",
+          "clave": "madera",
+          "nombre": "Sostenimiento de madera",
+          "es": [
+            "cuadros de madera",
+            "puntales",
+            "woodpack",
+            "paquetes de madera"
+          ],
+          "en": [
+            "timber sets",
+            "timber props",
+            "cribs"
+          ],
+          "se_ve": "cuadros y puntales en labores angostas",
+          "numeros": [
+            "espaciado",
+            "diámetro"
+          ]
+        },
+        {
+          "grupo": "relleno",
+          "clave": "relleno-hidraulico",
+          "nombre": "Relleno hidráulico",
+          "es": [
+            "relleno hidráulico",
+            "relave clasificado"
+          ],
+          "en": [
+            "hydraulic fill"
+          ],
+          "se_ve": "arena drenando agua en el tajeo, barreras",
+          "numeros": [
+            "% de sólidos",
+            "permeabilidad"
+          ]
+        },
+        {
+          "grupo": "relleno",
+          "clave": "relleno-pasta",
+          "nombre": "Relleno en pasta",
+          "es": [
+            "relleno en pasta",
+            "pasta cementada"
+          ],
+          "en": [
+            "paste fill",
+            "cemented paste backfill"
+          ],
+          "se_ve": "pasta gris sin agua libre; cara expuesta al lado del tajeo",
+          "numeros": [
+            "% de cemento",
+            "resistencia"
+          ]
+        },
+        {
+          "grupo": "relleno",
+          "clave": "relleno-detritico",
+          "nombre": "Relleno detrítico o cementado",
+          "es": [
+            "relleno detrítico",
+            "relleno cementado",
+            "relleno de roca"
+          ],
+          "en": [
+            "rockfill",
+            "cemented rockfill",
+            "waste fill"
+          ],
+          "se_ve": "desmonte suelto o cementado en el tajeo",
+          "numeros": [
+            "% de cemento",
+            "granulometría"
+          ]
+        },
+        {
+          "grupo": "control",
+          "clave": "desatado",
+          "nombre": "Desatado",
+          "es": [
+            "desatado",
+            "desate de rocas",
+            "barretilla",
+            "scaler"
+          ],
+          "en": [
+            "scaling",
+            "mechanical scaling"
+          ],
+          "se_ve": "trabajador o equipo retirando roca suelta de la corona",
+          "numeros": [
+            "frecuencia"
+          ]
+        },
+        {
+          "grupo": "monitoreo",
+          "clave": "radar-prismas",
+          "nombre": "Radar de taludes y prismas",
+          "es": [
+            "radar de taludes",
+            "prismas",
+            "monitoreo de taludes",
+            "estación total"
+          ],
+          "en": [
+            "slope radar",
+            "prisms",
+            "slope monitoring",
+            "total station"
+          ],
+          "se_ve": "radar frente al talud, prismas en las crestas, mapa de desplazamientos",
+          "numeros": [
+            "velocidad de desplazamiento mm/día"
+          ]
+        },
+        {
+          "grupo": "monitoreo",
+          "clave": "instrumentos",
+          "nombre": "Instrumentación subterránea y de taludes",
+          "es": [
+            "extensómetro",
+            "inclinómetro",
+            "piezómetro",
+            "celda de presión",
+            "convergencímetro"
+          ],
+          "en": [
+            "extensometer",
+            "inclinometer",
+            "piezometer",
+            "pressure cell",
+            "convergence monitoring"
+          ],
+          "se_ve": "instrumentos instalados en sondajes o en las paredes",
+          "numeros": [
+            "desplazamiento",
+            "presión"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "clave": "ambiente",
+      "nombre": "Ambiente de trabajo",
+      "descripcion": "Lo que hace difícil ver y trabajar, y que casi nunca aparece en una figura técnica.",
+      "valores": [
+        {
+          "clave": "altitud",
+          "nombre": "Gran altitud",
+          "es": [
+            "gran altitud",
+            "altura geográfica",
+            "minería de altura",
+            "hipoxia",
+            "sobre 4000 msnm"
+          ],
+          "en": [
+            "high altitude",
+            "high-altitude mining",
+            "hypoxia"
+          ],
+          "se_ve": "puna sin vegetación, cielo muy claro, nieve en cumbres",
+          "numeros": [
+            "msnm",
+            "presión atmosférica"
+          ]
+        },
+        {
+          "clave": "frio",
+          "nombre": "Frío, escarcha y nieve",
+          "es": [
+            "bajas temperaturas",
+            "heladas",
+            "nieve",
+            "escarcha",
+            "friaje"
+          ],
+          "en": [
+            "cold climate",
+            "frost",
+            "snow"
+          ],
+          "se_ve": "escarcha en bermas, nieve en el tajo, aliento visible",
+          "numeros": [
+            "temperatura mínima",
+            "días de helada"
+          ]
+        },
+        {
+          "clave": "calor",
+          "nombre": "Calor y humedad en profundidad",
+          "es": [
+            "calor en mina",
+            "temperatura de roca",
+            "estrés térmico",
+            "gradiente geotérmico"
+          ],
+          "en": [
+            "heat stress",
+            "virgin rock temperature",
+            "deep mine heat"
+          ],
+          "se_ve": "vapor, ropa empapada, cascos con condensación",
+          "numeros": [
+            "temperatura de roca virgen",
+            "temperatura de bulbo húmedo"
+          ]
+        },
+        {
+          "clave": "polvo",
+          "nombre": "Polvo",
+          "es": [
+            "polvo",
+            "material particulado",
+            "sílice cristalina",
+            "polvo respirable"
+          ],
+          "en": [
+            "dust",
+            "particulate matter",
+            "respirable crystalline silica"
+          ],
+          "se_ve": "luz difusa, contornos borrosos, todo cubierto de una capa gris",
+          "numeros": [
+            "mg/m³",
+            "visibilidad"
+          ]
+        },
+        {
+          "clave": "gases",
+          "nombre": "Gases y humos de voladura",
+          "es": [
+            "gases de voladura",
+            "humos",
+            "monóxido de carbono",
+            "nitrosos",
+            "reingreso"
+          ],
+          "en": [
+            "blast fumes",
+            "carbon monoxide",
+            "nox",
+            "re-entry"
+          ],
+          "se_ve": "neblina tras la voladura, tiempo de espera para reingresar",
+          "numeros": [
+            "ppm de CO",
+            "tiempo de reingreso"
+          ]
+        },
+        {
+          "clave": "ventilacion",
+          "nombre": "Ventilación",
+          "es": [
+            "ventilación de minas",
+            "ventilador",
+            "manga de ventilación",
+            "circuito de ventilación",
+            "caudal de aire"
+          ],
+          "en": [
+            "mine ventilation",
+            "fan",
+            "ventilation duct",
+            "airflow"
+          ],
+          "se_ve": "mangas colgadas, ventiladores, corriente que mueve el polvo",
+          "numeros": [
+            "caudal m³/s",
+            "velocidad m/s"
+          ]
+        },
+        {
+          "clave": "iluminacion",
+          "nombre": "Iluminación y oscuridad",
+          "es": [
+            "iluminación",
+            "lámpara minera",
+            "oscuridad",
+            "visibilidad"
+          ],
+          "en": [
+            "illumination",
+            "cap lamp",
+            "visibility",
+            "darkness"
+          ],
+          "se_ve": "cono de luz de la lámpara, el resto en negro: el mapeo se hace con esa luz",
+          "numeros": [
+            "lux"
+          ]
+        },
+        {
+          "clave": "sismo",
+          "nombre": "Sismo",
+          "es": [
+            "sismo",
+            "aceleración sísmica",
+            "peligro sísmico",
+            "carga sísmica"
+          ],
+          "en": [
+            "earthquake",
+            "seismic acceleration",
+            "seismic hazard",
+            "pseudo-static"
+          ],
+          "se_ve": "la misma cara con bloques sueltos tras un sismo",
+          "numeros": [
+            "PGA (g)",
+            "coeficiente sísmico"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D11",
+      "clave": "topografia",
+      "nombre": "Topografía e infraestructura de superficie",
+      "descripcion": "El relieve donde está la mina y lo que la mina le agrega. Se alimenta de DEM, nubes de puntos y modelos.",
+      "valores": [
+        {
+          "grupo": "relieve",
+          "clave": "ladera",
+          "nombre": "Cerro y ladera",
+          "es": [
+            "ladera",
+            "estabilidad de laderas",
+            "pendiente de ladera"
+          ],
+          "en": [
+            "hillslope",
+            "hillside"
+          ],
+          "se_ve": "relieve andino con quebradas profundas",
+          "numeros": [
+            "pendiente",
+            "desnivel"
+          ]
+        },
+        {
+          "grupo": "relieve",
+          "clave": "quebrada",
+          "nombre": "Quebrada y valle",
+          "es": [
+            "cauce de quebrada",
+            "valle glaciar",
+            "valle fluvial",
+            "geomorfología fluvial"
+          ],
+          "en": [
+            "ravine",
+            "glacial valley",
+            "stream channel"
+          ],
+          "se_ve": "valle en V o en U glaciar",
+          "numeros": [
+            "pendiente",
+            "caudal"
+          ]
+        },
+        {
+          "grupo": "relieve",
+          "clave": "altiplano",
+          "nombre": "Pampa y altiplano",
+          "es": [
+            "altiplano",
+            "puna",
+            "meseta altoandina"
+          ],
+          "en": [
+            "altiplano",
+            "high plateau",
+            "puna"
+          ],
+          "se_ve": "llanura alta con lagunas",
+          "numeros": [
+            "cota"
+          ]
+        },
+        {
+          "grupo": "relieve",
+          "clave": "nevado-laguna",
+          "nombre": "Nevado, glaciar y laguna",
+          "es": [
+            "nevado",
+            "glaciar",
+            "laguna glaciar",
+            "bofedal"
+          ],
+          "en": [
+            "glacier",
+            "glacial lake",
+            "wetland"
+          ],
+          "se_ve": "lagunas al pie de nevados, bofedales cerca de la mina",
+          "numeros": [
+            "área",
+            "cota"
+          ]
+        },
+        {
+          "grupo": "minera",
+          "clave": "tajo-final",
+          "nombre": "Tajo final (pit)",
+          "es": [
+            "pit final",
+            "tajo final",
+            "diseño de tajo",
+            "límite final"
+          ],
+          "en": [
+            "final pit",
+            "ultimate pit",
+            "pit shell",
+            "pit design"
+          ],
+          "se_ve": "cono escalonado con rampas en espiral",
+          "numeros": [
+            "profundidad",
+            "ángulo global"
+          ]
+        },
+        {
+          "grupo": "minera",
+          "clave": "desmonte",
+          "nombre": "Botadero de desmonte",
+          "es": [
+            "desmonte",
+            "botadero",
+            "depósito de desmonte",
+            "escombrera"
+          ],
+          "en": [
+            "waste dump",
+            "waste rock dump",
+            "stockpile"
+          ],
+          "se_ve": "plataformas con taludes de ángulo de reposo",
+          "numeros": [
+            "ángulo de reposo",
+            "altura"
+          ]
+        },
+        {
+          "grupo": "minera",
+          "clave": "pad-lixiviacion",
+          "nombre": "Pila de lixiviación",
+          "es": [
+            "pila de lixiviación",
+            "pad de lixiviación",
+            "lixiviación en pilas"
+          ],
+          "en": [
+            "heap leach pad",
+            "leach pad"
+          ],
+          "se_ve": "pila escalonada con riego y geomembrana",
+          "numeros": [
+            "altura",
+            "riego L/h/m²"
+          ]
+        },
+        {
+          "grupo": "minera",
+          "clave": "presa-relaves",
+          "nombre": "Presa y depósito de relaves",
+          "es": [
+            "presa de relaves",
+            "depósito de relaves",
+            "relavera",
+            "dique de relaves",
+            "relaves"
+          ],
+          "en": [
+            "tailings dam",
+            "tailings storage facility",
+            "tsf"
+          ],
+          "se_ve": "dique con playa de relaves y laguna de agua clara",
+          "numeros": [
+            "altura",
+            "método de crecimiento",
+            "FS"
+          ]
+        },
+        {
+          "grupo": "minera",
+          "clave": "accesos",
+          "nombre": "Accesos e instalaciones",
+          "es": [
+            "acceso a mina",
+            "planta concentradora",
+            "campamento minero",
+            "infraestructura minera"
+          ],
+          "en": [
+            "mine access road",
+            "processing plant",
+            "mine camp",
+            "mine infrastructure"
+          ],
+          "se_ve": "la mina en su contexto: planta, caminos, campamento",
+          "numeros": [
+            "distancia"
+          ]
+        },
+        {
+          "grupo": "dato",
+          "clave": "dem",
+          "nombre": "Modelo digital de elevación",
+          "es": [
+            "modelo digital de elevación",
+            "modelo digital de terreno",
+            "curvas de nivel",
+            "topografía"
+          ],
+          "en": [
+            "digital elevation model",
+            "dem",
+            "dtm",
+            "contour lines"
+          ],
+          "se_ve": "superficie de alturas",
+          "numeros": [
+            "resolución m",
+            "precisión vertical"
+          ]
+        },
+        {
+          "grupo": "dato",
+          "clave": "nube-puntos",
+          "nombre": "Nube de puntos (lidar, fotogrametría)",
+          "es": [
+            "nube de puntos",
+            "lidar",
+            "escáner láser",
+            "fotogrametría",
+            "dron",
+            "vant"
+          ],
+          "en": [
+            "point cloud",
+            "lidar",
+            "laser scanning",
+            "photogrammetry",
+            "drone",
+            "uav",
+            "structure from motion"
+          ],
+          "preferir": [
+            "nube de puntos",
+            "fotogrametría",
+            "fotogrametria",
+            "dron",
+            "lidar",
+            "point cloud"
+          ],
+          "se_ve": "cara de talud o túnel escaneada con las discontinuidades visibles",
+          "numeros": [
+            "densidad de puntos",
+            "error"
+          ]
+        },
+        {
+          "grupo": "dato",
+          "clave": "modelo-3d",
+          "nombre": "Modelo geológico 3D y DFN",
+          "es": [
+            "modelo geológico 3d",
+            "modelo de bloques",
+            "red de fracturas discretas",
+            "dfn",
+            "modelamiento geológico"
+          ],
+          "en": [
+            "3d geological model",
+            "block model",
+            "discrete fracture network",
+            "dfn",
+            "implicit modelling"
+          ],
+          "se_ve": "sólidos de litología o alteración; red de fracturas estocástica",
+          "numeros": [
+            "P32",
+            "intensidad de fracturas",
+            "tamaño de bloque"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D12",
+      "clave": "metalurgia",
+      "nombre": "Metalurgia y geometalurgia",
+      "descripcion": "Lo que la roca le hace a la planta. Une D1 y D2 con el proceso: la alteración cambia la dureza, las arcillas y la recuperación.",
+      "valores": [
+        {
+          "grupo": "mineralogia",
+          "clave": "sulfuros-cu-primarios",
+          "nombre": "Sulfuros primarios de Cu",
+          "es": [
+            "calcopirita",
+            "bornita",
+            "sulfuros primarios"
+          ],
+          "en": [
+            "chalcopyrite",
+            "bornite",
+            "primary sulfides"
+          ],
+          "se_ve": "granos dorados o violáceos en la roca o en sección pulida",
+          "numeros": [
+            "ley",
+            "tamaño de grano"
+          ]
+        },
+        {
+          "grupo": "mineralogia",
+          "clave": "molibdenita",
+          "nombre": "Molibdenita",
+          "es": [
+            "molibdenita",
+            "molibdeno"
+          ],
+          "en": [
+            "molybdenite"
+          ],
+          "se_ve": "láminas gris plomo en venillas",
+          "numeros": [
+            "ley de Mo"
+          ]
+        },
+        {
+          "grupo": "mineralogia",
+          "clave": "pirita",
+          "nombre": "Pirita y sulfuros de hierro",
+          "es": [
+            "pirita",
+            "pirrotita",
+            "marcasita"
+          ],
+          "en": [
+            "pyrite",
+            "pyrrhotite",
+            "marcasite"
+          ],
+          "se_ve": "cubos dorados; fuente de agua ácida",
+          "numeros": [
+            "% de pirita",
+            "S total"
+          ]
+        },
+        {
+          "grupo": "mineralogia",
+          "clave": "galena-esfalerita",
+          "nombre": "Galena y esfalerita",
+          "es": [
+            "galena",
+            "esfalerita",
+            "blenda",
+            "marmatita"
+          ],
+          "en": [
+            "galena",
+            "sphalerite"
+          ],
+          "se_ve": "galena gris cúbica, esfalerita parda a negra",
+          "numeros": [
+            "ley de Pb y Zn",
+            "Fe en esfalerita"
+          ]
+        },
+        {
+          "grupo": "mineralogia",
+          "clave": "plata",
+          "nombre": "Minerales de plata",
+          "es": [
+            "sulfosales de plata",
+            "argentita",
+            "acantita",
+            "tetraedrita",
+            "pirargirita",
+            "proustita",
+            "alabandita"
+          ],
+          "en": [
+            "silver sulfosalts",
+            "acanthite",
+            "tetrahedrite",
+            "pyrargyrite"
+          ],
+          "se_ve": "minerales finos asociados a galena y manganeso",
+          "numeros": [
+            "ley de Ag",
+            "asociación mineral"
+          ]
+        },
+        {
+          "grupo": "mineralogia",
+          "clave": "oro",
+          "nombre": "Oro libre y refractario",
+          "es": [
+            "oro libre",
+            "oro refractario",
+            "oro encapsulado",
+            "oro en pirita",
+            "arsenopirita"
+          ],
+          "en": [
+            "free gold",
+            "refractory gold",
+            "encapsulated gold",
+            "arsenopyrite"
+          ],
+          "se_ve": "oro visible rara vez; casi siempre dentro de sulfuros",
+          "numeros": [
+            "ley de Au",
+            "% de oro libre"
+          ]
+        },
+        {
+          "grupo": "mineralogia",
+          "clave": "arcillas",
+          "nombre": "Arcillas y filosilicatos",
+          "es": [
+            "arcillas",
+            "caolinita",
+            "montmorillonita",
+            "illita",
+            "esmectita",
+            "sericita"
+          ],
+          "en": [
+            "clays",
+            "kaolinite",
+            "montmorillonite",
+            "illite",
+            "smectite"
+          ],
+          "se_ve": "roca blanda que forma lodo; problemas en molienda y flotación",
+          "numeros": [
+            "% de arcillas",
+            "viscosidad de pulpa"
+          ]
+        },
+        {
+          "grupo": "textura",
+          "clave": "textura",
+          "nombre": "Textura de mena",
+          "es": [
+            "diseminado",
+            "masivo",
+            "bandeado",
+            "intercrecimiento",
+            "liberación",
+            "textura mineral"
+          ],
+          "en": [
+            "disseminated",
+            "massive",
+            "banded",
+            "intergrowth",
+            "liberation",
+            "ore texture"
+          ],
+          "preferir": [
+            "intercrecimiento",
+            "liberación",
+            "liberacion",
+            "textura",
+            "liberation",
+            "microscop"
+          ],
+          "se_ve": "sección pulida con granos entrelazados",
+          "numeros": [
+            "grado de liberación",
+            "P80 de liberación"
+          ]
+        },
+        {
+          "grupo": "proceso",
+          "clave": "conminucion",
+          "nombre": "Chancado y molienda",
+          "es": [
+            "chancado",
+            "molienda",
+            "molino sag",
+            "molino de bolas",
+            "índice de bond",
+            "conminución"
+          ],
+          "en": [
+            "crushing",
+            "grinding",
+            "sag mill",
+            "ball mill",
+            "bond work index",
+            "comminution"
+          ],
+          "se_ve": "chancadoras y molinos; la alteración cambia la dureza",
+          "numeros": [
+            "Bond Wi (kWh/t)",
+            "A×b",
+            "P80"
+          ]
+        },
+        {
+          "grupo": "proceso",
+          "clave": "flotacion",
+          "nombre": "Flotación",
+          "es": [
+            "flotación",
+            "celdas de flotación",
+            "concentrado",
+            "recuperación metalúrgica"
+          ],
+          "en": [
+            "flotation",
+            "flotation cells",
+            "concentrate",
+            "metallurgical recovery"
+          ],
+          "se_ve": "celdas con espuma cargada de mineral",
+          "numeros": [
+            "recuperación %",
+            "ley de concentrado"
+          ]
+        },
+        {
+          "grupo": "proceso",
+          "clave": "lixiviacion",
+          "nombre": "Lixiviación y cianuración",
+          "es": [
+            "lixiviación",
+            "cianuración",
+            "lixiviación en pilas",
+            "extracción por solventes",
+            "electroobtención",
+            "carbón en pulpa"
+          ],
+          "en": [
+            "leaching",
+            "cyanidation",
+            "heap leaching",
+            "sx-ew",
+            "carbon in pulp"
+          ],
+          "se_ve": "pilas regadas, tanques agitados",
+          "numeros": [
+            "extracción %",
+            "consumo de reactivo"
+          ]
+        },
+        {
+          "grupo": "proceso",
+          "clave": "relaves-planta",
+          "nombre": "Espesamiento y relaves",
+          "es": [
+            "espesador",
+            "relave",
+            "filtrado de relaves",
+            "relave en pasta"
+          ],
+          "en": [
+            "thickener",
+            "tailings",
+            "filtered tailings",
+            "paste tailings"
+          ],
+          "se_ve": "espesadores circulares, tubería de relaves",
+          "numeros": [
+            "% de sólidos"
+          ]
+        },
+        {
+          "grupo": "proceso",
+          "clave": "geometalurgia",
+          "nombre": "Dominios geometalúrgicos",
+          "es": [
+            "geometalurgia",
+            "dominio geometalúrgico",
+            "unidades geometalúrgicas",
+            "variabilidad metalúrgica"
+          ],
+          "en": [
+            "geometallurgy",
+            "geometallurgical domain",
+            "ore variability"
+          ],
+          "se_ve": "modelo de bloques coloreado por dureza o recuperación esperada",
+          "numeros": [
+            "Wi por dominio",
+            "recuperación por dominio"
+          ]
+        }
+      ]
+    }
+  ]
+}
