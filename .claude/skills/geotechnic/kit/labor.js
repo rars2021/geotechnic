@@ -36,8 +36,13 @@ function remuestrear(pts, paso) {
  * Devuelve { geometria, muestra(x, s), seccion, contorno, S }.
  */
 export function galeria(op = {}) {
-  const { seccion = seccionBaul(), largo = 30, paso = 0.12, sobreexcavacion = 0.25, dfn = null, semilla = 31,
-    color = () => rgb("#7d786f"), humedad = null, shotcrete = null, region = null, colorShot = rgb("#9c9a94"), inicio = 0 } = op;
+  const { seccion = seccionBaul(), largo = 30, paso = 0.12, sobreexcavacion = 0.25, semilla = 31,
+    shotcrete = null, region = null, colorShot = rgb("#9c9a94"), inicio = 0, macizo = null,
+    huellas = [{ z: 0.95, ancho: 0.35 }, { z: -0.95, ancho: 0.35 }] } = op;
+  // motor B: si viene un macizo (kit/macizo.js), él da relieve, color y humedad; si no, los parámetros sueltos
+  const dfn = macizo ? null : op.dfn ?? null;
+  const color = op.color || macizo?.color || (() => rgb("#7d786f"));
+  const humedad = op.humedad || macizo?.humedad || null;
   const n = ruido3(semilla), n2 = ruido3(semilla + 2);
   const cont = remuestrear(seccion.pts, paso);
   const ns = cont.length, nx = Math.ceil(largo / paso) + 1;
@@ -61,7 +66,8 @@ export function galeria(op = {}) {
       const enShot = shotcrete && x > shotcrete.desde + 0.6 * n(0, y0 * 0.5, z0 * 0.5) && x < shotcrete.hasta + 0.6 * n(9, y0 * 0.5, z0 * 0.5) && !piso;
       if (!piso) {
         // sobreexcavación: bloques que se desprendieron + ondulación de la voladura (se repite cada avance)
-        if (dfn) { const b = relieveBloques(dfn, x, y0, z0, 1); d -= b.d * 0.9; dist = b.dist; tono = b.tono; }
+        if (macizo) { const b = macizo.relieve(x, y0, z0, 1); d -= b.d * 0.9; dist = b.dist; tono = b.tono; }
+        else if (dfn) { const b = relieveBloques(dfn, x, y0, z0, 1); d -= b.d * 0.9; dist = b.dist; tono = b.tono; }
         d += sobreexcavacion * (0.6 + 0.8 * (0.5 + 0.5 * fbm(n, x * 0.25, y0 * 0.25, z0 * 0.25, 4)));
         const avance = 3.6; const fase = ((x % avance) + avance) % avance / avance;
         d += 0.12 * Math.pow(1 - fase, 3); // escalón por disparo (el contorno se angosta al fondo de cada avance)
@@ -69,7 +75,8 @@ export function galeria(op = {}) {
         else d += 0.04 * fbm(n2, x * 2, y0 * 2, z0 * 2, 3);
       } else {
         // piso: huellas de llantas, barro y charcos
-        const huella = Math.max(0, 1 - Math.abs(Math.abs(z0) - 0.95) / 0.35);
+        // huellas: las ruedas del equipo (contrato A → B) marcan el piso en su trocha
+        let huella = 0; for (const h of huellas) huella = Math.max(huella, 1 - Math.abs(z0 - h.z) / h.ancho);
         d = -0.06 * huella * (0.6 + 0.4 * n(x * 0.3, 0, z0)) + 0.05 * fbm(n2, x * 0.5, 0, z0 * 0.5, 3);
       }
       const px = x, py = y0 + ny * d, pz = z0 + nz * d;
@@ -99,7 +106,25 @@ export function galeria(op = {}) {
     const k = i * ns + j, P = g.attributes.position.array, Nn = g.attributes.normal.array;
     return { p: new THREE.Vector3(P[k * 3], P[k * 3 + 1], P[k * 3 + 2]), n: new THREE.Vector3(Nn[k * 3], Nn[k * 3 + 1], Nn[k * 3 + 2]) };
   };
-  return { geometria: g, muestra, seccion, contorno: cont, nx, ns, largo, inicio };
+  return { geometria: g, muestra, seccion, contorno: cont, nx, ns, largo, inicio, macizo };
+}
+
+/** Superficie del frente: x(y, z) con el relieve de voladura y los bloques del macizo (la usa frente() y el contrato). */
+export function superficieFrente(galeriaObj, op = {}) {
+  const { x = galeriaObj.inicio + galeriaObj.largo, taladros = [], semilla = 5 } = op;
+  const macizo = op.macizo ?? galeriaObj.macizo ?? null, dfn = macizo ? null : op.dfn ?? null;
+  const n = ruido3(semilla);
+  return (y, z) => {
+    // relieve de voladura ±0,2 m (bloques por juntas + ondulación), como en las fotos de frentes
+    const amp = op.relieve ?? 1;
+    let d = amp * 0.2 * fbm(n, y * 0.7, z * 0.7, 3, 5) + 0.12, tono = 0.5, dist = 9;
+    if (macizo) { const b = macizo.relieve(x, y, z, 1); d -= b.d * 1.2 * amp; tono = b.tono; dist = b.dist; }
+    else if (dfn) { const b = relieveBloques(dfn, x, y, z, 1); d -= b.d * 1.2 * amp; tono = b.tono; dist = b.dist; }
+    // el frente es cóncavo: avanza más en el centro (arranque)
+    d += 0.35 * Math.exp(-(z * z + (y - 1.6) ** 2) / 3);
+    for (const t of taladros) { const r2 = (z - t.z) ** 2 + (y - t.y) ** 2; if (r2 < (t.d * 2.5) ** 2) d += 0.08 * (1 - Math.sqrt(r2) / (t.d * 2.5)); }
+    return { x: x + d, tono, dist };
+  };
 }
 
 /**
@@ -107,8 +132,9 @@ export function galeria(op = {}) {
  * y, si se dan, los taladros nuevos como huecos oscuros. taladros: [{ z, y, d }] en m.
  */
 export function frente(galeriaObj, op = {}) {
-  const { x = galeriaObj.inicio + galeriaObj.largo, color = () => rgb("#7d786f"), taladros = [], dfn = null, semilla = 5, res = 70 } = op;
-  const n = ruido3(semilla);
+  const { x = galeriaObj.inicio + galeriaObj.largo, res = 70 } = op;
+  const color = op.color || (op.macizo ?? galeriaObj.macizo)?.color || (() => rgb("#7d786f"));
+  const sup = superficieFrente(galeriaObj, op);
   const cont = galeriaObj.contorno;
   const zs = cont.map((p) => p[0]), ys = cont.map((p) => p[1]);
   const W = Math.max(...zs) - Math.min(...zs) + 3.0, H = Math.max(...ys) + 1.6;
@@ -119,13 +145,8 @@ export function frente(galeriaObj, op = {}) {
   const C = new Float32Array(P.length);
   for (let i = 0; i < P.length; i += 3) {
     const y = P[i + 1], z = P[i + 2];
-    let d = 0.32 * fbm(n, y * 0.7, z * 0.7, 3, 5) + 0.18;
-    let tono = 0.5, dist = 9;
-    if (dfn) { const b = relieveBloques(dfn, x, y, z, 1); d -= b.d * 1.7; tono = b.tono; dist = b.dist; }
-    // el frente es cóncavo: avanza más en el centro (arranque)
-    d += 0.35 * Math.exp(-(z * z + (y - 1.6) ** 2) / 3);
-    for (const t of taladros) { const r2 = (z - t.z) ** 2 + (y - t.y) ** 2; if (r2 < (t.d * 2.5) ** 2) d += 0.08 * (1 - Math.sqrt(r2) / (t.d * 2.5)); }
-    P[i] = x + d;
+    const { x: xs, tono, dist } = sup(y, z);
+    P[i] = xs;
     const c = color(P[i], y, z);
     const k0 = (1 + (tono - 0.5) * 0.25) * (1 - 0.35 * (1 - suave(0.02, 0.08, dist)));
     C[i] = c[0] * k0; C[i + 1] = c[1] * k0; C[i + 2] = c[2] * k0;

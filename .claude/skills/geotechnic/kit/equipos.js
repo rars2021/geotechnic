@@ -1,4 +1,7 @@
-// Geotechnic · equipos paramétricos. Cada máquina se arma con piezas comunes (llanta, cilindro, cabina, placa)
+// Geotechnic · equipos v1 (heredados). El scoop y el jumbo ya viven en el motor A (equipos/scoop, equipos/jumbo) y
+// pasan el juez; las demás máquinas de este archivo esperan que su agente (`.claude/agents/equipo-*`) las pase al motor A.
+// `llanta` se sigue usando en el motor A para dibujar las ruedas.
+// Cada máquina se arma con piezas comunes (llanta, cilindro, cabina, placa)
 // y devuelve { grupo, partes, poner(estado), dims }. Medidas en metros; x = adelante, y = arriba, z = izquierda.
 // Las proporciones de cada equipo vienen de references/reglas-equipos.md (con su fuente o marcadas "estimado").
 import * as THREE from "three";

@@ -51,7 +51,20 @@ Región resaltada: `mat.userData.uniforms.uRegion.value = n` (y `uAtenuar`).
 `seccionBaul(ancho, alto, flecha)` · `galeria({ seccion, largo, inicio, paso, sobreexcavacion, dfn, color, humedad, shotcrete, region })` ·
 `frente(galeria, { x, taladros, dfn })` · `pernos(galeria, { espaciado })` · `mangaVentilacion` · `tuberias` · `charcos`.
 
-## equipos.js
+## macizo.js (motor B)
+`macizo({ familias, caja, semilla, ruido: { amplitud, longitud, octavas }, aspereza, litologia, alteracion, agua })` →
+`{ dfn, relieve(x,y,z), color, humedad, metodologia }`. Pásalo a `galeria({ macizo })` y `superficieFrente(gal, { macizo })`.
+
+## contrato.js
+`terrenoGaleria(gal, { frente })` → `{ piso(x,z), contorno(x), libre(p), frenteX(y,z), enCavidad(q, pieza), cavidades }` ·
+`emboquillesMalla(malla, frente)` · `huellasDe(M)` · `asentar(M, valores, terreno, { x, z, rumbo })`.
+
+## motorA (equipos y mecanismos)
+Ver `motor-a.md`: `maquina`, `grupo`, `prisma`/`caja`/`placa`/`losa`/`pared`, `redondo`/`barra`, `rueda`, `pasador`,
+`cilindro`, `puerto`, `manguera`, `cadena`, `posar`, `cascos`; dibujo con `mallasMaquina(M)`.
+Equipos: `EQUIPO_SCOOP` (`equipos/scoop`), `EQUIPO_JUMBO` y `apuntarJumbo` (`equipos/jumbo`).
+
+## equipos.js (v1 heredado)
 Cada máquina devuelve `{ grupo, poner(estado), partes, dims }`.
 | Máquina | Estado de `poner` |
 |---|---|
@@ -70,6 +83,10 @@ Piezas: `cajaB`, `placa`, `tubo`, `baranda`, `llanta`, `cilindro`, `faro`, `cabi
 ## senalar.js
 `senalar(escena, contenedor, piezas, { modo, foco })` → `{ resaltar(id), ponerModo(m), colocar() }`.
 Pieza: `{ id, numero, nombre, definicion, ancla, objetos?, region?: { material, valor }, lineas?, oculta?() }`.
+
+## Contrato de un ejemplo con equipos
+`montaje.js` exporta `pruebas(paso)` → `{ M, terreno, ciclo: [{ etiqueta, valores, cavidades? }], rango }` (lo usa el juez)
+y una función de montaje que la escena llama para dibujar exactamente lo mismo.
 
 ## Contrato de una escena de ejemplo
 ```js

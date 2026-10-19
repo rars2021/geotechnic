@@ -2,6 +2,12 @@
 
 Mira cada captura. Si no se parece a la foto, no está terminado.
 
+## Primero el juez
+
+`node scripts/juez.mjs ejemplos/<tema> --salida <scratchpad>/dist --incrustar` y lee `juez/informe.md` y
+`juez/hoja-realismo.png` (`references/juez.md`). Sin «JUEZ: APROBADO» no hay `index.html`. Lo de abajo es la mirada
+del crítico, que el juez no reemplaza.
+
 ## Capturas
 
 ```bash

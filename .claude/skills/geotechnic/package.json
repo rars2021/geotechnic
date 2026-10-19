@@ -1,0 +1,9 @@
+{
+  "name": "geotechnic-skill",
+  "private": true,
+  "type": "module",
+  "description": "Dependencias de Node para el juez (scripts/juez.mjs): three.js con la misma versión que cargan las páginas.",
+  "devDependencies": {
+    "three": "0.160.0"
+  }
+}

@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 // Geotechnic · armar: junta el kit y la escena de un ejemplo en una página lista para publicar como Artifact.
 //
-//   node scripts/armar.mjs ejemplos/<tema> [--salida dist] [--modo completo|blanco] [--foco id] [--incrustar]
+//   node scripts/armar.mjs ejemplos/<tema> [--salida dist] [--modo completo|blanco] [--foco id] [--incrustar] [--borrador]
 //   --incrustar: las fotos abiertas van dentro de index.html (data URI); úsalo si no se pueden publicar archivos sueltos
+//   --borrador: solo vista.html y comparar.html (para el juez y para mirar); NO escribe index.html
+//
+// BLOQUEO DEL JUEZ: sin --borrador, index.html solo se escribe si <salida>/<tema>/juez/informe.json dice «aprobado» y
+// su sello coincide con las fuentes actuales (kit, motor A, equipos, ficha, montaje, escena). Si no: sale con código 2.
 //
 // Salida en <salida>/<tema>/:
 //   index.html   página sin doctype (el Artifact pone el esqueleto): es la que se publica
@@ -10,31 +14,17 @@
 //   vista.html   la misma página con doctype, para verificar en Chrome (scripts/drive.mjs)
 //   comparar.html  hoja local con TODAS las referencias, también las de tesis: NUNCA se publica
 import { readFileSync, writeFileSync, mkdirSync, existsSync, copyFileSync } from "node:fs";
+import { kitCodigo, desmodular, selloDe, THREE_VER } from "./codigo.mjs";
 import { execFileSync } from "node:child_process";
 import { dirname, join, resolve, basename } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const RAIZ = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const KIT = ["nucleo", "materiales", "fracturas", "volumenes", "terreno", "equipos", "labor", "procesos", "tajo", "escena", "senalar"];
-export const THREE_VER = "0.160.0";
 
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf("--" + k); return i >= 0 ? args[i + 1] : d; };
 const dirEj = resolve(args.find((a) => !a.startsWith("--") && args[args.indexOf(a) - 1]?.startsWith("--") !== true) || "");
 if (!existsSync(join(dirEj, "ficha.mjs"))) { console.error("uso: node scripts/armar.mjs ejemplos/<tema>  (falta ficha.mjs)"); process.exit(1); }
-
-/** Quita import/export para concatenar módulos en uno solo (los nombres del kit son únicos). */
-export function desmodular(src) {
-  return src
-    .replace(/^import\s[^;]*?from\s+["'][^"']+["'];?\s*$/gms, "")
-    .replace(/^export\s+(async\s+function|function|const|let|class)\s/gm, "$1 ")
-    .replace(/^export\s+\{[^}]*\};?\s*$/gm, "");
-}
-
-export function kitCodigo() {
-  return KIT.filter((k) => existsSync(join(RAIZ, "kit", k + ".js")))
-    .map((k) => `// ── kit/${k}.js ──\n` + desmodular(readFileSync(join(RAIZ, "kit", k + ".js"), "utf8"))).join("\n");
-}
 
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
@@ -142,6 +132,18 @@ document.addEventListener("geo:listo", () => { elegir(0, false); setTimeout(capt
 ponerModo(modoActual);
 `;
 
+/** Resumen del informe del juez para la página (solo si aprobó y su sello coincide). */
+function juezHtml(inf) {
+  const L = inf.lineas, filas = [];
+  for (const [n, l] of Object.entries(L)) {
+    if (n.startsWith("fisica")) filas.push(`<tr><td>Física · ${n === "fisicaRango" ? "rango del modelo" : "ciclo en la labor"}</td><td>${l.poses} poses</td><td>${Object.entries(l.lineas).map(([k, v]) => `${k} ${v.ok ? "✓" : "✗"}`).join(" · ")}</td></tr>`);
+    else if (n.startsWith("fidelidad")) filas.push(`<tr><td>Fidelidad · ${esc(n.slice(10))}</td><td>${l.filas.filter((f) => f.fuente).length} con fuente</td><td>${l.filas.filter((f) => f.fuente).map((f) => `${esc(f.dato)} ${f.medido === null ? "—" : (f.error >= 0 ? "+" : "") + (f.error * 100).toFixed(1) + " %"}`).join(" · ")}</td></tr>`);
+    else if (n === "realismo") filas.push(`<tr><td>Realismo</td><td>${l.pasan} de ${l.pares} fotos</td><td>luminancia, contraste, bordes y colorido de cada captura dentro del rango de su foto · consola ${l.consolaLimpia ? "limpia" : "con errores"}</td></tr>`);
+  }
+  return `<section class="geo-seccion geo-solo-completo"><h2>Lo que probó el juez</h2><p style="margin:0;max-width:72ch">Aprobado el ${esc(inf.fecha.slice(0, 10))} · sello <code>${esc(inf.sello)}</code>. Sin esta aprobación la página no se arma.</p>
+<div style="overflow-x:auto"><table class="geo-tabla"><thead><tr><th>Línea</th><th>Alcance</th><th>Resultado</th></tr></thead><tbody>${filas.join("")}</tbody></table></div></section>`;
+}
+
 function controlesHtml(ctrls = []) {
   return ctrls.map((c) => c.html ? c.html : `<label class="geo-control" for="${c.id}"><span>${esc(c.etiqueta)}</span><input type="range" id="${c.id}" min="${c.min}" max="${c.max}" step="${c.paso ?? 1}" value="${c.valor}"><output for="${c.id}">${esc(c.salida ?? c.valor)}</output></label>`).join("");
 }
@@ -176,7 +178,20 @@ async function main() {
   const estudio = (ficha.referencias?.estudio || []).map((r) => `<li>${esc(r.titulo)} — ${esc(r.leyenda)} (pág. ${r.pagina}) · el catálogo de fuentes <code>${esc(r.clave)}</code></li>`).join("");
   const modos = (ficha.modos || ["completo", "blanco"]).map((m) => `<button type="button" data-modo="${m}" aria-pressed="${m === modo}">${m === "blanco" ? "En blanco" : m[0].toUpperCase() + m.slice(1)}</button>`).join("");
   const miniaturas = abiertas.map((r, i) => `<button type="button" data-ref="${i}" aria-pressed="${i === 0}" title="${esc(r.alt)}"><img src="${r.src}" alt="${esc(r.alt)}" loading="lazy"></button>`).join("");
+  const equipos = ficha.equipos || [];
+  const montajeSrc = existsSync(join(dirEj, "montaje.js")) ? desmodular(readFileSync(join(dirEj, "montaje.js"), "utf8")) : "";
   const escenaSrc = desmodular(readFileSync(join(dirEj, "escena.js"), "utf8"));
+  const borrador = args.includes("--borrador");
+  const sello = selloDe(dirEj, equipos);
+  const fInf = join(salida, "juez", "informe.json");
+  const inf = existsSync(fInf) ? JSON.parse(readFileSync(fInf, "utf8")) : null;
+  if (!borrador) {
+    if (!inf || !inf.aprobado || inf.sello !== sello) {
+      console.error(`BLOQUEADO por el juez: ${!inf ? "no hay informe" : !inf.aprobado ? "el informe reprueba" : "las fuentes cambiaron desde el informe"} (${fInf}).`);
+      console.error(`Corre: node scripts/juez.mjs ${args.find((a) => !a.startsWith("--"))} --salida ${opt("salida", join(RAIZ, "dist"))}`);
+      process.exit(2);
+    }
+  }
   const datosFicha = { modo, foco, abiertas: abiertas.map(({ archivo, ...r }) => r), piezas: piezas.map(({ id, numero, nombre }) => ({ id, numero, nombre })) };
   const cuerpo = `<title>${esc(ficha.titulo)}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -196,6 +211,7 @@ ${ficha.controles?.length ? `<div class="geo-controles">${controlesHtml(ficha.co
 <div class="geo-quiz"><b>Rotula cada número</b>${quiz}<div class="geo-barra"><button type="button" data-corregir>Corregir</button></div><div class="geo-res" aria-live="polite"></div></div>
 </section>
 ${ficha.extra || ""}
+${inf && inf.aprobado && inf.sello === sello ? juezHtml(inf) : ""}
 <section class="geo-seccion"><h2>Comparar con fotos reales</h2>
 <p style="margin:0;max-width:72ch">Elige una foto: la cámara del modelo se acerca a un punto de vista parecido y se captura al lado. Las fotos tienen licencia abierta y están registradas en el catálogo de fuentes.</p>
 <div class="geo-miniaturas">${miniaturas}</div>
@@ -214,7 +230,9 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoundedBoxGeometry } from "three/addons/geometries/RoundedBoxGeometry.js";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 ${PAGINA_JS}
-${kitCodigo()}
+${kitCodigo(equipos)}
+// ── montaje del ejemplo (lo mismo que juzga el juez) ──
+${montajeSrc}
 // ── escena del ejemplo ──
 ${escenaSrc}
 const contenedor = document.getElementById("lienzo");
@@ -228,13 +246,13 @@ try {
   contenedor.querySelector(".geo-cargando").textContent = "No se pudo iniciar WebGL en este navegador: " + e.message;
 }
 </script>`.replace(/<\/script>(?=[\s\S]*<\/script>)/g, (m, off, all) => m); // (las etiquetas internas ya están bien formadas)
-  writeFileSync(join(salida, "index.html"), cuerpo);
+  if (!borrador) writeFileSync(join(salida, "index.html"), cuerpo);
   writeFileSync(join(salida, "vista.html"), `<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><style>body{margin:0}</style></head><body>\n${cuerpo}\n</body></html>`);
   // hoja local de comparación con referencias de estudio (no se publica)
   const est = (ficha.referencias?.estudio || []).filter((r) => r.archivo && existsSync(r.archivo));
   const tarj = [...abiertas.map((r) => `<figure><img src="${r.src}"><figcaption>${r.pie}</figcaption></figure>`),
     ...est.map((r) => `<figure><img src="${pathToFileURL(r.archivo).href}"><figcaption>${esc(r.titulo)} — ${esc(r.leyenda)} (pág. ${r.pagina}) · ${esc(r.clave)} · <b>solo estudio</b></figcaption></figure>`)].join("");
   writeFileSync(join(salida, "comparar.html"), `<!doctype html><meta charset="utf-8"><title>Comparar ${tema}</title><style>body{font:13px system-ui;margin:16px;background:#eee}main{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:12px}figure{margin:0;background:#fff;padding:8px}img{width:100%}</style><h1>${esc(ficha.titulo)} · referencias (local)</h1><main>${tarj}</main>`);
-  console.log(`listo: ${join(salida, "index.html")} (${(cuerpo.length / 1024).toFixed(0)} KB) · ${abiertas.length} fotos abiertas · ${est.length} de estudio`);
+  console.log(`${borrador ? "borrador" : "listo"}: ${join(salida, borrador ? "vista.html" : "index.html")} (${(cuerpo.length / 1024).toFixed(0)} KB) · ${abiertas.length} fotos abiertas · ${est.length} de estudio · sello ${sello}`);
 }
 await main();

@@ -23,11 +23,11 @@ Las que tienen ejemplo completo se marcan con ✅.
 
 | Tema | Kit | Rasgos | Números |
 |---|---|---|---|
-| ✅ Scoop / LHD | `scoop` | articulación central, cabina lateral baja, cucharón ancho con dientes | `reglas-equipos.md` |
+| ✅ Scoop / LHD | motor A: `EQUIPO_SCOOP` (`equipos/scoop`) | articulación central, barra en Z, cabina lateral baja, cucharón ancho con dientes | `equipos/scoop/medidas.js` |
 | Camión de acarreo | `camionAcarreo` | cubierta alta, escalera diagonal, visera, ruedas dobles | capacidad, ancho de vía |
 | Pala | `palaElectrica` | pórtico en A, cables, mango con empuje, compuerta | capacidad del cucharón |
 | Cargador | `cargadorFrontal` | cabina alta adelante, brazos en Z | capacidad |
-| ✅ Jumbo | `jumbo` + `apuntar` | brazos, vigas, perforadora que avanza, gatas | barra, sección |
+| ✅ Jumbo | motor A: `EQUIPO_JUMBO` + `apuntarJumbo` (`equipos/jumbo`) | brazos con muñeca, vigas, perforadora que avanza, gatas, turnos anticolisión | `equipos/jumbo/medidas.js` |
 | Perforadora de taladros largos | `perforadoraTaladrosLargos` | viga que gira en abanico | longitud de taladro, burden |
 | Perforadora de tajo | `perforadoraTajo` + `polvo` | mástil, conos de detrito, polvo | diámetro (Bonilla Vargas 2024, tabla 4) |
 | Empernador | `empernador` + `pernos` | carrusel de pernos | longitud y malla de pernos |

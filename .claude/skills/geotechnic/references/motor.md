@@ -1,5 +1,8 @@
 # Motor de dibujo: por qué three.js y cómo está armado
 
+> v2: el equipo se modela en el motor A (disciplina de Anatomy) y la roca en el motor B; ambos se dibujan en este mismo
+> mundo three.js. Por qué no se usa el 3D SVG de Anatomy dentro de la roca: `arquitectura.md`.
+
 ## La decisión
 
 | Opción | Sirve para | Por qué no (o sí) como motor principal |

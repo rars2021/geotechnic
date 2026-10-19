@@ -1,13 +1,27 @@
 ---
 name: geotechnic
 description: Dibuja cualquier tema de minería o geología con apariencia casi real y números verdaderos, en 3D interactivo (three.js) publicado como Artifact en tema claro y oscuro. Úsala para modelar un equipo (scoop, camión, pala, jumbo, perforadora, cargador, empernador, shotcrete, volquete), mostrar un corte de talud o un macizo con fracturas, alteración, fallas, agua, hielo o polvo, una labor subterránea con su sostenimiento, o un proceso animado (perforación de un frente, voladura, carguío y acarreo, dispatch, ventilación, relleno, planta, relaves), a cualquier escala (cerro, tajo, banco, labor, frente, testigo, probeta). Sirve a SSTutor (cada relación es una pieza o región señalable, modos completo y en blanco) y a cualquier otro uso. No reemplaza a sstutor-anatomia, que sigue para objetos mecánicos isométricos de laboratorio.
-compatibility: Claude Code. Node.js 20+ para armar; Chrome o Edge para verificar (scripts/drive.mjs). Las fotos de referencia se reúnen con el catálogo de fuentes (<REPOS>catalogo/).
+compatibility: Claude Code. Node.js 20+ (npm install en la carpeta de la skill trae three 0.160 para el juez); Python con numpy y Pillow para el realismo; Chrome o Edge para verificar (scripts/drive.mjs). Las fotos de referencia se reúnen con el catálogo de fuentes (<REPOS>catalogo/).
 ---
 
 # Geotechnic
 
-Dibujos 3D casi reales de minería y geología. Cada dibujo es una escena three.js armada con un kit propio
-(terreno, fracturas, volúmenes, equipos, labores, procesos) y publicada como una sola página.
+Dibujos 3D casi reales de minería y geología, publicados como una sola página three.js. Desde la v2 los arman **dos
+motores que se alimentan entre sí**, los prueba un **juez** antes de publicar y los mantiene **un agente por equipo**.
+
+## Arquitectura (v2)
+
+| Pieza | Qué es | Dónde |
+|---|---|---|
+| Motor A · equipos y mecanismos | Sólidos convexos con grupos, pasadores, cilindros de pasador a pasador y mangueras de racor a racor. Disciplina de Anatomy (wheresryan22/anatomy, MIT, copia en `anatomia/`) | `motorA/`, `equipos/<equipo>/` · `references/motor-a.md` |
+| Motor B · roca y terreno | Macizo con DFN, facetas, ruido explícito, alteración gradacional, agua y polvo; galerías, frentes, taludes | `kit/macizo.js`, `kit/labor.js`, `kit/terreno.js` · `references/motor-b.md` |
+| Contrato | B → A: piso, contorno, `libre(p)`, frente, emboquilles. A → B: huellas, polvo, taladros, carga | `kit/contrato.js` · `references/arquitectura.md` |
+| Juez | Física (interpenetración, rangos, cierres, cilindros, mangueras, ruedas, roca), fidelidad (medidas con fuente) y realismo (capturas contra fotos). **Sin su aprobación, `armar` no escribe `index.html`** | `juez/`, `scripts/juez.mjs` · `references/juez.md` |
+| Agentes | Uno por equipo (scoop, jumbo, camión, pala, perforadora, empernador, shotcrete, volquete, cargador), roca y terreno, orquestador de escenas, juez | `.claude/agents/` del repo · `references/agentes.md` |
+
+Por qué el equipo no se dibuja con el 3D SVG de Anatomy dentro de la roca (cámara fija, sin z-buffer contra WebGL,
+otra luz, auditoría de horas): `references/arquitectura.md`. Se trae su modelo, su disciplina y su separador de planos;
+todo se dibuja en un solo mundo three.js, con un modo «lámina» que agrega las aristas en tinta.
 
 ## La regla: la verdad primero
 
@@ -53,12 +67,16 @@ Ejemplos de pedidos que funcionan:
    - Todo va a `<DATOS>/geotechnic\figuras\<tema>\` (estudio) y `…\<tema>\abiertas\` (incrustables), cada carpeta con su `fuentes.json`.
 2. **Mira las fotos de verdad** (léelas con la herramienta Read, con hojas de contacto) y anota rasgos y proporciones. Si un rasgo es nuevo, va a `references/reglas-*.md` con su fuente.
 3. **Junta los números** en las tesis del catálogo (`textos\` de el catálogo de fuentes): grep, lectura de la página, clave de la ficha.
-4. **Escribe el ejemplo** en `ejemplos/<tema>/`:
-   - `ficha.mjs`: título, resumen, piezas, controles, tabla de fuentes y referencias (ver los tres ejemplos).
-   - `escena.js`: `async function montar(ctx)` que arma la escena con el kit y deja `window.GEO = { escena, senal, igualarVista }`.
-5. **Arma**: `node scripts/armar.mjs ejemplos/<tema> --salida <scratchpad>/dist` → `index.html` (se publica), `ref/*.jpg`, `vista.html` y `comparar.html` (locales).
-6. **Verifica como un crítico** (`references/verificar.md`): capturas en claro y oscuro, cada modo, la animación en varios cuadros, la comparación con 3 o más fotos. Corrige lo que no se parezca a la foto.
-7. **Publica** `index.html` con la herramienta Artifact, con `files` para `ref/*.jpg`. Si los archivos sueltos no se pueden publicar, arma con `--incrustar` (las fotos van dentro de la página).
+4. **Equipos** (agente `equipo-<equipo>`): modelo en el motor A con sus medidas (`equipos/<equipo>/`), probado en el
+   taller (`node scripts/taller.mjs <equipo>`) hasta que el juez aprueba su rango y su fidelidad.
+5. **Escribe el ejemplo** en `ejemplos/<tema>/` (agente `orquestador-escenas`):
+   - `ficha.mjs`: título, resumen, `equipos`, piezas, controles, tabla de fuentes (`filasMedidas`), vistas con `recorte`.
+   - `montaje.js`: macizo, galería y contrato (motor B), máquinas asentadas (motor A), ciclo `estado(t)`; exporta `pruebas(paso)`.
+   - `escena.js`: `async function montar(ctx)` que dibuja el montaje (`mallasMaquina`) y deja `window.GEO = { escena, senal, igualarVista }`.
+6. **Juzga**: `node scripts/juez.mjs ejemplos/<tema> --salida <scratchpad>/dist --incrustar` → `juez/informe.md`. Cada falla vuelve a su dueño.
+7. **Arma**: `node scripts/armar.mjs ejemplos/<tema> --salida <scratchpad>/dist --incrustar` → `index.html` solo si el juez aprobó con el sello vigente.
+8. **Verifica como un crítico** (`references/verificar.md`): capturas en claro y oscuro, cada modo, la animación en varios cuadros, la hoja del realismo.
+9. **Publica** `index.html` con la herramienta Artifact (si ya existe: `read` primero y `publish` con su `url`).
 
 ## Modos (una relación = una pieza o región)
 
@@ -81,7 +99,15 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `kit/terreno.js` | Perfil de bancos, malla de talud, escombros, medias cañas, cerros, pretil, cortes de bloque |
 | `kit/fracturas.js` | DFN de discos por familia, relieve en bloques facetados, trazas reales sobre la malla |
 | `kit/volumenes.js` | Zonas gradacionales (alteración, óxidos, panizo), agua, hielo, polvo, goteo |
-| `kit/equipos.js` | Llanta, cilindro, cabina, faro; scoop, camión, pala, jumbo, perforadora de tajo, cargador, empernador, shotcrete, taladros largos, volquete |
+| `kit/macizo.js` | Macizo: DFN, facetas, ondulación de juntas y aspereza con ruido explícito, alteración, agua; su `metodologia` |
+| `kit/contrato.js` | Contrato entre motores: `terrenoGaleria` (piso, contorno, libre, frente, cavidades), `emboquillesMalla`, `huellasDe`, `asentar` |
+| `motorA/modelo.js` · `motorA/mallas.js` | Motor A: modelo puro de máquinas (Node y página) y su dibujo three.js |
+| `equipos/<equipo>/` | Un agente por equipo: `medidas.js` (con fuente) y, en el motor A, `modelo.js` (scoop y jumbo hoy) |
+| `kit/equipos.js` | v1 heredada: llanta (la usa el motor A), y camión, pala, perforadora, cargador, empernador, shotcrete, volquete hasta que sus agentes los pasen al motor A |
+| `juez/` · `scripts/juez.mjs` | Juez: física, fidelidad, realismo; informe y sello |
+| `scripts/taller.mjs` | Banco de un equipo solo (cascos y lámina) para su agente |
+| `scripts/codigo.mjs` | Junta kit, motores y equipos en el módulo de la página; sello de fuentes |
+| `anatomia/` | Copia sin cambios del kit, scripts y referencias de Anatomy (MIT, `LICENSE-anatomy`) |
 | `kit/labor.js` | Galería con sobreexcavación, frente, pernos, shotcrete, manga, tuberías, charcos |
 | `kit/procesos.js` | Mallas de perforación reales, orden de perforación, líneas de tiempo, simulación de flota (dispatch) |
 | `kit/senalar.js` | Plaquitas, resaltado y modos |
@@ -90,6 +116,6 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `ejemplos/comun.mjs` | `abierta()`, `estudio()`, `cita()`: leen `fuentes.json` y arman las referencias de una ficha |
 | `scripts/drive.mjs` | Capturas en Chrome sin interfaz (de sstutor-anatomia, MIT; ver `scripts/LICENSE-anatomy`) |
 | `ejemplos/talud-tajo` | Corte de talud de tajo (Antamina) · [publicado](https://claude.ai/artifact/9yawDfHqMnZNYZ8oQcCBgz) |
-| `ejemplos/scoop-lhd` | Scoop CAT R1600G en galería, con ciclo de carguío · [publicado](https://claude.ai/artifact/NYN2ccWp45UG4kF4R9D2cn) |
-| `ejemplos/frente-jumbo` | Perforación de un frente 4 × 4 m con jumbo y secuencia de salida · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
-| `references/` | `motor.md` (por qué three.js), `kit.md` (API), `reglas-roca.md`, `reglas-equipos.md`, `reglas-luz.md`, `reglas-procesos.md`, `temas.md`, `fotos.md`, `verificar.md` |
+| `ejemplos/scoop-lhd` | Scoop CAT R1600G (motor A, 260 piezas) en galería, con ciclo de carguío juzgado · [publicado](https://claude.ai/artifact/NYN2ccWp45UG4kF4R9D2cn) |
+| `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 244 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
+| `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |
