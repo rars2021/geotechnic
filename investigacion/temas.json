@@ -1,0 +1,1980 @@
+{
+  "version": "2026-10-19",
+  "nota": "Temas para el loop de pruebas de Geotechnic. Rutas de imágenes en <DATOS>/geotechnic; claves el catálogo de fuentes con página. Figuras de tesis: solo estudio. Ver representacion-visual.md y rubrica.md.",
+  "temas": [
+    {
+      "id": "falla-planar-corte",
+      "tema": "Corte de banco con falla planar a favor del talud: losas que salen a la cara y cordón de lajas al pie",
+      "escala": "banco",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "planos lisos que buzan hacia la vía con casi el ángulo de la cara",
+        "escalones de una familia transversal",
+        "junta oxidada pardo-rojiza apagada contra roca fresca gris verdosa 25 % más clara",
+        "cordón angosto de lajas planas al pie, no talud de bloques",
+        "aleros con sombra bajo la familia subhorizontal",
+        "estereograma con la familia que desliza y la cara"
+      ],
+      "piezas": [
+        "cara del talud",
+        "familia que desliza",
+        "familia transversal",
+        "cara de junta oxidada",
+        "roca fresca",
+        "lajas al pie",
+        "alero",
+        "cresta",
+        "estereograma"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\daylighted_slope_along_the_baguio_bua_itogon_road.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\jointed_diorite_outcrop_dalupirip_itogon_benguet_01.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2025_lopez_nicolaz_optimizacion_geotecni_p56.jpg",
+        "hdl:20.500.14076/28951 pág. 56"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "losas de 0,1–0,5 m; lajas al pie de 0,1–0,4 m",
+          "fuente": "Commons Daylighted slope Baguio (CC BY-SA 4.0), medido en foto"
+        },
+        {
+          "dato": "junta #7b655c S 0,25; roca fresca #89847e S 0,08; razón de luminancia 0,79",
+          "fuente": "Commons Baguio, regiones medidas"
+        },
+        {
+          "dato": "cinemática: fricción < buzamiento de la junta < buzamiento de la cara; rumbo ±20°",
+          "fuente": "hdl:20.500.14076/28951 pág. 56"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "granito-meteorizado-bolos",
+      "tema": "Afloramiento de granito con dos familias conjugadas, bolos de meteorización esferoidal y delantal de grus, con persona de escala",
+      "escala": "afloramiento",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "núcleos redondeados dentro de cada bloque de juntas",
+        "surcos hundidos en las juntas",
+        "grus más claro y menos saturado que el núcleo",
+        "delantal de grus de perfil recto al pie",
+        "rombos por familias conjugadas a ±45°",
+        "agua que oscurece solo las juntas por donde baja",
+        "persona de 1,7 m"
+      ],
+      "piezas": [
+        "bolo (núcleo)",
+        "junta (surco)",
+        "grus",
+        "delantal de grus",
+        "familia 1",
+        "familia 2",
+        "franja húmeda",
+        "persona de escala"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\butte_granite_joints_2012_1440.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\jointed_and_weathered_granite_geodil_number_2208.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "bolos de 2–3,5 m; surcos de 0,15–0,25 m",
+          "fuente": "Commons Butte Granite joints 2012 (CC BY-SA 4.0), escala por persona"
+        },
+        {
+          "dato": "grus Lum 0,75 S 0,09 (#c6beb4); núcleo Lum 0,69 S 0,16 (#b8ad9c)",
+          "fuente": "Commons Butte Granite joints, regiones medidas"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "pared-tajo-oxidos",
+      "tema": "Pared de tajo polimetálico con zonas de óxidos, crema y gris que cortan los bancos",
+      "escala": "tajo",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "zonas en columnas o manchas de 50–200 m que cruzan varias bermas",
+        "bordes gradacionales de ≥ 5 m",
+        "óxidos apagados (S ≤ 0,5), no naranja vivo",
+        "bermas como rayas finas claras que siguen el contorno",
+        "rampas en bandas claras",
+        "camión como escala"
+      ],
+      "piezas": [
+        "zona de óxidos",
+        "zona crema",
+        "roca sin oxidar",
+        "berma",
+        "cara de banco",
+        "rampa",
+        "borde gradacional",
+        "camión de escala"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\mina_cerro_de_pasco1.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\minas_de_tintaya_peru.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\big_rock_candy_mountain_marysvale_utah_19970724.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "ocre #6c5536 S 0,50; crema #857b66 S 0,23; gris #5f5146 S 0,26",
+          "fuente": "web:b55550f33eeedd32 Mina Cerro de Pasco1 (CC BY-SA 4.0), medido"
+        },
+        {
+          "dato": "transición de borde 5–10 m",
+          "fuente": "reglas-roca.md M1; Cisneros Eufracio 2023, hdl:20.500.14076/26749 pág. 191"
+        },
+        {
+          "dato": "berma ≈ 7,5 m para banco de 15 m",
+          "fuente": "Montes Valderrama 2025, hdl:20.500.14076/29234 fig. 12 (reglas-roca.md R10)"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "relaves-laguna-botadero",
+      "tema": "Depósito de relaves con muro, playa y laguna junto a un botadero por bancos, con cielo despejado y cubierto",
+      "escala": "instalación",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "agua turquesa con cielo despejado y plateada con cielo cubierto",
+        "playa ancha, plana y clara entre muro y agua, con islotes",
+        "muro recto con surcos verticales",
+        "botadero con caras rectas al ángulo de reposo y bandas de tono por carga",
+        "plataformas horizontales con vías",
+        "camión como escala"
+      ],
+      "piezas": [
+        "laguna",
+        "playa de relaves",
+        "muro de la presa",
+        "cresta del muro",
+        "botadero",
+        "banco de botadero",
+        "cara al ángulo de reposo",
+        "vía",
+        "camión de escala"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\antamina_mine_tailings_pond.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\tajos_abiertos_y_presa_de_relaves_de_antamina.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\highland_valley_copper_mine_tailings_former_bethlehem_mine.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\minas_de_tintaya_peru.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "agua despejado #4b707c H 196 S 0,39; cubierto #b3b4b1 S 0,02",
+          "fuente": "Commons Antamina Mine Tailings Pond (CC BY-SA 2.0); web:4361eadc81f9d736 (CC BY-SA 4.0)"
+        },
+        {
+          "dato": "playa #a69d8a–#b0a9a0 S ≤ 0,17, ancho ≥ 5 % del largo de la laguna",
+          "fuente": "mismas fotos, medido"
+        },
+        {
+          "dato": "caras de botadero 33°–37°; 6–8 bancos",
+          "fuente": "reglas-roca.md R6; web:4361eadc81f9d736"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "roca-terreno",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "caja-testigos-rqd",
+      "tema": "Caja de testigos HQ de 5 filas con tacos, línea de orientación, fracturas y RQD calculado, con su columna de log",
+      "escala": "testigo",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "lectura de izquierda a derecha y de arriba abajo",
+        "tacos de madera con profundidad al final de cada corrida",
+        "línea roja de orientación a lo largo",
+        "fracturas naturales a 30–60° del eje, distintas de las mecánicas",
+        "cascajo al final de filas",
+        "tapa con proyecto, DDH y DE–HASTA",
+        "log al lado con De–A, código y color",
+        "barra de escala"
+      ],
+      "piezas": [
+        "caja",
+        "fila",
+        "testigo HQ",
+        "taco de profundidad",
+        "línea de orientación",
+        "fractura natural",
+        "fractura mecánica",
+        "cascajo",
+        "rótulo DE–HASTA",
+        "columna de log",
+        "pieza ≥ 10 cm"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\drill_core_boxes_onkalo_1.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2022_riveros_alvarado_control_de_calidad_p87.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2023_condorpusa_cordova_caracterizacion__p38.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\logueo\\2022_ruiz_borja_interpretacion_gen_p93.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\logueo\\2025_chavez_palacin_analisis_del_c_p67.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "5 filas por caja; Onkalo 17,94→22,60 m",
+          "fuente": "Commons Drill core boxes Onkalo 1 (CC BY-SA 4.0)"
+        },
+        {
+          "dato": "HQ = 63,5 mm; diámetro/largo de fila 0,04–0,07; testigo/paso 0,5–0,65",
+          "fuente": "hdl:20.500.14076/24548 pág. 87; Onkalo 1 medido"
+        },
+        {
+          "dato": "RQD = Σ piezas ≥ 10 cm / largo de corrida",
+          "fuente": "definición estándar de RQD (Deere), sin clave el catálogo de fuentes; hdl:20.500.12918/8033 pág. 38 para fractura natural"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "testigo-porfido-probeta",
+      "tema": "Testigo de pórfido mineralizado y una probeta cortada de él, de cerca",
+      "escala": "probeta",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "fondo blanco verdoso de sericita",
+        "pirita en motas doradas alineadas en vetillas",
+        "cobre secundario verde azulado junto a la pirita",
+        "puntos de limonita",
+        "superficie rota áspera",
+        "probeta cilíndrica con caras planas y escala gráfica"
+      ],
+      "piezas": [
+        "testigo",
+        "vetilla de pirita",
+        "cobre secundario",
+        "limonita",
+        "matriz sericitizada",
+        "cara rota",
+        "probeta",
+        "escala gráfica"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\broken_drill_core_butte_mining_district_montana_usa_1.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2022_riveros_alvarado_control_de_calidad_p87.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "diámetro HQ 63,5 mm",
+          "fuente": "hdl:20.500.14076/24548 pág. 87"
+        },
+        {
+          "dato": "probeta con razón alto/diámetro 2–2,5",
+          "fuente": "estimado (norma de compresión uniaxial; falta clave el catálogo de fuentes)"
+        }
+      ],
+      "dificultad": 1,
+      "dueños": [
+        "roca-terreno",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "bocamina-hielo",
+      "tema": "Bocamina en invierno: carámbanos en los primeros metros, hastiales mojados y canal de agua en el piso",
+      "escala": "labor",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "carámbanos solo cerca del portal",
+        "colgando de la corona y de la mitad alta de los hastiales, juntos donde filtra",
+        "carámbanos translúcidos con raya especular",
+        "hastial mojado muy oscuro",
+        "canal central que refleja la luz del portal",
+        "bloques angulosos a los lados del canal",
+        "goteo"
+      ],
+      "piezas": [
+        "portal",
+        "corona",
+        "hastial mojado",
+        "carámbano",
+        "filtración",
+        "canal de agua",
+        "bloques del piso",
+        "goteo"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\adit_icicles_50312853716.jpg",
+        "<DATOS>/geotechnic\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "carámbanos de 0,2 m a 0,6 del alto de la labor, a ≤ 10 m del portal",
+          "fuente": "Commons Adit icicles (CC BY 2.0), estimado en foto"
+        },
+        {
+          "dato": "Lum hastial 0,14; charco 0,66",
+          "fuente": "Commons Adit icicles, medido"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "camaras-pilares-estratificada",
+      "tema": "Cámaras y pilares en caliza estratificada con techo plano y pernos en malla",
+      "escala": "labor",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "techo plano según la estratificación",
+        "desprendimientos en arco donde cayó una losa",
+        "pernos en malla regular, 8–10 por fila",
+        "capas horizontales en los hastiales y pilares",
+        "estrías verticales de taladros de contorno abajo",
+        "cascajo al pie",
+        "piso de polvo claro",
+        "luz solo de faros"
+      ],
+      "piezas": [
+        "techo",
+        "estrato",
+        "desprendimiento en arco",
+        "placa de perno",
+        "pilar",
+        "cámara",
+        "huella de contorno",
+        "cascajo",
+        "piso"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\maxville_limestone_black_17_mine_4.jpg",
+        "<DATOS>/geotechnic\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\fibre_reinforced_shotcrete.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "placas ≈ 0,15 m; 8–10 pernos por fila",
+          "fuente": "Commons Maxville Limestone Black 17 Mine 4 (CC BY 2.0), estimado en foto"
+        },
+        {
+          "dato": "techo #827b6a S 0,18; hastial #9a978b",
+          "fuente": "misma foto, medido"
+        },
+        {
+          "dato": "cámaras de 10–15 m de ancho",
+          "fuente": "estimado"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "drenaje-acido-botadero",
+      "tema": "Drenaje ácido que baja por un botadero de desmonte hasta un bofedal",
+      "escala": "banco",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "mancha naranja-parda limitada al perímetro mojado del cauce",
+        "desmonte gris neutro fuera de la franja",
+        "agua lechosa con espuma en los saltos",
+        "precipitado naranja vivo en el fondo del cauce lento (único acento)",
+        "cárcavas en el desmonte",
+        "bofedal verde al pie"
+      ],
+      "piezas": [
+        "cauce",
+        "franja teñida",
+        "precipitado de hierro",
+        "desmonte",
+        "cárcava",
+        "salto con espuma",
+        "bofedal"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\acid_mine_drainage_at_tilt_cove.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\iron_precipitate_on_quaker_run.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\shinarump_mine_waste_rock.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "franja de 0,3–0,6 m a cada lado del cauce; roca teñida #796257 S 0,28; desmonte #77736f S 0,06",
+          "fuente": "Commons Tilt Cove (CC BY-SA 4.0), medido"
+        },
+        {
+          "dato": "precipitado #be804b S 0,60",
+          "fuente": "Commons Quaker Run (CC BY-SA 4.0)"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "cerro-alteracion-hidrotermal",
+      "tema": "Cerro con alteración hidrotermal sin vegetación junto a laderas sanas con pasto, cárcavas y conos de detritos",
+      "escala": "cerro",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "cobertura vegetal 0 en lo alterado",
+        "manchas de decenas de metros crema, pardo rojizo y blanco",
+        "bordes difusos a lo largo de las cárcavas",
+        "cárcavas profundas y conos de detritos al pie",
+        "ladera sana con pasto o arbustos",
+        "flecha norte y barra de escala"
+      ],
+      "piezas": [
+        "zona argílica",
+        "zona de óxidos",
+        "zona blanca",
+        "cárcava",
+        "cono de detritos",
+        "ladera con vegetación",
+        "borde difuso"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\big_rock_candy_mountain_marysvale_utah_19970724.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2015_norabuena_huahuachampi_analisis_de__p113.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\hydrothermally_altered_volcanic_rocks_quaternary_inspiration.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "crema #d9cda8 S 0,23; pardo rojizo #63503f S 0,37",
+          "fuente": "Commons Big Rock Candy Mountain (CC0), medido"
+        },
+        {
+          "dato": "transición de alteración 5–10 m",
+          "fuente": "reglas-roca.md M1"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "talud-agua-grietas",
+      "tema": "Triple banco con dren subhorizontal, grietas de tracción en la cresta y escarpa fresca de un deslizamiento",
+      "escala": "banco",
+      "tipo": "roca-terreno",
+      "que_debe_verse": [
+        "dren que asoma 0,3–0,5 m con chorro casi vertical",
+        "franja húmeda oscura y huella de erosión bajo el dren",
+        "grietas de tracción abiertas con labios derrumbados y cascajo dentro",
+        "escarpa crema clara contra la ladera meteorizada",
+        "roca 40 % más oscura bajo la surgencia",
+        "persona como escala"
+      ],
+      "piezas": [
+        "dren",
+        "chorro",
+        "franja húmeda",
+        "grieta de tracción",
+        "cresta",
+        "escarpa",
+        "masa deslizada",
+        "berma"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2023_cisneros_eufracio_reevaluacion_geot_p133.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2023_cisneros_eufracio_reevaluacion_geot_p211.jpg",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2015_norabuena_huahuachampi_analisis_de__p113.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "grietas de 0,3–0,6 m de abertura",
+          "fuente": "hdl:20.500.14076/26749 pág. 211"
+        },
+        {
+          "dato": "dren que asoma 0,3–0,5 m",
+          "fuente": "hdl:20.500.14076/26749 pág. 133, estimado en foto"
+        },
+        {
+          "dato": "oscurecimiento ≈ 40 % bajo la surgencia",
+          "fuente": "reglas-roca.md M5; Alvarez Tovar 2020 hdl:20.500.12394/8743 pág. 78"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "pala-electrica-carguio",
+      "tema": "Pala eléctrica de cables cargando un camión de tajo en pases contados, con cable de cola y cola de camiones",
+      "escala": "banco",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "pórtico en A con cables de suspensión rectos y tensos",
+        "izaje casi vertical de la polea a la cuchara",
+        "mango a media pluma",
+        "cable de cola tendido en el piso",
+        "camión esperando de costado junto a la pala, paralelo a las orugas; al cargar, cuchara sobre el centro de la tolva",
+        "pases enteros con la carga creciendo",
+        "camión con escalera diagonal, filtros y número de flota"
+      ],
+      "piezas": [
+        "pórtico",
+        "cable de suspensión",
+        "pluma",
+        "polea de punta",
+        "cable de izaje",
+        "mango",
+        "cuchara",
+        "casa",
+        "orugas",
+        "cable de cola",
+        "camión",
+        "tolva del camión"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\p_h_4100xpb_shovel.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\p_h_4100xpb_shovel_4.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\bucyrus_822_shovel_continental_mine_butte_montana_usa_11.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\carguio\\2022_tenorio_enciso_mejora_en_la_product_p33.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\machinery_hannans_north_tourist_mine_2016_01.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "CAT 7495: descarga 8,61 m alto y 21,64 m radio; corte 17,80 m y 25,20 m; manija 10,9 m",
+          "fuente": "hdl:20.500.14076/22793 pág. 33"
+        },
+        {
+          "dato": "3–6 pases por camión (práctica 3–5)",
+          "fuente": "hdl:20.500.14076/22795 pág. 74"
+        },
+        {
+          "dato": "73 yd³ ≈ 120 t por pase; 360 t en 3 pases",
+          "fuente": "hdl:20.500.14076/22523 pág. 31"
+        },
+        {
+          "dato": "izaje < 10° de la vertical al cargar",
+          "fuente": "Commons P&H 4100XPB Shovel-4, estimado en foto"
+        },
+        {
+          "dato": "camión de costado y paralelo a las orugas: se ve en la foto, no en el diagrama de rango (allí el camión se dibuja de frente)",
+          "fuente": "Commons P&H 4100XPB Shovel-4 (CC BY-SA 3.0), estimado en foto; hdl:20.500.14076/22793 pág. 33"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "equipo-pala",
+        "equipo-camion",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "cargador-994k-camion",
+      "tema": "Cargador frontal 994K cargando un camión de tajo",
+      "escala": "banco",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "varillaje en Z con balancín sobre los brazos",
+        "cucharón sobre el borde lateral de la tolva, volcando al centro",
+        "eje delantero junto al costado del camión",
+        "llanta del cargador ≈ llanta del camión",
+        "escalera diagonal y dos escapes verticales atrás"
+      ],
+      "piezas": [
+        "cucharón",
+        "brazos de levante",
+        "balancín",
+        "cilindro de volteo",
+        "cabina",
+        "llanta",
+        "articulación",
+        "escalera",
+        "escape",
+        "tolva del camión"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\carguio\\2023_cortez_tanta_determinacion_de_la_se_p46.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\machinery_hannans_north_tourist_mine_2016_03.jpg",
+        "hdl:20.500.14076/2098 pág. 75"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "labio del cucharón ≥ 0,5 m sobre el borde de la tolva",
+          "fuente": "hdl:20.500.14076/24846 pág. 46, estimado en foto"
+        },
+        {
+          "dato": "medidas del 994K",
+          "fuente": "estimado (sin ficha abierta en el catálogo de fuentes)"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "equipo-cargador",
+        "equipo-camion"
+      ]
+    },
+    {
+      "id": "perforadora-tajo-conos",
+      "tema": "Tres perforadoras de tajo sobre una malla, con conos de detritus que aparecen por taladro y polvo en el collar",
+      "escala": "banco",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "mástil alto vertical, ≈ 2 veces el largo del carrier",
+        "cabina a un costado del mástil",
+        "un cono gris claro por taladro terminado, en filas",
+        "nube de polvo en el collar al perforar",
+        "una perforadora con el mástil abatido en traslado",
+        "operario como escala"
+      ],
+      "piezas": [
+        "mástil",
+        "carrier de orugas",
+        "cabina",
+        "barra",
+        "cono de detritus",
+        "collar",
+        "polvo",
+        "gatas",
+        "malla de taladros"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\narva_mine_blasthole_drilling.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2014_lucano_chuan_mejoramiento_del_calcu_p25.jpg",
+        "hdl:20.500.14076/4581 pág. 64",
+        "hdl:20.500.14076/14760 pág. 77"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "mástil 1,5–2,5 × largo del carrier",
+          "fuente": "Commons Narva mine blasthole drilling (CC BY-SA 4.0), estimado"
+        },
+        {
+          "dato": "diámetro de taladro",
+          "fuente": "Bonilla Vargas 2024, hdl:20.500.14076/28169 tabla 4 (temas.md)"
+        },
+        {
+          "dato": "polvo #cdbfa9",
+          "fuente": "reglas-roca.md M9; hdl:20.500.14076/6645 pág. 25"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "equipo-perforadora",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "empernador-carrusel",
+      "tema": "Empernador mecanizado instalando pernos en malla en una galería",
+      "escala": "labor",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "carrusel anular de pernos junto a la viga",
+        "viga apoyada contra el techo",
+        "mangueras en lazos del brazo al carrier",
+        "techo protector del operador",
+        "pernos instalados que aparecen en el contorno en tresbolillo",
+        "piso mojado que refleja los faros"
+      ],
+      "piezas": [
+        "carrusel",
+        "viga",
+        "brazo",
+        "perforadora del brazo",
+        "techo protector",
+        "carrier",
+        "mangueras",
+        "perno instalado",
+        "placa"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\boltec_2.jpg",
+        "hdl:20.500.14076/1367 pág. 102",
+        "<DATOS>/geotechnic\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "malla de pernos en tresbolillo",
+          "fuente": "Garrido Llosa 2015, hdl:20.500.14076/2101 fig. 24 (reglas-roca.md L3)"
+        },
+        {
+          "dato": "número de pernos del carrusel",
+          "fuente": "estimado (sin ficha abierta)"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "equipo-empernador"
+      ]
+    },
+    {
+      "id": "shotcrete-via-humeda",
+      "tema": "Lanzado de shotcrete por vía húmeda en una galería de 4,5 × 4,0 m, con espesor que crece y rebote al piso",
+      "escala": "labor",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "brazo con boquilla cerca de la roca",
+        "capa que sigue el relieve de la roca, sin quedar lisa",
+        "brillo húmedo recién lanzado",
+        "montón de rebote al pie del hastial",
+        "borde irregular del shotcrete",
+        "fibras asomando de cerca"
+      ],
+      "piezas": [
+        "boquilla",
+        "brazo",
+        "bomba",
+        "manguera",
+        "capa de shotcrete",
+        "rebote",
+        "borde",
+        "roca sin cubrir"
+      ],
+      "referencias": [
+        "hdl:20.500.12394/4685 págs. 67-68",
+        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\fibre_reinforced_shotcrete.jpg",
+        "hdl:20.500.12394/11540 pág. 79",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2018_quispe_matos_evaluacion_geomecanica_p68.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "vía húmeda 4–5 m³/h; rebote 2–10 %",
+          "fuente": "hdl:20.500.12394/4685 págs. 67-68"
+        },
+        {
+          "dato": "vía seca < 1 m³/h; rebote 30–50 %",
+          "fuente": "hdl:20.500.12394/4685 págs. 67-68"
+        },
+        {
+          "dato": "sección 4,5 × 4,0 m",
+          "fuente": "SKILL.md (ejemplo de pedido), estimado"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "equipo-shotcrete",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "scoop-proporciones",
+      "tema": "Scoop LHD de perfil y en 3/4, en la misma pose que las fotos de Commons, en tres niveles de realismo (esquemático, idealizado, detallado con sombreado simple)",
+      "escala": "equipo",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "cucharón con lado ≈ alto de llanta y dientes cortos",
+        "cucharón más ancho que el chasis",
+        "llanta > mitad del alto total",
+        "articulación central y barra en Z",
+        "cabina lateral baja",
+        "misma pose que la foto (puntos clave)"
+      ],
+      "piezas": [
+        "cucharón",
+        "dientes",
+        "brazo de levante",
+        "barra en Z",
+        "articulación central",
+        "cabina",
+        "llanta",
+        "contrapeso",
+        "cilindro de volteo"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\figuras\\scoop\\abiertas\\load_haul_dump_cobar_2017_01.jpg",
+        "<DATOS>/geotechnic\\figuras\\scoop\\abiertas\\sandvik_lh517_lhd.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\big_nickel_mining_35992475746.jpg",
+        "<DATOS>/geotechnic\\investigacion\\evaluacion\\skulmowski2022_p8_fig2.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "alto del cucharón / diámetro de llanta ≈ 1,0",
+          "fuente": "Commons Load haul dump Cobar 2017 01, estimado en foto"
+        },
+        {
+          "dato": "medidas del R1600G",
+          "fuente": "equipos/scoop/medidas.js (con fuente)"
+        },
+        {
+          "dato": "error de razón ≤ 10 %",
+          "fuente": "rubrica.md K2"
+        }
+      ],
+      "dificultad": 1,
+      "dueños": [
+        "equipo-scoop",
+        "juez"
+      ]
+    },
+    {
+      "id": "dispatch-ptx",
+      "tema": "Dispatch de 8 camiones entre 2 palas y una chancadora, con la PTX del camión y la pantalla de la pala sincronizadas con la escena",
+      "escala": "tajo",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "camiones que eligen pala según la política",
+        "colas por pala",
+        "PTX con estado en letras grandes y minutos esperados",
+        "pantalla de pala con tonelaje por camión y cola como chips",
+        "bifurcación de la descarga: chancadora o botadero",
+        "9 estados del ciclo"
+      ],
+      "piezas": [
+        "pala 1",
+        "pala 2",
+        "chancadora",
+        "botadero",
+        "camión",
+        "ruta",
+        "cola",
+        "PTX del camión",
+        "pantalla de pala",
+        "estado del ciclo"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2022_tenorio_enciso_mejora_en_la_product_p45.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2023_moromisato_gibu_analisis_de_variabl_p49.jpg",
+        "<DATOS>/geotechnic\\figuras\\dispatch\\2014_castillo_calderon_factor_equivalent_p28.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2022_ojeda_ore_simulacion_de_rutas_de_re_p31.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "9 estados del camión",
+          "fuente": "hdl:20.500.14076/9227 pág. 28"
+        },
+        {
+          "dato": "parámetros de flota y política",
+          "fuente": "Yupanqui Sánchez 2025, tabla 7 (temas.md de la skill)"
+        },
+        {
+          "dato": "tonelaje por camión 236 t, 100 % OK",
+          "fuente": "hdl:20.500.14076/25219 pág. 49"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "equipo-camion",
+        "equipo-pala"
+      ]
+    },
+    {
+      "id": "ciclo-desarrollo-10-pasos",
+      "tema": "Ciclo de desarrollo horizontal en 10 pasos en una galería de 4 × 4 m, con línea de tiempo y un equipo por paso",
+      "escala": "labor",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "orden: ventilación, marina, desatado, pernos, lechado, malla, hilteo, shotcrete, perforación, carguío y voladura",
+        "mismo corte de galería en cada paso",
+        "un equipo visible por paso",
+        "avance por pasos con botón siguiente",
+        "duración de la limpieza coherente con el scoop"
+      ],
+      "piezas": [
+        "ventilador",
+        "scoop",
+        "desatador",
+        "empernador",
+        "malla",
+        "lanzador de shotcrete",
+        "jumbo",
+        "frente",
+        "taladros cargados",
+        "marina"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2024_vargas_rojas_analisis_de_las_operac_p36.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\boltec_2.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2023_nunez_soras_caracterizacion_geomeca_p115.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2022_sapallanay_rashuaman_mejoramiento_d_p44.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "10 pasos del ciclo",
+          "fuente": "tit:f98d6db20aff3715 pág. 36"
+        },
+        {
+          "dato": "limpieza de un disparo de tajeo de 12 m (no de galería): 552 m³ in situ, 626 m³ esponjados según la fuente (552 × 1,2 = 662: la fuente no cuadra), 4,5 m³/viaje → 140 viajes ≈ 7 h",
+          "fuente": "tit:f98d6db20aff3715 pág. 93"
+        },
+        {
+          "dato": "contraste: el sub level caving tiene 6 operaciones (slot, abanicos, carguío y voladura, limpieza, carguío y transporte), no 10",
+          "fuente": "hdl:20.500.14076/22981 pág. 44"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "equipo-scoop",
+        "equipo-jumbo",
+        "equipo-empernador",
+        "equipo-shotcrete"
+      ]
+    },
+    {
+      "id": "voladura-frente-grupos",
+      "tema": "Frente de 4 × 4 m con la malla pintada, carguío con tubos de choque y voladura animada por grupos de salida",
+      "escala": "frente",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "malla pintada sobre la roca",
+        "taladros cargados con tubo de choque; alivios vacíos sin tubo",
+        "lámina 2D: punto lleno, alivio vacío mayor, retardo junto a cada taladro",
+        "cuadrados de arranque girados 45°",
+        "retardos que crecen del arranque al contorno",
+        "un color por grupo y barras de columna de carga",
+        "salida por grupos con pausa y paso a paso"
+      ],
+      "piezas": [
+        "arranque",
+        "alivio",
+        "ayuda",
+        "cuadrador",
+        "corona",
+        "arrastre",
+        "tubo de choque",
+        "cebo",
+        "explosivo",
+        "taco",
+        "eje de simetría"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2023_ozgur_y_lmaz_drilling_and_bla_p11.jpg",
+        "<DATOS>/geotechnic\\figuras\\jumbo\\2021_zanabria_mejia_analisis_del_monitor_p26.jpg",
+        "<DATOS>/geotechnic\\figuras\\jumbo\\2023_nunez_soras_caracterizacion_geomeca_p113.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2021_acero_vergara_propuesta_de_un_p69.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2023_nunez_soras_caracterizacion_geomeca_p115.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "malla 4 × 4 m: 33 cargados + 8 vacíos; espaciamientos 0,6/0,7/1,2 m; longitud 3,9 m",
+          "fuente": "hdl:20.500.12394/10815 pág. 26"
+        },
+        {
+          "dato": "alivio de 76 mm; retardos 9–14 junto a cada taladro",
+          "fuente": "doi:10.1038/s41598-023-29803-6 pág. 11 (CC BY 4.0)"
+        },
+        {
+          "dato": "error de taladros contra el plano ≤ 5 cm",
+          "fuente": "rubrica.md K1"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "roca-terreno",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "voladura-banco-precorte",
+      "tema": "Voladura de un banco junto al talud final: planta y sección con producción, amortiguación, precorte y amarre animado desde INICIO",
+      "escala": "banco",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "planta y sección una junto a la otra",
+        "filas de producción en tresbolillo",
+        "amortiguación, precorte y recorte rotulados",
+        "B y E rotulados",
+        "cresta continua y pie discontinuo",
+        "sobreperforación bajo la cota del banco",
+        "conos de detritus antes de cargar",
+        "secuencia de salida desde INICIO con retardos en ms"
+      ],
+      "piezas": [
+        "cara libre",
+        "cresta",
+        "pie",
+        "fila de producción",
+        "fila de amortiguación",
+        "precorte",
+        "burden",
+        "espaciamiento",
+        "sobreperforación",
+        "taco",
+        "INICIO"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2011_perales_orellana_planeamiento_p119.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2022_verastegui_marquino_factores__p100.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2021_ruiz_damian_evaluacion_tecnic_p49.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2022_valverde_aguirre_reduccion_de_p90.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\voladura_antamina_panoramio.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "precorte 1,20 m; amortiguación 2,00 m; producción 3,00 × 2,78 m",
+          "fuente": "hdl:20.500.14076/22722 pág. 100"
+        },
+        {
+          "dato": "contorno cada 1,5 m sin carga; producción 6,5 m (mineral) y 8,5 m (desmonte)",
+          "fuente": "hdl:20.500.14076/29218 pág. 74"
+        },
+        {
+          "dato": "amarre: líneas de 2000 ms, T1–T5 de 1000 ms",
+          "fuente": "hdl:20.500.14076/22845 pág. 90"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "roca-terreno",
+        "equipo-perforadora"
+      ]
+    },
+    {
+      "id": "ventilacion-frente-ciego",
+      "tema": "Ventilación auxiliar de un frente ciego con ventilador de 10 kCFM y dos mangas de 32\" en la corona",
+      "escala": "labor",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "ventilador sobre caballete con rejilla y caja de arranque",
+        "dos mangas pegadas a la corona junto a un hastial",
+        "catenaria leve entre colgadores",
+        "aire fresco por la manga y viciado de vuelta por la galería, con leyenda de colores",
+        "reflectivos en el hastial a ≈ 1 m",
+        "charcos en la huella"
+      ],
+      "piezas": [
+        "ventilador auxiliar",
+        "caballete",
+        "manga",
+        "colgador",
+        "frente ciego",
+        "aire fresco",
+        "aire viciado",
+        "reflectivo",
+        "charco"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2022_collantes_diaz_analisis_psicrometri_p40.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2025_huaira_rondo_modelo_matematico_de_r_p25.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2025_povis_rodriguez_analisis_de_circuit_p88.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\coal_mine_ventilation_fan.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "mangas de 32\" = 0,81 m, en pares",
+          "fuente": "hdl:20.500.14076/24538 pág. 40"
+        },
+        {
+          "dato": "ventilador auxiliar 10 kCFM",
+          "fuente": "hdl:20.500.14076/28632 pág. 25"
+        },
+        {
+          "dato": "catenaria > 0 y < 5 % del vano",
+          "fuente": "estimado"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "orquestador-escenas",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "chancado-primario",
+      "tema": "Camión de 238 t descargando en reversa a una giratoria de 60\"×113\", en corte, con bolsón, alimentador de orugas y faja",
+      "escala": "instalación",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "camión en reversa hacia el bolsón",
+        "descarga por dos lados",
+        "pórtico de acero sobre la boca",
+        "rompe-rocas en pedestal y grúa",
+        "corte con bolsón inferior, alimentador de orugas y faja que sube",
+        "bloques de 1,2 m que salen de 0,165 m"
+      ],
+      "piezas": [
+        "camión",
+        "bolsón superior",
+        "chancadora giratoria",
+        "rompe-rocas",
+        "grúa",
+        "bolsón inferior",
+        "alimentador de orugas",
+        "faja",
+        "detector de metales",
+        "muro de seguridad"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2022_quezada_valuis_analisis_comparativo_p68.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2014_lucano_chuan_mejoramiento_del_calcu_p29.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2022_rojas_ramirez_desarrollo_del_plan_d_p45.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\crusher_plant_panoramio.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "giratoria 60\"×113\": 1200 → 165 mm; 746 kW; 2600 t/h; bolsones de 500 t",
+          "fuente": "hdl:20.500.14076/22796 pág. 68"
+        },
+        {
+          "dato": "alimentador de 2700 mm; faja de 1830 mm",
+          "fuente": "hdl:20.500.14076/22796 pág. 68"
+        },
+        {
+          "dato": "camiones/h × 238 t ≤ 2600 t/h",
+          "fuente": "invariante derivado de hdl:20.500.14076/22796 pág. 68"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "equipo-camion"
+      ]
+    },
+    {
+      "id": "molienda-flotacion-hmi",
+      "tema": "Molino SAG de 40×22 pies con corte al interior, ciclones y banco de celdas con espuma, con flowsheet y HMI 2D enlazados y un escenario de problema",
+      "escala": "planta",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "SAG con razón largo/diámetro 0,55",
+        "tapa con filas radiales de pernos",
+        "corte con lifters, parrilla y bolas",
+        "banco de celdas en serie con pasarela y tuberías",
+        "espuma gris plateada",
+        "flowsheet de arriba-izquierda a abajo-derecha con reciclos discontinuos",
+        "escenario: baja la recuperación, diagnosticar y ajustar"
+      ],
+      "piezas": [
+        "molino SAG",
+        "lifter",
+        "parrilla",
+        "carga de bolas",
+        "hidrociclón",
+        "celda de flotación",
+        "espuma",
+        "pasarela",
+        "concentrado",
+        "relave",
+        "reciclo"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2021_ordonez_ylachoque_optimizacion_del__p24.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\tega_product_picture.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\delkor_bqr_flotation_cells_maxgen.jpg",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\prominenthill_flotation.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\flujo\\2024_acevedo_sinche_reduccion_del__p38.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2022_charlotte_e_gibson_michael_ch_p4_4.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "SAG 40×22 pies (12,2 × 6,7 m); 24 MW; 3963 t/h por línea",
+          "fuente": "hdl:20.500.14076/22415 págs. 13-15"
+        },
+        {
+          "dato": "tres zonas de la celda: espuma, inerte, mezcla",
+          "fuente": "hdl:20.500.14076/28628 pág. 90"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "nivel-lhd-cruceros",
+      "tema": "Nivel de producción subterráneo con LHD recorriendo cruceros cada 18 m, respetando radio de giro y holgura",
+      "escala": "nivel",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "galerías de 5,0–5,8 m",
+        "cruceros cada 18,2 m",
+        "trayectoria del LHD con giro suave y holgura",
+        "puntos de extracción con mineral",
+        "planta con norte y escala, y vista 3D enlazada",
+        "scoop bajo con cucharón ancho"
+      ],
+      "piezas": [
+        "galería de transporte",
+        "crucero",
+        "punto de extracción",
+        "LHD",
+        "trayectoria",
+        "pique de traspaso",
+        "pilar",
+        "holgura"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\lhd_benchmark_mapa_nivel.png",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\big_nickel_mining_35992475746.jpg",
+        "<DATOS>/geotechnic\\figuras\\scoop\\abiertas\\load_haul_dump_cobar_2017_01.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "galerías 5,0–5,8 m; cruceros cada 18,2 m",
+          "fuente": "zenodo:23292838 (CC BY 4.0)"
+        },
+        {
+          "dato": "LHD 2,45 m de ancho; articulación 30°; curvatura ≤ 0,22 m⁻¹ a 2 m/s; holgura 1,725 m",
+          "fuente": "zenodo:23292838 parameters"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "orquestador-escenas",
+        "equipo-scoop",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "relleno-pasta-secuencia",
+      "tema": "Relleno en pasta de tajeos por paneles numerados entre subniveles, con la planta de relleno y su HMI",
+      "escala": "mina",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "paneles numerados en orden 1-2-4, 3-5, 6",
+        "pasta como superficie gris lisa y mojada que avanza",
+        "tubería de relleno desde la planta",
+        "planta con silos, espesador y bombeo",
+        "HMI esquemático con valores en cajas"
+      ],
+      "piezas": [
+        "tajeo",
+        "subnivel",
+        "panel de relleno",
+        "pasta",
+        "tubería",
+        "silo",
+        "espesador",
+        "bomba",
+        "barricada"
+      ],
+      "referencias": [
+        "hdl:20.500.14076/29222 págs. 43-44",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2025_lopez_requelme_reduccion_de_costos__p30.jpg",
+        "hdl:20.500.14076/28634 pág. 29",
+        "hdl:20.500.14076/22442 pág. 54"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "orden de paneles 1-2-4 abajo, 3-5 al medio, 6 arriba",
+          "fuente": "hdl:20.500.14076/29222 págs. 43-44"
+        },
+        {
+          "dato": "caudal y tiempos de relleno",
+          "fuente": "estimado: buscar en tesis de relleno UNI"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "orquestador-escenas",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "macizo-familias-estereograma",
+      "tema": "Macizo con 3 o 4 familias y una cuña sobre una galería, con estereograma de igual área al lado y el mismo color por familia en todas las vistas",
+      "escala": "afloramiento",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "red de Schmidt, hemisferio inferior, N arriba con E y W",
+        "plano como círculo máximo y polo como punto",
+        "leyenda con n, proyección y contorno",
+        "mismo color por familia en red, sección y bloque",
+        "cuña marcada por las trazas",
+        "bloque con dos caras visibles"
+      ],
+      "piezas": [
+        "familia 1",
+        "familia 2",
+        "familia 3",
+        "cuña",
+        "galería",
+        "estereograma",
+        "círculo máximo",
+        "polo",
+        "leyenda"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\estereo\\2017_cruzado_peralta_evaluacion_ge_p27.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\estereo\\2019_aceijas_perez_geomecanica_apl_p78.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\stero_projection_structural_geology.png",
+        "<DATOS>/geotechnic\\figuras\\talud\\2020_alvarez_tovar_evaluacion_geomecanic_p79.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "hemisferio inferior; Schmidt para conteos",
+          "fuente": "hdl:20.500.14074/2871 págs. 19-21"
+        },
+        {
+          "dato": "67 entradas; Fisher, círculo de 1 %; densidad máx. 28,48 %",
+          "fuente": "hdl:20.500.14074/3366 pág. 78"
+        },
+        {
+          "dato": "ΔE ≤ 5 entre el color de la familia en la red y en 3D",
+          "fuente": "rubrica.md K4"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "bloque-distrito-fgdc",
+      "tema": "Bloque diagrama de un distrito minero con topografía arriba, caras con patrones FGDC, veta y falla normal, y sección A–A' alineada con su planta",
+      "escala": "distrito",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "terreno casi real arriba",
+        "caliza en ladrillo, intrusivo con cruces, morrena con círculos",
+        "falla normal con medias flechas y F",
+        "contactos ciertos continuos e inferidos discontinuos",
+        "A–A' en la planta y sección alineada, SW–NE",
+        "cotas en m s. n. m. a ambos lados",
+        "escala gráfica y exageración vertical declarada",
+        "rótulos fuera del bloque con guías"
+      ],
+      "piezas": [
+        "topografía",
+        "caliza",
+        "intrusivo",
+        "morrena",
+        "veta",
+        "falla normal",
+        "contacto inferido",
+        "línea A–A'",
+        "sección",
+        "escala gráfica"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\karstterrainusgs.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\floridan_block_diagram.png",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\seccion\\2021_mejia_mauricio_estudio_del_co_p93.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\seccion\\2013_quispe_aguilar_plan_de_minado_p25.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\fgdc\\hoja_fgdc.png"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "patrones FGDC 627, 721, 601",
+          "fuente": "gh:davenquinn/geologic-patterns (CC0)"
+        },
+        {
+          "dato": "cotas 2000–5500 m s. n. m., progresiva 0+000 a 6+000",
+          "fuente": "hdl:20.500.14076/22440 pág. 93"
+        },
+        {
+          "dato": "escala gráfica con error ≤ 3 %",
+          "fuente": "rubrica.md K4"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "estudio-visual",
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "columna-estratigrafica-andina",
+      "tema": "Columna estratigráfica 3D de un distrito andino con espesores proporcionales, patrones FGDC, discordancias e intrusivos",
+      "escala": "distrito",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "tres bandas: cronología, gráfico, descripción",
+        "espesor proporcional con su cifra",
+        "patrón y color por unidad",
+        "discordancias onduladas con nombre",
+        "intrusivos que cortan la pila",
+        "códigos INGEMMET"
+      ],
+      "piezas": [
+        "era",
+        "sistema",
+        "unidad",
+        "patrón litológico",
+        "discordancia",
+        "intrusivo",
+        "espesor",
+        "veta",
+        "código de unidad"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\columna\\2021_cerron_acosta_evaluacion_geom_p31.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\columna\\2021_sanchez_llanos_estudio_geolog_p48.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\simbolo\\2024_begazo_montes_caracterizacion_p66.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\fgdc\\hoja_fgdc.png"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "espesores ±850, ±2480 y ±350 m",
+          "fuente": "hdl:20.500.14076/22436 pág. 48"
+        },
+        {
+          "dato": "códigos Qr-al, Tm-an, Ki-so, Js-chu",
+          "fuente": "hdl:20.500.12773/18055 pág. 66"
+        }
+      ],
+      "dificultad": 1,
+      "dueños": [
+        "estudio-visual",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "alteracion-epitermal-seccion",
+      "tema": "Sección y bloque de alteración de un epitermal con zonas de sílice, alunita y arcilla, bordes gradacionales y vista al Norte",
+      "escala": "tajo",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "paleta ordenada por intensidad y desaturada",
+        "códigos SM, SG, SA, SC, CP en la leyenda",
+        "bordes gradacionales",
+        "fallas inferidas discontinuas",
+        "topografía y cobertura",
+        "«vista al Norte», A y A', cotas a ambos lados"
+      ],
+      "piezas": [
+        "sílice masiva",
+        "sílice granular",
+        "sílice-alunita",
+        "sílice-arcilla",
+        "arcilla",
+        "falla inferida",
+        "topografía",
+        "leyenda"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\simbolo\\2021_anchelia_huamanta_reduccion_d_p70.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\simbolo\\2021_anchelia_huamanta_reduccion_d_p80.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2015_cabrera_aquije_planificacion_minera_p69.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "orden SM > SG > SA > SC > CP",
+          "fuente": "hdl:20.500.14076/22428 pág. 70"
+        },
+        {
+          "dato": "S p90 ≤ 0,45 fuera del acento; L* monótona",
+          "fuente": "references/juez.md (paleta); rubrica.md K5"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "sectores-geotecnicos-tajo",
+      "tema": "Tajo con sectores geotécnicos: perfil de talud rotulado y caja de ángulos, estereograma e icono de modo de falla por sector",
+      "escala": "tajo",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "cresta, pie, altura y berma rotulados",
+        "ángulos de cara, interrampa y global con su línea y arco",
+        "sectores numerados en círculos",
+        "caja cara/interrampa/global por sector",
+        "estereograma e icono planar/cuña/vuelco por sector",
+        "norte, coordenadas y cajetín"
+      ],
+      "piezas": [
+        "cresta",
+        "pie",
+        "berma",
+        "ángulo de cara",
+        "ángulo interrampa",
+        "ángulo global",
+        "sector",
+        "estereograma",
+        "modo de falla"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\figuras\\talud\\2025_lopez_nicolaz_optimizacion_geotecni_p25.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2025_ludena_montesinos_analisis_de_p64.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2011_perales_orellana_planeamiento_de_mi_p63.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "caja 55/40/38 (cara/interrampa/global)",
+          "fuente": "hdl:20.500.14076/28959 pág. 64"
+        },
+        {
+          "dato": "terminología de Read y Stacey 2009",
+          "fuente": "hdl:20.500.14076/28951 pág. 25"
+        },
+        {
+          "dato": "perfil contra plano: Hausdorff ≤ 0,5 m; interrampa ± 2°",
+          "fuente": "rubrica.md K1; hdl:20.500.14076/10463 pág. 63"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "bench-and-fill-isometrico",
+      "tema": "Mina Bench and Fill en isométrico con un color por tipo de labor y zonificación geomecánica según la cartilla de la mina",
+      "escala": "mina",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "rampa, accesos, subniveles, galería, chimeneas, cámaras y pilares con nombre escrito",
+        "un color por tipo de labor",
+        "gradiente de rampa −12 %",
+        "cotas totales",
+        "leyenda de clases propia de la mina",
+        "no más de 7 clases visibles y encuadre ajustado"
+      ],
+      "piezas": [
+        "rampa",
+        "acceso",
+        "subnivel",
+        "galería",
+        "chimenea",
+        "cámara",
+        "pilar",
+        "puente",
+        "zona geomecánica"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\labores\\2025_lozada_barrera_analisis_del_r_p68.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2023_ordonez_moreano_clasificacion_p43.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2015_marcos_alvarez_evaluacion_eco_p29.jpg",
+        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2021_canchari_gutierrez_evaluacion_p80.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "gradiente −12 %; cotas 300 × 58 m",
+          "fuente": "hdl:20.500.14076/28956 pág. 68"
+        },
+        {
+          "dato": "cartilla GSI: amarillo sin soporte … rojo cuadros a 1,2–1,5 m",
+          "fuente": "hdl:20.500.14195/472 pág. 43"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "regla-v-valle",
+      "tema": "Regla de la V: capa que buza río abajo, río arriba y vertical en un valle, con bloque 3D y mapa 2D enlazados",
+      "escala": "cerro",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "valle con río",
+        "traza de la capa en V apuntando según el buzamiento",
+        "tres casos comparables",
+        "caras laterales del bloque que revelan el buzamiento",
+        "mapa 2D enlazado al 3D",
+        "norte y escala"
+      ],
+      "piezas": [
+        "capa",
+        "traza en el mapa",
+        "río",
+        "valle",
+        "cara lateral",
+        "buzamiento",
+        "mapa"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\abiertas\\capa_que_buza_r_o_abajo.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\abiertas\\block_diagrams_stratigraphic_relations.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p2_0.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "dos caras ortogonales: normal·(−mirada) > 0,2",
+          "fuente": "doi:10.1186/s41235-016-0010-y págs. 11-13; rubrica.md K6"
+        },
+        {
+          "dato": "valle de 1–2 km",
+          "fuente": "estimado"
+        }
+      ],
+      "dificultad": 1,
+      "dueños": [
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "bloque-plegado-corte-movil",
+      "tema": "Bloque de estratos plegados con plano de corte móvil y cuatro secciones candidatas, en varias rondas",
+      "escala": "afloramiento",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "capas con colores planos distinguibles",
+        "plano de corte móvil con tapa",
+        "cuatro secciones candidatas, una correcta",
+        "trazas continuas en las aristas",
+        "respuesta inmediata y nueva ronda"
+      ],
+      "piezas": [
+        "estrato",
+        "charnela",
+        "flanco",
+        "plano de corte",
+        "tapa de sección",
+        "sección candidata"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p5_3.jpg",
+        "<DATOS>/geotechnic\\investigacion\\evaluacion\\bond2021_p3_fig1.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2020_aarohi_pathak_jack_shen_kuen__p6_2.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p7_4.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "línea base de acierto: foto 40 %, mapa 50 %, modelo 59 %",
+          "fuente": "doi:10.5194/gc-4-233-2021 pág. 6"
+        },
+        {
+          "dato": "18 min de práctica no bastan; varias rondas",
+          "fuente": "doi:10.3389/frvir.2020.569674 págs. 8-10"
+        }
+      ],
+      "dificultad": 1,
+      "dueños": [
+        "orquestador-escenas",
+        "juez"
+      ]
+    },
+    {
+      "id": "subduccion-multiescala",
+      "tema": "De la subducción andina al yacimiento: bloque regional con relieve casi real y sección esquemática, zoom al tajo y resumen final",
+      "escala": "región",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "relieve sombreado arriba",
+        "sección en tintas planas con ejes en km",
+        "texto «exageración vertical ×N»",
+        "flecha norte y barra de 5 km",
+        "transición regional → tajo → resumen",
+        "fuentes con clave"
+      ],
+      "piezas": [
+        "placa oceánica",
+        "placa continental",
+        "arco magmático",
+        "intrusivo",
+        "yacimiento",
+        "tajo",
+        "eje en km"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\abiertas\\block_diagram_showcasing_earthquake_hypocenter.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2022_jessica_helen_pugsley_john_an_p7_1.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2021_piyaphong_chenrai_case_study__p5_2.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "ejes −500 a 100 km y 0 a −200 km en el ejemplo USGS",
+          "fuente": "Commons Block Diagram showcasing earthquake hypocenter (dominio público)"
+        },
+        {
+          "dato": "geometría de la subducción peruana",
+          "fuente": "estimado: falta clave el catálogo de fuentes"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "roca-terreno"
+      ]
+    },
+    {
+      "id": "talud-incertidumbre",
+      "tema": "Corte de talud con contactos ciertos (sólidos), inferidos (discontinuos) y alteración gradacional (rayado), con camión y persona de escala",
+      "escala": "banco",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "contacto cierto en línea sólida",
+        "contacto inferido discontinuo con «?» donde dude",
+        "borde gradacional rayado o difuso",
+        "contraste ≥ 0,25 entre símbolo y relleno",
+        "camión y persona",
+        "altura, berma y ángulo leídos del modelo"
+      ],
+      "piezas": [
+        "contacto cierto",
+        "contacto inferido",
+        "zona gradacional",
+        "falla",
+        "berma",
+        "cara",
+        "camión de escala",
+        "persona de escala"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2021_ane_bang_kittilsen_terje_midt_p5_0.jpg",
+        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2021_ane_bang_kittilsen_terje_midt_p10_3.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2017_caruanambo_cortez_evaluacion_geomec_p17.jpg",
+        "<DATOS>/geotechnic\\figuras\\dispatch\\abiertas\\big_truck_looks_small_in_an_open_pit_mine.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "discontinua sube la incertidumbre percibida (p = 0,001)",
+          "fuente": "doi:10.1007/s41651-020-00071-6 págs. 9-13"
+        },
+        {
+          "dato": "certeza 0–100 por deslizador",
+          "fuente": "doi:10.1007/s41651-020-00071-6 pág. 6"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "modelo-bloques-pit",
+      "tema": "Modelo de bloques con leyes y litología, envolventes de pit y fases hasta el pit final, en sección, planta y 3D enlazados",
+      "escala": "tajo",
+      "tipo": "convencion",
+      "que_debe_verse": [
+        "bloques regulares de 10 × 10 × 7,5 m: la altura del bloque es la del banco",
+        "color por variable con leyenda que nombra la variable (litología PM_AZONE o ley Au g/t)",
+        "bloques bajo la ley de corte en gris o sin relleno",
+        "sección vertical con coordenadas en los bordes y cotas en m s. n. m.",
+        "planta de nivel con norte, escala gráfica y cajetín",
+        "envolventes de pit como líneas escalonadas de distinto color, cada una con nombre (Run 14, Run 15, LOM)",
+        "pit final con bancos y rampa; fases que crecen una dentro de otra",
+        "tonelaje y ley por banco en barras y línea"
+      ],
+      "piezas": [
+        "bloque",
+        "ley de corte",
+        "leyenda de variable",
+        "sección vertical",
+        "planta de nivel",
+        "envolvente de pit",
+        "pit final",
+        "fase 1",
+        "fase 2",
+        "rampa",
+        "topografía original"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\figuras\\talud\\2015_cabrera_aquije_planificacion_minera_p69.jpg",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p74.png",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p93.png",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p109.png",
+        "<DATOS>/geotechnic\\figuras\\talud\\2014_calampa_pinedo_descripcion_de_una_m_p90.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "bloque 10 × 10 × 7,5 m; modelo de 940 × 980 m en planta y 405 m de alto",
+          "fuente": "hdl:20.500.14076/2094 pág. 68"
+        },
+        {
+          "dato": "ley de corte 0,18 g/t Au",
+          "fuente": "hdl:20.500.14076/2094 págs. 3 y 83"
+        },
+        {
+          "dato": "envolventes con oro a US$1150–1300/oz",
+          "fuente": "hdl:20.500.14076/2094 pág. 88"
+        },
+        {
+          "dato": "banco de 10 m y berma de 10 m",
+          "fuente": "hdl:20.500.14076/2094 pág. 46"
+        },
+        {
+          "dato": "bancos cada 10 m (3992 a 3862) en el gráfico de tonelaje y ley",
+          "fuente": "hdl:20.500.14076/9917 pág. 90"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "estudio-visual"
+      ]
+    },
+    {
+      "id": "acarreo-rampa-berma",
+      "tema": "Acarreo por rampa en un tajo: cargados que suben y vacíos que bajan, con berma de seguridad, cuneta y ancho de vía de diseño, enlazado al dispatch",
+      "escala": "tajo",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "rampa que corta los bancos en diagonal",
+        "berma de seguridad continua del lado del vacío, de ≥ 3/4 de la llanta",
+        "vía doble de ≥ 3 anchos de camión",
+        "cuneta al pie del talud, del lado interior",
+        "pendiente 8–10 % rotulada",
+        "cargados lentos subiendo, vacíos bajando, cada uno en su carril",
+        "bermas de banco como rayas claras sobre la pared",
+        "derrame de carga y huellas en la vía mal mantenida contra la vía limpia"
+      ],
+      "piezas": [
+        "rampa",
+        "berma de seguridad",
+        "cuneta",
+        "carril de subida",
+        "carril de bajada",
+        "camión cargado",
+        "camión vacío",
+        "banco",
+        "derrame"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\figuras\\dispatch\\abiertas\\mina_de_chuquicamata_calama_chile_2016_02_01_dd_118.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2022_ojeda_ore_simulacion_de_rutas_de_re_p38.jpg",
+        "<DATOS>/geotechnic\\figuras\\talud\\2022_ojeda_ore_simulacion_de_rutas_de_re_p40.jpg",
+        "<DATOS>/geotechnic\\figuras\\dispatch\\2013_pelaez_vera_incremento_del_performa_p95.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "altura mínima de berma = 3/4 de la llanta más alta",
+          "fuente": "hdl:20.500.14076/22773 pág. 38"
+        },
+        {
+          "dato": "vía doble ≥ 3 × ancho del camión más grande",
+          "fuente": "hdl:20.500.14076/22773 págs. 38-39"
+        },
+        {
+          "dato": "pendiente de rampa 8–10 %",
+          "fuente": "hdl:20.500.14076/22773 pág. 39"
+        },
+        {
+          "dato": "vía en tajo (FMI): ancho 40 m, efectivo 37 m, berma 3 m de ancho × 2 m de alto, bombeo 3–4 %",
+          "fuente": "hdl:20.500.14076/22773 pág. 40"
+        },
+        {
+          "dato": "resistencia a la rodadura 1,5 % (vía dura) a 14 % (8\" de huella)",
+          "fuente": "hdl:20.500.14076/22773 pág. 37"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "equipo-camion",
+        "orquestador-escenas"
+      ]
+    },
+    {
+      "id": "pique-izaje-skip",
+      "tema": "Pique de izaje: castillo con polea, casa de winche de doble tambora y dos skips en contrapeso en un pique de 4 compartimientos, con su pantalla SCADA",
+      "escala": "mina",
+      "tipo": "equipo",
+      "que_debe_verse": [
+        "castillo con torre vertical sobre el pique y pata inclinada hacia la casa del winche",
+        "polea grande en la cumbre con baranda",
+        "dos cables en diagonal desde la polea a la casa del winche, paralelos a la pata",
+        "tambora doble con cable enrollado en la casa del winche",
+        "sección del pique con 4 compartimientos: 2 skips, personal y servicios con escalera",
+        "skips en contrapeso: uno sube mientras el otro baja",
+        "carga del skip abajo (silla, tolvas y fajas) y descarga arriba",
+        "pantalla SCADA con dos columnas de skip y flechas de sentido"
+      ],
+      "piezas": [
+        "castillo",
+        "pata inclinada",
+        "polea",
+        "cable",
+        "casa del winche",
+        "tambora",
+        "skip 1",
+        "skip 2",
+        "jaula",
+        "compartimiento de servicios",
+        "silla de carga",
+        "tolva de descarga"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\investigacion\\completitud\\headframe_of_campi_shaft.jpg",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\1401870_ii_skip_shaft_headframe_geevor_mine_levant_section_s.jpg",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\homestake_mine_yates_shaft_headframe_hoisting_room.jpg",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p32.png",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p24.png",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p42.png",
+        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2022_garcia_vera_evaluacion_del_sistema__p45.jpg"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "pique de 1280 m",
+          "fuente": "hdl:20.500.14076/22848 pág. 38"
+        },
+        {
+          "dato": "4 compartimientos: 2 skips, personal, servicios y escalera",
+          "fuente": "hdl:20.500.14076/22848 pág. 39"
+        },
+        {
+          "dato": "winche de doble tambora, 2 motores de 2931 HP, cable de 2¼\", 3000 pies/min (15,2 m/s), izaje máx. 5420 pies",
+          "fuente": "hdl:20.500.14076/22848 págs. 39-40"
+        },
+        {
+          "dato": "carga en el nivel 2830, descarga en 4088, polea en 4110",
+          "fuente": "hdl:20.500.14076/22848 págs. 39-40"
+        }
+      ],
+      "dificultad": 3,
+      "dueños": [
+        "orquestador-escenas",
+        "equipo-pique"
+      ]
+    },
+    {
+      "id": "pad-lixiviacion",
+      "tema": "Pad de lixiviación en capas: volquete y tractor arman la capa, riego por aspersión en malla de 6 m y pozas revestidas",
+      "escala": "instalación",
+      "tipo": "proceso",
+      "que_debe_verse": [
+        "pad escalonado en capas sobre la ladera, con rampa de acceso",
+        "volquete descargando al talud de la capa y tractor empujando",
+        "mangueras paralelas y aspersores con niebla baja sobre la capa en riego",
+        "capa regada más oscura que la capa seca",
+        "pozas con geomembrana negra al pie",
+        "capa nueva encima de la anterior"
+      ],
+      "piezas": [
+        "capa de mineral",
+        "rampa de acceso",
+        "volquete",
+        "tractor",
+        "aspersor",
+        "manguera",
+        "geomembrana",
+        "poza de solución rica",
+        "talud de la capa"
+      ],
+      "referencias": [
+        "<DATOS>/geotechnic\\figuras\\talud\\2025_flores_gutierrez_evaluacion_de_la_t_p40.jpg",
+        "<DATOS>/geotechnic\\investigacion\\completitud\\2025_flores_gutierrez_evaluacion_p41.png"
+      ],
+      "numeros_clave": [
+        {
+          "dato": "pad con pendiente de 2–7 % (hasta 20 % en taludes); geomembrana PVC 1,02 mm; cama de 70 cm",
+          "fuente": "hdl:20.500.14076/29238 pág. 39"
+        },
+        {
+          "dato": "riego 6 L/h/m² (pág. 39) u 8 L/h/m² (pág. 41): la fuente no cuadra; percolación 2 m/día; capa nueva cada 90 días",
+          "fuente": "hdl:20.500.14076/29238 págs. 39 y 41"
+        },
+        {
+          "dato": "aspersores en malla triangular de 6 m",
+          "fuente": "hdl:20.500.14076/29238 pág. 41"
+        },
+        {
+          "dato": "pozas con Hypalon 0,91 mm, compactadas en capas de 30 cm",
+          "fuente": "hdl:20.500.14076/29238 pág. 39"
+        }
+      ],
+      "dificultad": 2,
+      "dueños": [
+        "roca-terreno",
+        "orquestador-escenas"
+      ]
+    }
+  ]
+}
