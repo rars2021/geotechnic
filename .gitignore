@@ -1,0 +1,7 @@
+# datos pesados viven en <DATOS>/geotechnic
+*.tif
+*.las
+*.laz
+*.ply
+*.omf
+node_modules/
