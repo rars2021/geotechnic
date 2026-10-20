@@ -62,6 +62,12 @@ Ejemplos de pedidos que funcionan:
 
 ## Flujo
 
+0. **Clasifica el pedido** en seis ejes (`references/categorias.md`): ambiente (cerrado, abierto, bloque, mixto,
+   aislado, sin espacio), dominio (geológico, geotécnico, hidrogeológico, geoestadístico, geoespacial, minero operativo,
+   técnico de equipos, procesamiento, minero comercial, ambiental y social, seguridad, legal, minería artesanal,
+   minería ilegal), propósito, escala, forma y riesgo. El ambiente decide el corte: **solo los cerrados se cortan; los
+   abiertos usan colisión de cámara, como Anatomy**. La minería ilegal se desalienta: nunca procedimientos; sí impactos,
+   consecuencias y la vía de formalización.
 1. **Reúne referencias con el catálogo de fuentes** (`references/fotos.md`):
    - Figuras de tesis y papers: `leyendas.py` + `capturar.py` sobre los textos de el catálogo de fuentes (leyenda → página → recorte).
    - Fotos abiertas: Wikimedia Commons u otra fuente CC, registradas en el catálogo de fuentes con `catalogo.py sembrar <url> --titulo … --tipo imagen`.
@@ -122,4 +128,4 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 458 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
 | `ejemplos/dispatch` | Flota en el tajo: 12 camiones CAT 793 y 2 palas P&H 4100 (motor A) sobre `terrenoTajo`, `simularFlota` con colas FIFO y tres políticas, panel de tiempos y colas · [publicado](https://claude.ai/artifact/NNLK6JisqpF5SaFWTinYUV) |
 | `sstutor/` · `scripts/sstutor.mjs` | Paquete commiteable para SSTutor (figura del frente con jumbo, semilla, módulo 3D, test); ver `references/sstutor.md` |
-| `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `estudio.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |
+| `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `estudio.md`, `categorias.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |
