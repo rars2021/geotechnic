@@ -119,3 +119,38 @@ valores._pose = asentar(M, valores, ter, { x: e.p[0], z: e.p[2], rumbo: e.rumbo 
 (pf = gx·cos ρ − gz·sin ρ, pl = gx·sin ρ + gz·cos ρ; cabeceo = atan pf, alabeo = −atan pl) y, como la espiral es un
 helicoide (un chasis rígido no apoya todas las ruedas), baja la máquina hasta que ninguna rueda quede en el aire
 (el juez acepta 6 cm hundida y 2 cm en el aire). Con rumbo 0 es la fórmula de v2: scoop y jumbo no cambian.
+
+## Talud (`talud-tajo`): `bloqueTalud` + `terrenoTalud`
+
+Para el estudio v3 (colisión de cámara, limpieza): la misma malla de `mallaTalud`, cerrada y con contrato exacto.
+
+| Función | Dónde | Qué hace |
+|---|---|---|
+| `bloqueTalud(talud, { base: -14, color, oscurecer: 0.82, filas: 0.6, calma })` | `kit/terreno.js` | UN sólido cerrado y orientado: la malla del talud copiada tal cual (grupo 0) + tapas verticales de frente, derecha, atrás e izquierda y la base (grupo 1), con el color de `tapaSeccion` (color × 0,82). Reemplaza a las tres `tapaSeccion` (cortinas abiertas). Las tapas toman el sentido de giro de la topología del borde (no del área: el borde se pliega con el relieve). `calma`: solo color, en la malla y en las tapas |
+| `terrenoTalud(talud \| bloque, { base, caja, celda: 1, alcance: 12 })` | `kit/contrato.js` (puro) | Contrato exacto contra los triángulos: `piso(x, z)` = triángulo más alto en la vertical; `libre(p)` = distancia al triángulo más cercano (rejilla en planta; saturada en `alcance`), signo por paridad de cruces de la vertical (vale con voladizos), aire fuera de `caja`; `caja` (= `cajaTalud`), `region` (para `camarasCorte({ region })`) |
+| `cajaTalud(talud, base)` | `kit/contrato.js` | La caja común del bloque y del contrato |
+| `pretil(curva, { …, cerrado: true })` | `kit/terreno.js` | Con base y tapas en los extremos, caras hacia afuera (en v1 miraban adentro y se dibujaba a doble cara) |
+| `cerros({ …, cerrado: { fondo } })` | `kit/terreno.js` | Rejilla cerrada con faldón y base (`faldonRejilla`; grupo 1 = faldón) |
+
+`mallaTalud` (v3) ya no se pliega: los escombros al pie son un máximo de alturas (antes las filas de la cara se corrían
+sobre el talud de reposo y lo cubrían dos veces) y la cresta rota es un chaflán con ruido como mínimo de alturas (antes
+el retroceso a lo largo de normales distintas cruzaba filas). La forma visible es la misma (talud a 34° con su tope
+plano contra la cara; cresta que retrocede 0,45–1 × `retroceso`).
+
+Medido en Node con el talud de la escena (330 × 445, paso 0,28): `revisarCerradas` sin fallas (bloque, pretil y cerros
+cerrados, escombros); `piso` = vértices de bermas y piso (|Δ| ≤ 1,3e-6 m); `libre` a ±5 cm por la normal del vértice:
+59 de 16 280 al revés (0,36 %), por la normal del triángulo: 87 de 41 736 (0,2 %). Esos casos son autointersecciones
+del relieve de bloques (`bloques: 1.7`): con 0,8 quedan 2 de 16 280, con 0 ninguno. Consulta ≈ 30–45 µs.
+
+```js
+// talud-tajo/escena.js (v3): en rehacer(), en lugar de malla + tres tapaSeccion
+talud = construir();
+const blq = bloqueTalud(talud, { base: -14, color, calma: 1 });
+malla = new THREE.Mesh(blq.geometria, [matRoca, matTapa]);       // grupo 0 talud, 1 tapas
+ter = terrenoTalud(blq);                                           // rehacer también al cambiar bfa2
+// corteCamara recibe el terreno una vez: pásale un envoltorio que delegue al vigente
+// const terVivo = { libre: (p) => ter.libre(p), piso: (x, z) => ter.piso(x, z), get caja() { return ter.caja; } };
+// crearEscena(ctx.contenedor, { …, corte: terVivo });
+// pretil(curvaPretil, { alto: 2, ancho: 3, color, cerrado: true }) · cerros({ …, cerrado: { fondo: -160 } })
+// medias cañas (cintas finas pegadas a la cara): userData.calco = "medias cañas"
+```

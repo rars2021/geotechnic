@@ -6,6 +6,8 @@ const ZANABRIA = "hdl:20.500.12394/10815", REYNOSO = "hdl:20.500.14076/27172", E
 
 export default {
   titulo: "Perforación de un frente",
+  // clasificación del pedido (references/categorias.md): el juez elige corte o colisión de cámara por el ambiente
+  categorias: { ambiente: "cerrado", dominios: ["minero operativo", "técnico de equipos"], proposito: ["estudiar", "simular"], escala: "frente", forma: ["3D motor A", "3D motor B"], riesgo: "normal" },
   ceja: "Geotechnic · procesos · escala frente",
   resumen: "Un jumbo de dos brazos perfora la malla de un frente de 4,0 × 4,0 m: 33 taladros cargados y 8 vacíos de 3,90 m, tomados de una malla real. Cada brazo llega a su taladro por cinemática inversa (giro, alzada, telescópico, muñeca y rotación de viga); los dos trabajan a la vez y uno espera cuando se acercarían demasiado. Un juez automático recorrió las 41 perforaciones antes de publicar: sin choques entre brazos ni con la roca.",
   alt: "Modelo 3D de un jumbo de dos brazos perforando un frente de galería con la malla pintada en rojo y azul.",

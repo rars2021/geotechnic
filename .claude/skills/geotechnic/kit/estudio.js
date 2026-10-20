@@ -222,7 +222,8 @@ function planoCorteV2(terreno, camPos, d, margen, paso, max, plano) {
  * `userData.unidad = { fgdc: "627" | "caliza" | …, papel?: token | hex, orden?: n, celda?: m, opacidad?: 0.35 }` lleva
  * en su tapa el patrón FGDC en tinta sobre su papel (PATRONES_FGDC). Unidades con más `orden` quedan encima (una zona
  * dentro del macizo). Sin unidad (equipos), la tapa sigue lisa.
- * op: { margen, paso, max } de planoCorte; op.objetivo: () => Vector3 si no es controls.target; op.tapa: false sin
+ * op: { margen, paso, max } de planoCorte; op.objetivo: () => Vector3 si no es controls.target; op.habilitado: (cam) =>
+ * bool (ambiente mixto: corta solo dentro del tramo cerrado; fijar() manda igual); op.tapa: false sin
  * capping; op.lamina; op.celda (m, fija la escala del patrón); op.borde: false sin contorno; op.anchoBorde (px de
  * búsqueda, ≈ medio ancho de la línea); op.opacidadBorde (0,8).
  * Devuelve { activo(), plano(), apagar(), encender(), fijar(p), fijo(), lamina(on), borde(on), unidades(), actualizar() }.
@@ -317,6 +318,9 @@ export function corteCamara(esc, terreno, op = {}) {
     camera.updateMatrixWorld();
     camera.getWorldPosition(pos); camera.getWorldDirection(dir);
     if (fijo) { plano.copy(fijo); activo = true; return; }
+    if (op.habilitado && !op.habilitado([pos.x, pos.y, pos.z])) { // ambiente mixto fuera del tramo cerrado: aparcado
+      activo = false; ultimo = ""; plano.normal.copy(dir); plano.constant = -plano.normal.dot(pos) + 1e3; return;
+    }
     const obj = objetivo(), o = obj ? [obj.x, obj.y, obj.z] : null;
     const clave = pos.toArray().concat(dir.toArray(), o || []).map((x) => x.toFixed(4)).join();
     if (clave === ultimo) return;
@@ -452,6 +456,141 @@ export function corteCamara(esc, terreno, op = {}) {
     borde(on) { borde = !!on; esc.marcar?.(); },
     /** Unidades con patrón pintadas en el último cuadro (para verificar). */
     unidades: () => nUnidades,
+    actualizar,
+  };
+}
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// Colisión de cámara (ambientes abiertos: tajo, talud, afloramiento). No se corta: la cámara choca con el terreno,
+// como en Anatomy. Ver references/estudio.md, «Colisión de cámara».
+
+/**
+ * Posición libre de la cámara (pura, arrays [x, y, z]; la prueba el juez en Node). Devuelve la nueva posición:
+ *  1. si `cam` tiene `libre ≥ margen` y el tramo cam → objetivo no cruza roca, `cam` tal cual;
+ *  2. si `cam` está dentro o rozando el terreno, la empuja hacia el objetivo a lo largo de la mirada hasta el primer
+ *     punto con `libre ≥ margen` desde el que el objetivo se ve (sin acercarse a menos de `distMin`);
+ *  3. si no alcanza (o el objetivo queda tapado), sube la elevación alrededor del objetivo, a la misma distancia, de a
+ *     `pasoElev` grados hasta `maxElev`, hasta despejar;
+ *  4. si nada despeja, sube la cámara en vertical hasta `libre ≥ margen` (el objetivo puede quedar tapado).
+ * «Tapado»: algún punto del tramo, salvo el último `margen` junto al objetivo, con `libre < 0` (en ese último tramo,
+ * `libre < −tolMira` si el objetivo está en aire).
+ * El tramo se mira dos veces: sphere tracing (rápido, para buscar) y, antes de aceptar una posición, la mira fina del
+ * juez (fallaColision, juez/limpieza.mjs): los mismos puntos, cada min(10, max(2, L/40)) cm; de un punto con `libre`
+ * d salta los que caben en d / `pendiente`: cuánto puede caer libre por metro de mira. Un libre de primer orden (terrenoTajo:
+ * altura vertical / √(1 + |∇|²)) salta abajo en el pie de cada cara y cae hasta ≈ tan(cara) por m (en el dispatch, 2,5
+ * como mucho); con 8 vale hasta caras de ≈ 82°. Una distancia exacta (como terrenoTalud) cae ≤ 1: el terreno puede
+ * declararlo con `terreno.pendienteLibre` (1) y la mira fina sale casi gratis. Así un roce rasante junto a una cresta no se salta.
+ * Bajo el fondo de `terreno.caja` cuenta como roca (en un abierto no se mira el bloque desde abajo).
+ * op: { margen = 1.5, distMin = 2, pasoElev = 1, maxElev = 85, muestras = 160 (empuje), pasoMin = 0.02 (m, tramo),
+ *       pendiente = terreno.pendienteLibre ?? 8 (mira fina), tolMira = 0.05 (m, cola junto al objetivo) }
+ */
+export function posicionLibre(terreno, cam, objetivo, op = {}) {
+  const { margen = 1.5, distMin = 2, pasoElev = 1, maxElev = 85, muestras = 160, pasoMin = 0.02, pendiente = terreno.pendienteLibre ?? 8, tolMira = 0.05 } = op;
+  const piso = terreno.caja ? terreno.caja.min[1] : -Infinity;
+  const libre = (p) => { const d = terreno.libre(p); return p[1] < piso ? Math.min(d, p[1] - piso) : d; };
+  const o = objetivo;
+  // tramo libre (sphere tracing): paso = libre × 0,5, entre `pasoMin` y 10 m (libre no es distancia exacta: mitad)
+  const visto = (c) => {
+    const v = [o[0] - c[0], o[1] - c[1], o[2] - c[2]], L = Math.hypot(v[0], v[1], v[2]), Lu = L - margen;
+    for (let s = 0, k = 0; s < Lu && k < 4000; k++) {
+      const t = s / L, d = libre([c[0] + v[0] * t, c[1] + v[1] * t, c[2] + v[2] * t]);
+      if (d < 0) return false;
+      s += Math.min(10, Math.max(pasoMin, d * 0.5));
+    }
+    return true;
+  };
+  // mira fina: los puntos del juez (paso min(0,1, max(0,02, L/4000)) m), saltando los que caben en d / pendiente
+  const colaAire = libre(o) >= 0;
+  const fino = (c) => {
+    const v = [o[0] - c[0], o[1] - c[1], o[2] - c[2]], L = Math.hypot(v[0], v[1], v[2]);
+    const n = Math.max(1, Math.ceil(L / Math.min(0.1, Math.max(0.02, L / 4000)))), h = L / n, cola = L - margen;
+    for (let i = 0; i <= n;) {
+      const s = i * h;
+      if (s >= cola && !colaAire) break; // objetivo sobre el piso: la cola no cuenta
+      const t = s / (L || 1), d = libre([c[0] + v[0] * t, c[1] + v[1] * t, c[2] + v[2] * t]), umbral = s < cola ? 0 : -tolMira;
+      if (d < umbral) return false;
+      i += Math.max(1, Math.floor(Math.min(10, (d - umbral) / pendiente) / h));
+    }
+    return true;
+  };
+  const mira = (c) => visto(c) && fino(c);
+  const ok = (c) => libre(c) >= margen && mira(c);
+  if (ok(cam)) return cam.slice();
+  const v = [cam[0] - o[0], cam[1] - o[1], cam[2] - o[2]], L = Math.hypot(v[0], v[1], v[2]) || 1;
+  const enRayo = (s) => { const f = 1 - s / L; return [o[0] + v[0] * f, o[1] + v[1] * f, o[2] + v[2] * f]; };
+  // 2) empujar hacia el objetivo por la mirada
+  if (libre(cam) < margen && L > distMin) {
+    const n = Math.max(16, Math.min(muestras, Math.ceil((L - distMin) / 0.25)));
+    for (let i = 1; i <= n; i++) {
+      const s = ((L - distMin) * i) / n;
+      if (libre(enRayo(s)) >= margen) {
+        // refina el borde (bisección) para que el empuje sea continuo
+        let a = ((L - distMin) * (i - 1)) / n, b = s;
+        for (let k = 0; k < 16; k++) { const m = (a + b) / 2; if (libre(enRayo(m)) >= margen) b = m; else a = m; }
+        const cb = enRayo(b);
+        if (mira(cb)) return cb;
+        break;
+      }
+    }
+  }
+  // 3) subir la elevación alrededor del objetivo (misma distancia)
+  const h = Math.hypot(v[0], v[2]), az = Math.atan2(v[2], v[0]), e0 = Math.atan2(v[1], h) * (180 / Math.PI);
+  const enElev = (e) => { const r = (e * Math.PI) / 180; return [o[0] + L * Math.cos(r) * Math.cos(az), o[1] + L * Math.sin(r), o[2] + L * Math.cos(r) * Math.sin(az)]; };
+  for (let e = Math.ceil(e0 / pasoElev) * pasoElev; e <= maxElev; e += pasoElev) {
+    if (!ok(enElev(e))) continue;
+    let a = Math.max(e0, e - pasoElev), b = e; // refina la elevación mínima (con la mira rápida; la fina, al final)
+    for (let k = 0; k < 12; k++) { const m = (a + b) / 2, q = enElev(m); if (libre(q) >= margen && visto(q)) b = m; else a = m; }
+    if (b < e && !ok(enElev(b))) { a = b; b = e; for (let k = 0; k < 3; k++) { const m = (a + b) / 2; if (ok(enElev(m))) b = m; else a = m; } }
+    return enElev(b);
+  }
+  // 4) subir en vertical
+  const c = cam.slice();
+  for (let k = 0; k < 400 && libre(c) < margen; k++) c[1] += Math.max(0.25, margen - libre(c));
+  return c;
+}
+
+/**
+ * Colisión de cámara: antes de cada render (envuelve esc.renderizar, después de controls.update) lleva la cámara a
+ * `posicionLibre`. Sin saltos: si la corrección salta más de `salto` × distancia, se acerca de a `suave` por cuadro
+ * (pero nunca deja la cámara dentro del terreno). OrbitControls toma la posición corregida como base del cuadro
+ * siguiente: no pelea. Con la cámara y el objetivo quietos (y ya libres) no recalcula. op: { margen = 1.5, suave = 0.25,
+ * salto = 0.04, habilitado: (cam) => bool, objetivo: () => Vector3, …posicionLibre }. Devuelve { activo(), apagar(),
+ * encender(), actualizar() }; activo() = la cámara se corrigió en el último cuadro.
+ */
+export function colisionCamara(esc, terreno, op = {}) {
+  const { camera, controls } = esc, margen = op.margen ?? 1.5, suave = op.suave ?? 0.25, salto = op.salto ?? 0.04;
+  let encendido = true, activo = false, quieta = null; // quieta: [cámara, objetivo] ya libres (no se recalcula)
+  const piso = terreno.caja ? terreno.caja.min[1] : -Infinity;
+  const libre = (p) => { const d = terreno.libre(p); return p[1] < piso ? Math.min(d, p[1] - piso) : d; };
+  function actualizar() {
+    activo = false;
+    if (!encendido) return;
+    const c = camera.position, cam = [c.x, c.y, c.z];
+    if (op.habilitado && !op.habilitado(cam)) return;
+    const t = op.objetivo ? op.objetivo() : controls?.target, o = t ? [t.x, t.y, t.z] : [c.x, c.y - 1, c.z];
+    const clave = [...cam, ...o];
+    if (quieta && quieta.every((v, k) => v === clave[k])) return; // misma cámara y objetivo que el cuadro anterior, ya libre
+    quieta = null;
+    const n = posicionLibre(terreno, cam, o, { ...op, margen });
+    const d = Math.hypot(n[0] - cam[0], n[1] - cam[1], n[2] - cam[2]);
+    if (d < 1e-6) { quieta = clave; return; }
+    activo = true;
+    const L = Math.hypot(cam[0] - o[0], cam[1] - o[1], cam[2] - o[2]) || 1;
+    let p = n;
+    if (d > salto * L) { // salto grande: acercarse suave, sin quedar dentro
+      const q = [cam[0] + (n[0] - cam[0]) * suave, cam[1] + (n[1] - cam[1]) * suave, cam[2] + (n[2] - cam[2]) * suave];
+      if (libre(q) >= 0) { p = q; esc.marcar?.(); } // falta acercarse: otro cuadro
+    }
+    c.set(p[0], p[1], p[2]);
+    if (t) camera.lookAt(t);
+    camera.updateMatrixWorld();
+  }
+  const previo = esc.renderizar;
+  esc.renderizar = function (...a) { actualizar(); return previo.apply(this, a); };
+  return {
+    activo: () => encendido && activo,
+    apagar() { encendido = false; esc.marcar?.(); },
+    encender() { encendido = true; quieta = null; esc.marcar?.(); },
     actualizar,
   };
 }

@@ -2,6 +2,10 @@
 // Pedido del usuario: «que se vea limpio, para estudio» (references/estudio.md). Sublíneas:
 //   cerradas  toda Mesh visible de la escena viva es cerrada y orientada (salvo calcos declarados con userData.calco).
 //             Corre en la página (se pasa como texto a la acción `eval` de scripts/drive.mjs) y en Node (plantas).
+//   (cámara)  según ficha.categorias.ambiente (references/categorias.md): cerrado → corte; abierto → colision;
+//             mixto → los dos; aislado y bloque → ninguno; sin espacio → ninguno (y sin física). Sin categorías: corte.
+//   colision  posicionLibre de kit/estudio.js (ambientes abiertos): la cámara corregida queda en aire (libre ≥ margen)
+//             y ve el objetivo sin roca de por medio; también la cámara real de cada vista en la página.
 //   corte     planoCorte de kit/estudio.js: si el segmento cámara→objetivo toca roca hay plano, del plano al objetivo
 //             todo es aire y el objetivo queda del lado que se ve; si es todo aire no hay plano. En Node, sobre el terreno.
 //   paleta    saturación HSV p90 de la zona del equipo ≤ 0,45 (juez/limpieza.py).
@@ -20,6 +24,9 @@ export const TOLERANCIAS_LIMPIEZA = {
   margenCorte: 0.35,   // m: el plano va 0,35 m pasado el último tramo de roca antes del objetivo (ronda 3)
   sondaCorte: 0.02,    // m: el segmento plano + 2 cm → objetivo se muestrea cada 2 cm y debe ser todo aire
   exteriores: { az: [45, 135, 225, 315], el: 24, dist: [10, 14], objetivos: 8 }, // vistas 3/4 desde fuera del bloque
+  margenColision: 0.5, // m: la cámara de un ambiente abierto queda a ≥ 0,5 m del terreno (colisión, como Anatomy)
+  tolColision: 0.05,   // m: tolerancia del margen y de la línea de mira (un roce de ≤ 5 cm con el terreno no tapa nada)
+  camarasColision: 240, distanciasAbierto: [5, 400], // órbita en abiertos: 5–400 m (acotada por la caja del terreno)
   camarasOrbita: 240,  // cámaras al azar (≥ 200) alrededor de objetivos dentro de la labor
   distancias: [1.5, 18], elevaciones: [-10, 60], semilla: 7,
 };
@@ -240,6 +247,113 @@ export async function corteDeEjemplo(terreno, ficha, extra = []) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// ambiente (references/categorias.md, eje 1): qué líneas de cámara corren
+const AMBIENTES = { cerrado: [true, false], abierto: [false, true], mixto: [true, true], aislado: [false, false], bloque: [false, false], "sin espacio": [false, false] };
+/** { corte, colision, fisica, ambiente, nota } según ficha.categorias.ambiente. */
+export function lineasPorAmbiente(categorias) {
+  const a = categorias?.ambiente ? String(categorias.ambiente).toLowerCase().replace(/[-_]/g, " ").trim() : null;
+  if (!a) return { ambiente: null, corte: true, colision: false, fisica: true, nota: "la ficha no declara categorias.ambiente: corte como siempre, sin colisión" };
+  if (!(a in AMBIENTES)) return { ambiente: a, corte: true, colision: false, fisica: true, error: `ambiente desconocido «${a}» (cerrado, abierto, mixto, bloque, aislado, sin espacio)` };
+  const [corte, colision] = AMBIENTES[a];
+  return { ambiente: a, corte, colision, fisica: a !== "sin espacio", nota: `ambiente ${a}: ${[corte && "corte", colision && "colisión"].filter(Boolean).join(" y ") || "sin corte ni colisión"}${a === "sin espacio" ? ", sin física" : ""}` };
+}
+
+/** Carga posicionLibre de kit/estudio.js. */
+export async function cargarPosicionLibre(f = join(RAIZ, "kit", "estudio.js")) {
+  if (!existsSync(f)) return { error: "sin colisión de cámara (no existe kit/estudio.js)" };
+  try {
+    const m = await import(pathToFileURL(f).href);
+    return typeof m.posicionLibre === "function" ? { posicionLibre: m.posicionLibre } : { error: "sin colisión de cámara (kit/estudio.js no exporta posicionLibre)" };
+  } catch (e) { return { error: "kit/estudio.js no carga en Node: " + String(e.message).split("\n")[0] }; }
+}
+
+/** Objetivos sobre el terreno de un ambiente abierto: rutas y zonas (tajo), o la caja; 1,5 m sobre el piso. */
+export function objetivosAbiertos(terreno, n, R, region = null) {
+  const out = [], esPunto = (q) => Array.isArray(q) && q.length === 3 && q.every(Number.isFinite);
+  const cand = [];
+  for (const r of Object.values(terreno.rutas || {})) for (const q of r.puntos || []) if (esPunto(q)) cand.push(q);
+  for (const lista of Object.values(terreno.zonas || {})) for (const z of Array.isArray(lista) ? lista : []) if (esPunto(z?.punto)) cand.push(z.punto);
+  const caja = region || terreno.caja;
+  for (let k = 0, intentos = 0; k < n && intentos < n * 400; intentos++) {
+    let o;
+    if (cand.length) { const q = cand[Math.floor(R() * cand.length)]; o = [q[0], q[1] + 1.5, q[2]]; }
+    else if (caja) o = [0, 1, 2].map((i) => caja.min[i] + (caja.max[i] - caja.min[i]) * R());
+    else return out;
+    const L = terreno.libre(o);
+    if (!(L >= 0.4) || (!cand.length && L > 8)) continue; // en aire, cerca del suelo
+    out.push(o); k++;
+  }
+  return out;
+}
+
+/** Cámaras para colisión: vistas de la ficha, las que se pasen y una órbita alrededor de objetivos del terreno. */
+export function camarasColision(terreno, { vistas = [], extra = [], n = TOLERANCIAS_LIMPIEZA.camarasColision, semilla = TOLERANCIAS_LIMPIEZA.semilla, region = null } = {}) {
+  const T = TOLERANCIAS_LIMPIEZA, R = azar(semilla + 1);
+  const cams = vistas.filter((v) => v && v.objetivo && v.dist !== undefined).map((v, i) => ({ ...camaraDe(v), etiqueta: `vista ${i + 1}` }));
+  cams.push(...extra);
+  const caja = region || terreno.caja;
+  const lado = caja ? Math.max(...[0, 1, 2].map((i) => caja.max[i] - caja.min[i])) : 100;
+  const [d0, d1] = [T.distanciasAbierto[0], Math.max(T.distanciasAbierto[0] * 2, Math.min(T.distanciasAbierto[1], lado * 0.6))];
+  for (const [k, o] of objetivosAbiertos(terreno, n, R, region).entries()) {
+    const v = { objetivo: o, az: 360 * R(), el: T.elevaciones[0] + (T.elevaciones[1] - T.elevaciones[0]) * R(), dist: d0 * Math.pow(d1 / d0, R()) };
+    cams.push({ ...camaraDe(v), etiqueta: `órbita ${k + 1} (az ${v.az.toFixed(0)}°, el ${v.el.toFixed(0)}°, ${v.dist.toFixed(1)} m)` });
+  }
+  return cams;
+}
+
+/** ¿La cámara está en aire (libre ≥ margen − tol) y ve el objetivo sin roca de por medio? Devuelve el motivo o null. */
+function fallaColision(terreno, pos, objetivo) {
+  const T = TOLERANCIAS_LIMPIEZA;
+  if (!Array.isArray(pos) || pos.length !== 3 || !pos.every(Number.isFinite)) return "posicionLibre no devolvió [x, y, z]";
+  const L = terreno.libre(pos);
+  if (!(L >= T.margenColision - T.tolColision)) return `la cámara queda ${L < 0 ? "dentro del terreno" : "pegada al terreno"} (libre ${L.toFixed(2)} m; pide ≥ ${T.margenColision} m)`;
+  const largo = Math.hypot(...sub(objetivo, pos)), paso = Math.min(0.1, Math.max(0.02, largo / 4000));
+  let roca = null, hondo = 0;
+  for (const q of muestras(pos, objetivo, paso)) { const l = terreno.libre(q); if (l < -T.tolColision) { if (!roca) roca = q; hondo = Math.min(hondo, l); } }
+  if (roca) return `hay terreno entre la cámara y el objetivo, a ${Math.hypot(...sub(roca, pos)).toFixed(1)} m de la cámara (la mira entra ${(-hondo * 100).toFixed(0)} cm)`;
+  return null;
+}
+
+/** Juzga posicionLibre(terreno, cam, objetivo, { margen }) en cada cámara, y las cámaras reales de la página. */
+export function juzgarColision(terreno, posicionLibre, camaras, reales = []) {
+  const T = TOLERANCIAS_LIMPIEZA, fallas = [];
+  let dentro = 0, tapadas = 0;
+  for (const c of camaras) {
+    if (terreno.libre(c.pos) < T.margenColision) dentro++;
+    else if (muestras(c.pos, c.objetivo, Math.max(0.05, Math.hypot(...sub(c.objetivo, c.pos)) / 2000)).some((q) => terreno.libre(q) < 0)) tapadas++;
+    let q;
+    try { q = posicionLibre(terreno, [...c.pos], [...c.objetivo], { margen: T.margenColision }); } catch (e) { fallas.push({ ...c, motivo: "posicionLibre lanzó: " + String(e.message).split("\n")[0] }); continue; }
+    const m = fallaColision(terreno, q, c.objetivo);
+    if (m) fallas.push({ ...c, pos: Array.isArray(q) ? q : c.pos, motivo: m });
+  }
+  const fallasReales = [];
+  for (const c of reales) { const m = fallaColision(terreno, c.pos, c.objetivo); if (m) fallasReales.push({ ...c, motivo: m }); }
+  return { aprobado: camaras.length > 0 && !fallas.length && !fallasReales.length, camaras: camaras.length, dentro, tapadas, fallas, reales: reales.length, fallasReales };
+}
+
+/** Línea colisión completa para un ejemplo. reales: cámaras de la página tras igualarVista ({ pos, objetivo, etiqueta }). */
+export async function colisionDeEjemplo(terreno, ficha, { extra = [], reales = [], mixto = false, cargar = cargarPosicionLibre } = {}) {
+  const pl = await cargar();
+  if (pl.error) return { aprobado: false, error: pl.error, camaras: 0, fallas: [], fallasReales: [] };
+  if (!terreno) return { aprobado: true, noAplica: "el ejemplo no tiene montaje.js con terreno", camaras: 0, fallas: [], fallasReales: [] };
+  const vistas = [...(ficha.referencias?.abiertas || []).map((r) => r.vista), ficha.vistaInicial].filter(Boolean);
+  let cams = camarasColision(terreno, { vistas, extra });
+  if (mixto) { // mixto: colisión afuera; adentro de la labor manda el corte
+    const reg = regionLabor(terreno);
+    const fuera = (q) => !reg || q.some((v, i) => v < reg.min[i] || v > reg.max[i]);
+    cams = cams.filter((c) => fuera(c.pos)); reales = reales.filter((c) => fuera(c.pos));
+  }
+  return juzgarColision(terreno, pl.posicionLibre, cams, reales);
+}
+
+/** Cámaras reales de la página: líneas «eval: {"__camara": …}» de drive.mjs. */
+export function leerCamaras(salidaDrive) {
+  return salidaDrive.split(/\r?\n/).filter((l) => l.startsWith('eval: {"__camara"')).map((l) => JSON.parse(l.slice(6))).map((c) => ({ pos: c.pos, objetivo: c.objetivo, etiqueta: `página · ${c.__camara}` }));
+}
+/** Expresión para drive.mjs: la cámara real tras igualarVista. */
+export const expresionCamara = (etiqueta) => `(() => { const E = window.GEO && GEO.escena; return E ? { __camara: ${JSON.stringify(etiqueta)}, pos: E.camera.position.toArray(), objetivo: E.controls.target.toArray() } : { __camara: ${JSON.stringify(etiqueta)}, error: "sin GEO.escena" }; })()`;
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 // paleta y ruido (python)
 export function juzgarImagenes(capturasJson, salidaJson) {
   const txt = execFileSync("python", ["-I", join(RAIZ, "juez", "limpieza.py"), capturasJson, salidaJson], { encoding: "utf8", env: { ...process.env, PYTHONIOENCODING: "utf-8" } });
@@ -260,13 +374,24 @@ export function textoLimpieza(r) {
     if (c.fallas.length > 40) out.push(`       … y ${c.fallas.length - 40} más (informe.json)`);
     for (const k of c.calcos) out.push(`       calco ${(k.nombre + (k.veces > 1 ? ` ×${k.veces}` : "")).padEnd(38)} ${k.motivo}`);
   }
-  const k = r.corte;
+  if (r.camaraLineas) out.push(`${r.camaraLineas.error ? "NO   " : "     "}cámara    ${r.camaraLineas.error || r.camaraLineas.nota}`);
+  const k = r.corte || { noAplica: "no se juzgó" };
   if (k.error) out.push(`NO   corte     ${k.error}`);
   else if (k.noAplica) out.push(`ok   corte     no aplica: ${k.noAplica}`);
   else {
     out.push(`${ok(k.aprobado)}corte     ${k.camaras} cámaras (${k.enRoca} en roca, ${k.fuera} fuera; ${k.conRoca} con roca hasta el objetivo) · ${k.fallas.length} fallas`);
     for (const f of k.fallas.slice(0, 12)) out.push(`       NO  ${f.etiqueta}: ${f.motivo} · cámara [${f.pos.map((v) => v.toFixed(2)).join(", ")}]`);
     if (k.fallas.length > 12) out.push(`       … y ${k.fallas.length - 12} más (informe.json)`);
+  }
+  const co = r.colision;
+  if (co) {
+    if (co.error) out.push(`NO   colisión  ${co.error}`);
+    else if (co.noAplica) out.push(`ok   colisión  no aplica: ${co.noAplica}`);
+    else {
+      out.push(`${ok(co.aprobado)}colisión  ${co.camaras} cámaras (${co.dentro} dentro o pegadas al terreno, ${co.tapadas} con terreno de por medio) + ${co.reales} de la página · ${co.fallas.length + co.fallasReales.length} fallas`);
+      for (const f of [...co.fallasReales, ...co.fallas].slice(0, 12)) out.push(`       NO  ${f.etiqueta}: ${f.motivo} · cámara [${f.pos.map((v) => v.toFixed(2)).join(", ")}]`);
+      if (co.fallas.length + co.fallasReales.length > 12) out.push(`       … y ${co.fallas.length + co.fallasReales.length - 12} más (informe.json)`);
+    }
   }
   const im = r.imagen;
   if (!im) out.push("paleta    no se midió (sin navegador: --sin-realismo)", "ruido     no se midió (sin navegador: --sin-realismo)");
@@ -281,7 +406,7 @@ export function textoLimpieza(r) {
   else if (r.reintentos?.length) out.push(`ok   capturas  repetidas por vacías: ${r.reintentos.join(", ")}`);
   if (r.consola === undefined) out.push("consola   no se midió (sin navegador)");
   else out.push(`${ok(r.consola)}consola   ${r.consola ? "limpia" : "con errores o avisos"}`);
-  if (r.soloCorte) out.push("(sin navegador: limpieza solo juzgó corte; cerradas, paleta, ruido y consola quedan sin medir)");
+  if (r.soloCorte) out.push("(sin navegador: limpieza solo juzgó la cámara (corte o colisión, sin las cámaras de la página); cerradas, paleta, ruido y consola quedan sin medir)");
   out.push(r.aprobado ? "limpieza aprobada" : "limpieza reprobada");
   return out.join("\n");
 }
@@ -305,6 +430,63 @@ export function terrenoDePrueba({ bolsillo = false } = {}) {
     return d;
   };
   return { libre, region: { min: [-11.5, 0, -2], max: [9.6, 4, 2] } };
+}
+
+/** Talud de prueba (ambiente abierto): piso y = 0 para x < 0, talud de 45° hasta y = 20 en x = 20, meseta después;
+ *  extruido en z. libre = distancia con signo al perfil (≥ 0 en aire). */
+export function taludDePrueba() {
+  const perfil = [[-500, 0], [0, 0], [20, 20], [500, 20]];
+  const libre = (p) => {
+    let d = Infinity;
+    for (let i = 0; i < perfil.length - 1; i++) {
+      const [ax, ay] = perfil[i], [bx, by] = perfil[i + 1], ux = bx - ax, uy = by - ay, L2 = ux * ux + uy * uy;
+      const t = Math.max(0, Math.min(1, ((p[0] - ax) * ux + (p[1] - ay) * uy) / L2));
+      d = Math.min(d, Math.hypot(p[0] - ax - ux * t, p[1] - ay - uy * t));
+    }
+    const suelo = p[0] < 0 ? 0 : p[0] < 20 ? p[0] : 20;
+    return p[1] >= suelo ? d : -d;
+  };
+  return { libre, caja: { min: [-60, -5, -60], max: [60, 60, 60] } };
+}
+
+/** Cresta de prueba (ambiente abierto, como el borde del tajo): piso del hoyo y = −40 para x < 0, cara de 80° hasta
+ *  y = 0 en x = 7, meseta después; extruida en z. libre de primer orden, como terrenoTajo: (y − h) / √(1 + h'²), que
+ *  no es distancia exacta (sobre el piso del hoyo, junto al pie de la cara, vale la altura de la cara entera). */
+export function crestaDePrueba() {
+  const X1 = 7, H = 40, m = H / X1;
+  const h = (x) => (x < 0 ? -H : x < X1 ? -H + m * x : 0), g = (x) => (x > 0 && x < X1 ? m : 0);
+  return { libre: (p) => (p[1] - h(p[0])) / Math.hypot(1, g(p[0])), caja: { min: [-300, -45, -60], max: [300, 60, 60] } };
+}
+
+/** Miras rasantes de la cresta: objetivo sobre la meseta, la mira pasa 10 cm bajo el borde (x = 7) y la cámara queda
+ *  en el aire del hoyo, a 30–120 m (lo que encontró el juez en el dispatch: órbita 179). */
+export function mirasRasantes() {
+  const cams = [];
+  for (let i = 0; i < 6; i++) for (let j = 0; j < 8; j++) {
+    const o = [13 + 4 * i, 1.5, -20 + 5 * j], d = [7 - o[0], -0.1 - o[1], 0], Ld = Math.hypot(...d), D = 30 + 12 * j + 3 * i;
+    cams.push({ pos: o.map((v, k) => v + (d[k] / Ld) * D), objetivo: o, etiqueta: `rasante ${i + 1}·${j + 1} (${D} m)` });
+  }
+  return cams;
+}
+
+/** posicionLibre que confía en el sphere tracing (paso libre × 0,5 hasta 10 m, como el kit antes del 20-10-2026): si
+ *  la mira le parece libre deja la cámara; si no, la referencia. Con libre de primer orden salta el roce de una cresta. */
+export function posicionLibreSaltos(terreno, cam, objetivo, op = {}) {
+  const margen = op.margen ?? 0.5, v = sub(objetivo, cam), L = Math.hypot(...v);
+  let visto = terreno.libre(cam) >= margen;
+  for (let s = 0; visto && s < L - margen;) { const d = terreno.libre(mas(cam, v, s / L)); if (d < 0) visto = false; s += Math.min(10, Math.max(0.02, d * 0.5)); }
+  return visto ? [...cam] : posicionLibreReferencia(terreno, cam, objetivo, op);
+}
+
+/** posicionLibre de referencia: si la cámara está en el terreno o lo tiene de por medio, la acerca al objetivo por la
+ *  línea de mira hasta el último punto (desde el objetivo) con aire continuo a ≥ margen. */
+export function posicionLibreReferencia(terreno, cam, objetivo, { margen = 0.5 } = {}) {
+  const d = sub(cam, objetivo), L = Math.hypot(...d);
+  if (L < 1e-9) return [...cam];
+  const u = d.map((v) => v / L), paso = Math.min(0.05, L / 400);
+  let t = 0;
+  while (t + paso <= L && terreno.libre(mas(objetivo, u, t + paso)) >= margen) t += paso;
+  return t + paso > L && terreno.libre(cam) >= margen ? [...cam] : mas(objetivo, u, t);
 }
 
 /** planoCorte de referencia (regla de la ronda 3): plano pasado el ÚLTIMO tramo de roca del segmento cámara→objetivo,
@@ -428,6 +610,48 @@ export async function plantas() {
     }
     for (const f of filas.slice(filasAntes + 1)) f.info = true;
   }
+
+  // colisión (ambiente abierto): un talud de 45° de 20 m (perfil en x, extruido en z), objetivos cerca del pie
+  {
+    const ter = taludDePrueba(), R = azar(5), cams = [];
+    for (let k = 0; k < 240; k++) {
+      const o = [-30 + 28 * R(), 1.5, -40 + 80 * R()];
+      const v = { objetivo: o, az: 360 * R(), el: -10 + 70 * R(), dist: 5 * Math.pow(12, R()) };
+      cams.push({ ...camaraDe(v), etiqueta: `órbita ${k + 1}` });
+    }
+    const bajo = cams.filter((c) => ter.libre(c.pos) < 0).length;
+    caso("colisión", `hay cámaras bajo el talud o el piso (${bajo} de ${cams.length})`, true, bajo > 20);
+    const cc = (nombre, debe, fn, reales = []) => { const r = juzgarColision(ter, fn, cams, reales); caso("colisión", nombre, debe, r.aprobado, `${r.fallas.length + r.fallasReales.length} fallas${(r.fallasReales[0] || r.fallas[0]) ? " · " + (r.fallasReales[0] || r.fallas[0]).motivo : ""}`); };
+    cc("posicionLibre que no hace nada", false, (t, c) => c);
+    cc("referencia: acerca la cámara al objetivo hasta ver sin terreno", true, posicionLibreReferencia);
+    cc("solo saca la cámara del terreno (la deja tapada por el talud)", false, (t, c, o, op) => { let q = [...c]; while (t.libre(q) < op.margen) q[1] += 0.25; return q; });
+    cc("cámara real de la página dentro del talud", false, posicionLibreReferencia, [{ pos: [10, 5, 0], objetivo: [-10, 1.5, 0], etiqueta: "página · vista 1" }]);
+    const falta = await colisionDeEjemplo(ter, {}, { cargar: () => cargarPosicionLibre(join(RAIZ, "kit", "no-existe-estudio.js")) });
+    caso("colisión", "abierto sin posicionLibre: «sin colisión de cámara»", false, falta.aprobado, falta.error);
+    const real = await cargarPosicionLibre(); const filasAntes = filas.length;
+    if (real.error) caso("colisión", "kit/estudio.js · posicionLibre existe", true, false, real.error);
+    else cc("kit/estudio.js · posicionLibre en el talud de prueba", true, real.posicionLibre);
+    for (const f of filas.slice(filasAntes)) f.info = true;
+  }
+  { // mira rasante junto a una cresta: roza 10 cm el borde de la meseta (órbita 179 del dispatch)
+    const ter = crestaDePrueba(), cams = mirasRasantes();
+    caso("colisión", `cresta: ${cams.length} miras rasantes en aire (libre ≥ 0,5 m) que rozan 10 cm`, true, cams.every((c) => ter.libre(c.pos) >= 0.5 && /entra (9|10) cm/.test(fallaColision(ter, c.pos, c.objetivo) || "")));
+    const cc = (nombre, debe, fn) => { const r = juzgarColision(ter, fn, cams); caso("colisión", nombre, debe, r.aprobado, `${r.fallas.length} fallas${r.fallas[0] ? " · " + r.fallas[0].etiqueta + ": " + r.fallas[0].motivo : ""}`); };
+    cc("cresta: posicionLibre que no hace nada", false, (t, c) => c);
+    cc("cresta: sphere tracing libre × 0,5 (salta el roce)", false, posicionLibreSaltos);
+    cc("cresta: referencia", true, posicionLibreReferencia);
+    const real = await cargarPosicionLibre(); const filasAntes = filas.length;
+    if (real.error) caso("colisión", "kit/estudio.js · posicionLibre existe", true, false, real.error);
+    else cc("kit/estudio.js · posicionLibre corrige la mira rasante", true, real.posicionLibre);
+    for (const f of filas.slice(filasAntes)) f.info = true;
+  }
+  // ambiente: qué líneas de cámara corren
+  for (const [amb, esperado] of [[undefined, "corte"], ["cerrado", "corte"], ["abierto", "colision"], ["mixto", "corte+colision"], ["aislado", ""], ["bloque", ""], ["sin espacio", ""]]) {
+    const L = lineasPorAmbiente(amb === undefined ? undefined : { ambiente: amb });
+    const da = [L.corte && "corte", L.colision && "colision"].filter(Boolean).join("+");
+    caso("ambiente", `${amb ?? "sin categorías"} → ${esperado || "ninguna"}${amb === "sin espacio" ? " (sin física)" : ""}`, true, da === esperado && L.fisica === (amb !== "sin espacio"), L.nota);
+  }
+  caso("ambiente", "ambiente desconocido («subterráneo») falla", false, !lineasPorAmbiente({ ambiente: "subterráneo" }).error);
 
   // paleta y ruido (imágenes sintéticas en python)
   try {

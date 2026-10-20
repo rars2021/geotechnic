@@ -1,18 +1,23 @@
 // Ficha del ejemplo: textos, piezas, números con fuente y referencias. La escena está en escena.js.
-import { abierta, estudio, cita } from "../comun.mjs";
+import { abierta, estudio, cita, filasMedidas } from "../comun.mjs";
+import { MEDIDAS_CAMION } from "../../equipos/camion/medidas.js";
 
 const BONILLA = "hdl:20.500.14076/28169", QUEZADA = "hdl:20.500.14076/22796", MONTES = "hdl:20.500.14076/29234", PERALES = "hdl:20.500.14076/10463", OJEDA = "hdl:20.500.14076/22773";
 
 export default {
   titulo: "Corte de talud",
+  // clasificación del pedido (references/categorias.md): el juez elige corte o colisión de cámara por el ambiente
+  categorias: { ambiente: "abierto", dominios: ["geotécnico", "geológico"], proposito: ["estudiar"], escala: "banco", forma: ["3D motor B"], riesgo: "normal" },
   ceja: "Geotechnic · terreno y roca · escala banco",
   resumen: "Tres bancos de 15 m de una pared de tajo andino, con su cresta rota, el talud de escombros al pie, medias cañas de precorte, tres familias de fracturas, una falla con panizo, óxidos que chorrean y una filtración. Gira la cámara, señala cada pieza y cambia el ángulo de cara del banco 2.",
   alt: "Bloque diagrama 3D de una pared de tajo con tres bancos, fracturas, falla, óxidos y un camión de acarreo al pie.",
+  equipos: ["camion"],
   modos: ["completo", "blanco"],
   pista: "Arrastra para girar · rueda para acercar · toca un número",
   controles: [
     { id: "bfa2", etiqueta: "Cara del banco 2", min: 55, max: 80, paso: 1, valor: 65, salida: "65°" },
     { html: `<label class="geo-control" for="ver-trazas"><span>Trazas de fracturas</span><input type="checkbox" id="ver-trazas" checked style="justify-self:start"><output></output></label>` },
+    { html: `<label class="geo-control" for="lamina"><span>Lámina (aristas en tinta)</span><input type="checkbox" id="lamina" checked style="justify-self:start"><output></output></label>` },
   ],
   piezas: [
     { id: "cara", numero: 1, nombre: "Cara del banco", definicion: "Superficie excavada entre pie y cresta. 15 m de alto; 71° con precorte, 65° con voladura amortiguada." },
@@ -34,17 +39,18 @@ export default {
     { dato: "Espaciado de precorte", valor: "S = 16·Dh ≈ 2,0 m", fuente: cita("Bonilla Vargas", 2024, BONILLA, "ec. 6 (Smith 2016)") },
     { dato: "Ángulo de reposo del material suelto", valor: "33°–35° (se usa 34°)", fuente: cita("Perales Orellana", 2011, PERALES, "pág. 116") },
     { dato: "Pretil de la vía", valor: "2 m de alto · 3 m de base", fuente: cita("Ojeda Ore", 2022, OJEDA, "fig. 2.16 (FMI)") },
-    { dato: "Camión al pie", valor: "clase 226–230 t (CAT 793)", fuente: cita("Bonilla Vargas", 2024, BONILLA, "tabla 4") + "; dimensiones: catálogo del fabricante (estimado)" },
+    { dato: "Camión al pie", valor: "clase 226–230 t (CAT 793)", fuente: cita("Bonilla Vargas", 2024, BONILLA, "tabla 4") + "; modelo del motor A (equipos/camion, medidas en su tabla), asentado con sus seis ruedas en el piso del talud" },
     { dato: "Familias de fracturas", valor: "J1 82/205 · J2 75/110 · J3 38/330", fuente: "Ilustrativas: no hay levantamiento de esta pared en el catálogo de fuentes. Espaciado exponencial (Priest y Hudson)." },
     { dato: "Cara más oscura que la berma", valor: "≈ 0,6× de luminancia", fuente: "Medido en 3 fotos: Antamina (Commons), Chuquicamata (Commons), «Big truck…» (Commons)" },
+    ...filasMedidas(MEDIDAS_CAMION),
   ],
   referencias: {
     abiertas: [
-      abierta("talud", "operaciones_antamina_panoramio.jpg", { titulo: "Operaciones Antamina", vista: { objetivo: [0, 18, -18], az: 210, el: 30, dist: 140 } }),
-      abierta("dispatch", "big_truck_looks_small_in_an_open_pit_mine.jpg", { titulo: "Bancos con escombros al pie", vista: { objetivo: [0, 20, -16], az: 182, el: 14, dist: 105 } }),
-      abierta("dispatch", "mina_de_chuquicamata_calama_chile_2016_02_01_dd_120.jpg", { titulo: "Chuquicamata: cara, berma y perforación", vista: { objetivo: [-6, 10, -6], az: 178, el: 38, dist: 80 } }),
-      abierta("talud", "vistas_de_yanacancha_mina_antamina_01.jpg", { titulo: "Yanacancha, Antamina", vista: { objetivo: [0, 12, -10], az: 150, el: 8, dist: 160 } }),
-      abierta("talud", "minas_de_tintaya_peru.jpg", { titulo: "Tintaya: tajo con agua al fondo", vista: { objetivo: [0, 15, -20], az: 200, el: 55, dist: 220 } }),
+      abierta("talud", "operaciones_antamina_panoramio.jpg", { titulo: "Operaciones Antamina", recorte: [0.0, 0.15, 1.0, 0.85], vista: { recorte: [0.0, 0.1, 1.0, 0.9], objetivo: [0, 22, -4], az: 210, el: 30, dist: 140 } }),
+      abierta("dispatch", "big_truck_looks_small_in_an_open_pit_mine.jpg", { titulo: "Bancos con escombros al pie", recorte: [0.0, 0.0, 1.0, 0.75], vista: { recorte: [0.0, 0.1, 1.0, 0.9], objetivo: [0, 20, 0], az: 182, el: 14, dist: 105 } }),
+      abierta("dispatch", "mina_de_chuquicamata_calama_chile_2016_02_01_dd_120.jpg", { titulo: "Chuquicamata: cara, berma y perforación", recorte: [0.0, 0.0, 1.0, 0.8], vista: { recorte: [0.0, 0.1, 1.0, 0.9], objetivo: [-6, 18, -2], az: 178, el: 38, dist: 80 } }),
+      abierta("talud", "vistas_de_yanacancha_mina_antamina_01.jpg", { titulo: "Yanacancha, Antamina", recorte: [0.0, 0.2, 1.0, 0.8], vista: { recorte: [0.0, 0.1, 1.0, 0.9], objetivo: [0, 16, 4], az: 150, el: 8, dist: 160 } }),
+      abierta("talud", "minas_de_tintaya_peru.jpg", { titulo: "Tintaya: tajo con agua al fondo", recorte: [0.0, 0.1, 1.0, 0.9], vista: { recorte: [0.0, 0.1, 1.0, 0.9], objetivo: [0, 25, -6], az: 200, el: 55, dist: 220 } }),
     ],
     estudio: [
       estudio("talud", "2024_choqueneira_esperilla_clasificacion_p16.jpg"),

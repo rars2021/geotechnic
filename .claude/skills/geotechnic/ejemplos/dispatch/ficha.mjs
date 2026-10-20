@@ -19,6 +19,8 @@ const R = M.rutasDibujadas;
 
 export default {
   titulo: "Dispatch: flota en el tajo",
+  // clasificación del pedido (references/categorias.md): el juez elige corte o colisión de cámara por el ambiente
+  categorias: { ambiente: "abierto", dominios: ["minero operativo", "técnico de equipos", "minero comercial"], proposito: ["simular"], escala: "mina", forma: ["simulación 3D", "panel"], riesgo: "normal" },
   ceja: "Geotechnic · procesos · escala tajo",
   resumen: "Doce camiones de 230 t y dos palas comparten una chancadora primaria y un botadero. Una simulación de eventos discretos, con las distribuciones medidas por Yupanqui Sánchez (2025), decide cuándo carga, viaja, espera y descarga cada camión; la escena lo mueve por sus rutas y el panel lo muestra como un despacho real: estado de cada camión, colas en cada pala y en cada destino, y a qué pala va cada uno. Cambia la política de asignación y la simulación vuelve a correr.",
   alt: "Tajo abierto en tonos papel con dos palas, doce camiones en sus rutas, una chancadora y un botadero; debajo, un panel con la línea de tiempo de cada camión y las colas.",
@@ -33,7 +35,6 @@ export default {
     { html: `<label class="geo-control" for="politica"><span>Asignación</span><select id="politica" style="justify-self:start"><option value="cerrado" selected>Circuito cerrado (cada camión a su pala)</option><option value="libre">Circuito libre (a la pala que lo atiende antes)</option><option value="condicional">Despacho condicional (cambia si su cola supera el umbral)</option></select><output for="politica"></output></label>` },
     { id: "umbral", etiqueta: "Umbral de cola (condicional)", min: 0, max: 2, paso: 1, valor: 0, salida: "0 camiones" },
     { html: `<div class="geo-despacho" id="despacho"><canvas id="panel-despacho" aria-label="Línea de tiempo de cada camión, colas en palas y destinos" role="img"></canvas><div class="geo-kpi" id="kpi" aria-live="polite"></div></div>` },
-    { html: `<label class="geo-control" for="corte"><span>Corte del tajo</span><input type="checkbox" id="corte" checked style="justify-self:start"><output></output></label>` },
     { html: `<label class="geo-control" for="lamina"><span>Lámina (aristas en tinta)</span><input type="checkbox" id="lamina" checked style="justify-self:start"><output></output></label>` },
   ],
   css: `.geo-despacho{display:grid;gap:8px;padding:4px 0}.geo-despacho canvas{width:100%;display:block;cursor:pointer}

@@ -103,10 +103,10 @@ No todo es 3D: un cuadro de «tipos de yacimiento» se lee mejor como tarjetas 2
 
 | Fase | Qué | Dueño | Listo cuando |
 |---|---|---|---|
-| 1 | Este documento y el paso 0 en `SKILL.md`; `ficha.categorias` en las fichas existentes | sesión principal | Las 4 fichas declaran sus categorías |
-| 2 | `colisionCamara(esc, terreno)`: la cámara no entra al terreno (empuja la cámara a `libre ≥ margen` a lo largo de la mirada, sin saltos); `crearEscena(…, { ambiente })` elige corte o colisión | estudio-visual | Probado en Node con el terreno del tajo |
-| 3 | Juez: línea `colision` para abiertos (cámaras de órbita y de la ficha) y `corte` solo para cerrados y mixtos, según `ficha.categorias.ambiente`; plantas de las dos | juez | `--plantas` en verde |
-| 4 | `dispatch` sin corte y con colisión; `talud-tajo` a estudio v3 con colisión | orquestador-escenas | Juez aprobado y republicados |
+| 1 ✅ | Este documento y el paso 0 en `SKILL.md`; `ficha.categorias` en las fichas existentes | sesión principal | Las 4 fichas declaran sus categorías |
+| 2 ✅ | `colisionCamara(esc, terreno)`: la cámara no entra al terreno (empuja la cámara a `libre ≥ margen` a lo largo de la mirada, sin saltos); `crearEscena(…, { ambiente })` elige corte o colisión | estudio-visual | Probado en Node con el terreno del tajo |
+| 3 ✅ | Juez: línea `colision` para abiertos (cámaras de órbita y de la ficha) y `corte` solo para cerrados y mixtos, según `ficha.categorias.ambiente`; plantas de las dos | juez | `--plantas` en verde |
+| 4 ✅ | `dispatch` sin corte y con colisión; `talud-tajo` a estudio v3 con colisión | orquestador-escenas | Juez aprobado y republicados |
 | 5 | Modo «bloque» para geología: bloque diagrama con unidades FGDC y plano fijo como sección | estudio-visual + roca-terreno | Un ejemplo geológico aprobado (sirve al examen de Yacimientos) |
 | 6 | Formas sin 3D (cuadro, gráfico, mapa) dentro de la misma página de estudio, con modos completo y en blanco | orquestador-escenas | Un cuadro de tipos de yacimiento con quiz |
 | 7 | Reglas de riesgo en `SKILL.md` (restringido: minería ilegal) y búsqueda el catálogo de fuentes por raíz (palabras clave por dominio) | sesión principal | Documentado; un pedido de prueba sobre minería ilegal se desalienta y ofrece la vía formal |

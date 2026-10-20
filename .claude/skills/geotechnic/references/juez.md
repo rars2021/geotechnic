@@ -315,6 +315,7 @@ dibujado como un plano con bordes). Bloquea la publicación igual que las otras 
 |---|---|---|---|---|
 | cerradas | Toda `Mesh`/`InstancedMesh` visible de `GEO.escena.scene` es cerrada y orientada: tras soldar vértices (1e-5 m, coordenadas locales) y quitar triángulos degenerados, cada arista la comparten 2 triángulos en sentidos opuestos. Con la malla cerrada, volumen con signo > 0 (caras afuera; no se pide a `BackSide`). Exentos solo los calcos con `userData.calco = "motivo"` (en la malla o un padre), que se listan | 0 aristas abiertas, 0 no-variedad, 0 mal orientadas, 0 al revés | `revisarCerradas` (texto autocontenido: corre en la página por `eval` de `drive.mjs` y en Node) | Lathe abierta, Box sin una cara, cara volteada, cara repetida, Box espejada en la geometría, cilindro y tubo sin tapas, plano sin `calco` |
 | corte | Regla de la ronda 3: se corta TODA la roca entre la cámara y el objetivo. `planoCorte(terreno, cam, dir, { objetivo, margen: 0.35 })` de `kit/estudio.js`. Si el segmento cámara→objetivo toca roca (muestreado cada 2 cm): hay plano, normal·mirada ≥ 0,999, el segmento plano + 2 cm → objetivo es todo aire (cada 2 cm) y el objetivo queda más allá del plano. Si es todo aire: `null`. Un objetivo dentro de la roca es falla | 0 fallas | Node: terreno de `pruebas()`. Cámaras: las vistas de la ficha, la vista inicial de la página, 240 al azar (semilla 7) alrededor de objetivos de la labor (`libre ≥ 0,4`; 1,5–18 m, −10° a 60°, azimut completo) y 64 vistas 3/4 desde fuera del bloque (8 objetivos × az 45/135/225/315 × el 24° × 10 y 14 m) | regla vieja (solo corta con la cámara en roca), `null` siempre, plano en la cámara, plano sin roca de por medio, normal invertida, plano 30 m más allá, plano en el primer aire de una pared con bolsillos de 5 cm, sin `kit/estudio.js` («sin corte de cámara») |
+| colision | Solo en ambientes **abierto** y **mixto** (afuera de la labor). `posicionLibre(terreno, cam, objetivo, { margen: 0.5 })` de `kit/estudio.js` devuelve la cámara corregida [x, y, z]. Debe quedar con `terreno.libre` ≥ 0,5 m (tolerancia 5 cm) y ver el objetivo sin terreno de por medio: la mira se muestrea cada 2–10 cm y no puede entrar más de 5 cm. Lo mismo se exige a la cámara real de la página (`GEO.escena.camera.position` tras `igualarVista` de cada vista, y la vista inicial), juzgada en Node con el terreno del montaje | 0 fallas | Cámaras: vistas de la ficha + 240 en órbita (semilla 8) alrededor de objetivos del terreno: puntos de `terreno.rutas` y `terreno.zonas` (tajo) o de la caja, 1,5 m sobre el piso; 5–400 m (acotada por la caja), −10° a 60° | `posicionLibre` que no hace nada (cámaras bajo el talud); una que solo saca la cámara del suelo y la deja tapada por el talud; cámara real de la página dentro del talud; abierto sin `posicionLibre` («sin colisión de cámara») |
 | paleta | Saturación HSV p90 de los píxeles con V > 0,15 en la zona del equipo (`vista.recorte`; la vista inicial, entera). Fracción de «acento» (S > 0,6): informativa | ≤ 0,45 en cada captura | `juez/limpieza.py` | `#d9a521` (amarillo v2) y `#c8452f` (rojo v2); pasa `#c4ad7c` (papel) |
 | ruido | Media de \|Laplaciano\| (4 vecinos) de la captura entera en gris Rec. 709, reducida a 640 px de ancho | ≤ 0,0226 en cada captura | `juez/limpieza.py` | grano σ 0,02 (como la roca v2); pasan tonos lisos |
 | capturas | Ninguna captura está vacía. Se mide en el interior, sin el 2 % de cada borde: vacía si la desviación de luminancia es < 0,01 o si > 98 % de los píxeles son de un solo color. Una vista vacía se repite sola: página recargada, `igualarVista`, `GEO.escena.marcar()`, 1500 ms y nueva captura, hasta 2 veces. Si sigue vacía, la línea falla con «captura vacía: <vista>», y además esa captura falla paleta y ruido | 0 vacías | `scripts/juez.mjs`, `limpieza.py --vacias` | lienzo liso color fondo (paleta y ruido); fondo liso con borde |
@@ -324,6 +325,24 @@ dibujado como un plano con bordes). Bloquea la publicación igual que las otras 
   en paleta y ruido, no en realismo). `cerradas` corre tras la carga, antes de las vistas.
 - `--sin-realismo` salta el navegador: limpieza solo juzga `corte` y el informe queda **parcial**. `armar` no publica
   con un informe parcial ni con uno sin las líneas de realismo y limpieza.
+- **Cámara por ambiente** (ronda 7; `references/categorias.md`, eje 1). La línea de cámara sale de
+  `ficha.categorias.ambiente`. Regla del usuario: el corte es solo para ambientes cerrados; en los abiertos, la cámara
+  choca con el terreno, como en Anatomy.
+
+  | Ambiente | corte | colision | física |
+  |---|---|---|---|
+  | cerrado | sí | — | sí |
+  | abierto | — | sí | sí |
+  | mixto | sí (adentro) | sí (cámaras fuera de la caja de la labor) | sí |
+  | bloque, aislado | — | — | sí |
+  | sin espacio | — | — | no |
+  | sin `categorias` | sí (como antes; el informe lo dice) | — | sí |
+  | otro valor | falla («ambiente desconocido») | | |
+
+  Primera medida (20-10-2026), con la colisión forzada sobre el tajo del `dispatch`: 248 cámaras, 5 fallas. Son
+  roces de 9–24 cm en la línea de mira, a 50–300 m de la cámara. El `posicionLibre` del kit muestrea la mira con
+  160 puntos como máximo: a 300 m son pasos de unos 2 m. Lo mismo en el talud de prueba (corregido después). Dueño:
+  `estudio-visual`. Sugerencia: avanzar por la mira con pasos del tamaño de `libre` (sphere tracing).
 - Captura vacía (ronda 6, 19-10-2026): en la corrida final del scoop, `captura-3.png` («Sandvik LH410») salió con el
   lienzo color fondo (fallo pasajero del navegador sin pantalla; al repetirla salió bien). Una captura vacía daba paleta
   y ruido «limpios» (ruido 0). Esa captura mide 100 % de un solo color en el interior (98,2 % con el borde redondeado

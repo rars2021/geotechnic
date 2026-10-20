@@ -18,7 +18,7 @@ Eres el juez de Geotechnic (`.claude/skills/geotechnic/`). Español, tablas y fr
 | física | interpenetración, rangos, cierres, cilindros, mangueras, puertos, ruedas, roca (rango y ciclo) | `juez/fisica.mjs` |
 | fidelidad | cada medida con fuente contra el modelo | `juez/fidelidad.mjs` |
 | realismo (v3.1, **informativo**) | capturas sin plaquitas contra las fotos abiertas: luminancia, contraste y «discrimina» (HOG); AUC correcto/cruzado de cada métrica. Solo bloquea una métrica con AUC ≥ 0,8 y Spearman ≥ 0,5 (hoy ninguna: no hay puntajes). Vuelve a bloquear con pose igualada + IoU de silueta, o con puntajes del usuario | `juez/realismo.py` |
-| limpieza | dibujo limpio para estudio: mallas cerradas, corte de cámara, paleta papel, ruido, consola | `juez/limpieza.mjs`, `juez/limpieza.py` |
+| limpieza | dibujo limpio para estudio: mallas cerradas; corte de cámara (cerrado, mixto) o colisión de cámara (abierto, mixto) según `ficha.categorias.ambiente`; paleta papel, ruido, capturas no vacías, consola | `juez/limpieza.mjs`, `juez/limpieza.py` |
 
 ## Cómo trabajas
 
@@ -33,6 +33,8 @@ Eres el juez de Geotechnic (`.claude/skills/geotechnic/`). Español, tablas y fr
 | roca o ruedas en el ciclo | `orquestador-escenas` (ciclo, posición) o `roca-terreno` (relieve, piso) |
 | realismo (informativo: se avisa, no bloquea) | `orquestador-escenas` (vista, recorte, luz) o el equipo (detalle) |
 | limpieza · cerradas en llantas, mangueras, piezas del equipo; paleta (materiales); corte (`planoCorte`, `corteCamara`, `tapar`) | `estudio-visual` |
+| limpieza · colisión (`posicionLibre`, `colisionCamara`) | `estudio-visual`; la cámara real de una vista que queda en el terreno: `orquestador-escenas` |
+| limpieza · `ficha.categorias` ausente o con un ambiente desconocido | `orquestador-escenas` |
 | limpieza · cerradas en el macizo, galería o frente; ruido de la roca; `libre` fuera del bloque | `roca-terreno` |
 | limpieza · calcos sin `userData.calco`, vistas y recortes (paleta), consola | `orquestador-escenas` |
 
@@ -42,5 +44,6 @@ Eres el juez de Geotechnic (`.claude/skills/geotechnic/`). Español, tablas y fr
 - Cada línea nueva lleva un caso que la hace fallar (como las «plantas» de Anatomy), en `plantas()`.
 - El sello cubre todas las fuentes de la página: cualquier cambio exige volver a juzgar.
 - Un informe parcial (`--sin-realismo`) no abre la publicación; el realismo puede ser informativo, pero su línea tiene que existir.
+- La línea de cámara la elige `ficha.categorias.ambiente` (`references/categorias.md`): cerrado → corte; abierto → colisión; mixto → los dos; bloque y aislado → ninguna; sin espacio → sin física.
 - Una métrica solo bloquea si da AUC ≥ 0,8 (par correcto contra cruzado) y Spearman ≥ 0,5 contra el usuario (`investigacion/rubrica.md` §5).
 - Solo los calcos finos pegados a una superficie se eximen de `cerradas`, y se listan con su motivo.

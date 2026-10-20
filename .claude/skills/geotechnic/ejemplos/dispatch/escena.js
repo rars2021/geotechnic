@@ -129,7 +129,8 @@ function cintaDispatch(pts, ancho, color, motivo) {
 async function montar(ctx) {
   const m = montajeDispatch();
   const { ter, op } = m;
-  const esc = crearEscena(ctx.contenedor, { fondo: "subterraneo", estudio: true, exposicion: 0.95, fov: 34, cerca: 1, lejos: 8000, corte: ter, corteOp: { opacidadBorde: 0.35 } });
+  // ambiente abierto (references/categorias.md): sin corte; la cámara choca con el tajo (colisión, como Anatomy)
+  const esc = crearEscena(ctx.contenedor, { fondo: "subterraneo", estudio: true, ambiente: "abierto", corte: ter, exposicion: 0.95, fov: 34, cerca: 1, lejos: 8000 });
   const { scene } = esc;
   // ── luz de estudio: cielo parejo y un sol bajo que marca bancos y bermas (neutras: no tiñen el papel)
   scene.add(new THREE.HemisphereLight("#ffffff", "#8a8780", 1.6));
@@ -236,7 +237,6 @@ async function montar(ctx) {
   };
   selPol?.addEventListener("change", cambiarPol); umbral?.addEventListener("input", cambiarPol);
   document.getElementById("lamina")?.addEventListener("change", (ev) => { for (const d of [...dibC, ...dibP]) d.lamina(ev.target.checked); esc.marcar(); });
-  document.getElementById("corte")?.addEventListener("change", (ev) => { if (ev.target.checked) esc.corte?.encender(); else esc.corte?.apagar(); esc.marcar(); });
   esc.alAnimar((dt) => {
     if (!anim) return false;
     t += (dt * vel) / 60;

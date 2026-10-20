@@ -69,6 +69,70 @@ Saturación HSV de un equipo en pantalla: p90 ≤ 0,45 (lo mide el juez).
 - Roca: **macizo cerrado** (`kit/labor.js` → `macizoCerrado`): galería + frente + caja exterior en un solo sólido.
   Detrás del frente no hay un plano con bordes: hay roca hasta la cara trasera del bloque.
 
+## Ambiente: corte o colisión (`crearEscena(…, { ambiente })`)
+
+El corte de cámara es **solo para ambientes cerrados** (`references/categorias.md`, eje 1). En abiertos no se corta:
+la cámara choca con el terreno, como en Anatomy.
+
+| `ambiente` | Qué engancha `crearEscena(…, { ambiente, corte: terreno })` |
+|---|---|
+| `"cerrado"` | `corteCamara` (`esc.corte`) |
+| `"abierto"` | `colisionCamara` (`esc.colision`; opciones en `op.colisionOp`) |
+| `"mixto"` | las dos: corte cuando `terreno.cerrado?.(cámara)` es verdadero, colisión si no (sin `cerrado`, solo colisión) |
+| `"aislado"` | nada |
+| `"bloque"` | `esc.corte` sin corte automático: la sección se pone con `esc.corte.fijar(…)` |
+| sin `ambiente` | como antes: corte si hay `op.corte` |
+
+## Colisión de cámara (`kit/estudio.js` → `colisionCamara`, `posicionLibre`)
+
+`posicionLibre(terreno, cam, objetivo, { margen: 1.5, distMin: 2, pasoElev: 1, maxElev: 85, pasoMin: 0.02, pendiente: 8, tolMira: 0.05 })` →
+`[x, y, z]` (pura; la prueba el juez en Node):
+
+1. Si la cámara tiene `libre ≥ margen` y la mira cámara → objetivo no entra al terreno, queda igual.
+2. Si está dentro o rozando el terreno, se empuja hacia el objetivo por la mirada hasta el primer punto con
+   `libre ≥ margen` (bisección: empuje continuo), si desde ahí el objetivo se ve.
+3. Si no alcanza o el objetivo queda tapado, sube la elevación alrededor del objetivo a la misma distancia (de a 1°,
+   refinada, hasta 85°) hasta despejar.
+4. Si nada despeja, sube en vertical hasta `libre ≥ margen`.
+
+La mira se recorre dos veces:
+
+| Mira | Cómo | Para qué |
+|---|---|---|
+| Rápida | sphere tracing, paso = `libre × 0,5` entre 2 cm y 10 m | Buscar (empuje, elevación, bisección) |
+| Fina | los puntos del juez (`fallaColision`: cada min(10, max(2, L/40)) cm); de un punto con `libre` d salta los que caben en d / `pendiente` (máx. 10 m) | Aceptar una posición |
+
+Por qué dos: el `libre` del tajo es de primer orden (altura vertical / √(1 + |∇|²)), no una distancia. Sobre el piso,
+junto al pie de una cara, vale la altura de toda la cara: la mira rápida salta del hoyo a la meseta y deja pasar un roce
+de 10 cm en la cresta (órbita 179 del dispatch, 20-10-2026). `pendiente` = cuánto puede caer `libre` por metro de mira:
+≈ tan(cara) en un tajo (2,5 medido en el dispatch); 8 cubre caras hasta ≈ 82°. Un terreno con distancia exacta
+(como `terrenoTalud`) puede declararlo con `terreno.pendienteLibre = 1`: la mira fina cuesta poco más que la rápida
+(pendiente: `terrenoTalud` aún no lo declara).
+
+La mira no cuenta el último `margen` junto al objetivo si el objetivo está sobre el piso (`libre < 0`); si está en el
+aire, ese tramo admite un roce de `tolMira` (la tolerancia del juez). Bajo el fondo de `terreno.caja` cuenta como roca:
+en un abierto no se mira el bloque desde abajo.
+
+`colisionCamara(esc, terreno, { margen, suave: 0.25, salto: 0.04, habilitado, objetivo })` →
+`{ activo(), apagar(), encender(), actualizar() }`: envuelve `esc.renderizar` (después de `controls.update()`), lleva
+la cámara a `posicionLibre` y la mira al objetivo; OrbitControls toma esa posición como base del cuadro siguiente (no
+pelea). Si la corrección salta más de 4 % de la distancia, se acerca de a 25 % por cuadro, nunca dentro del terreno.
+Con la cámara y el objetivo quietos (y ya libres) no recalcula.
+
+Prueba en Node (`terrenoTajo()`, 300 cámaras al azar en órbita, `margen` 1,5 y 0,5): 0 con `libre < margen`, 0 con
+la mira dentro del terreno (tolerancia 5 cm); barridos de azimut de a 0,25°: 46 saltos de 28 800 pasos (cambios de
+estrategia, los suaviza `colisionCamara`); peor caso 17 ms por llamada.
+
+Con la mira fina (20-10-2026, tajo del dispatch, Node): 248 cámaras del juez, 0 fallas (antes 1); barrido de azimut de
+a 0,25° (25 920 pasos): 55 saltos, igual que antes, y 0 fallas del juez en 3240 cámaras (antes 10). Costo por llamada:
+
+| Caso | Antes | Ahora |
+|---|---|---|
+| Cámara libre, sin corregir (199 del juez) | 0,03 ms | 0,13 ms |
+| 240 cámaras del juez (promedio · p99) | 0,17 · 3,3 ms | 0,38 · 4,6 ms |
+| Barrido (promedio · p99) | 0,8 · 6,3 ms | 1,7 · 15 ms |
+| Talud (`libre` exacto, ≈ 0,5 ms cada uno): `libre` por llamada | 28 | 92 (con `pendienteLibre = 1`: 38) |
+
 ## Corte de cámara (`kit/estudio.js` → `corteCamara`)
 
 1. **Tapa**, en dos partes:
@@ -145,6 +209,7 @@ FGDC. Apagada por defecto; la sección de los equipos sigue lisa.
 | Función | Qué hace |
 |---|---|
 | `PALETA.claro / .oscuro` · `temaActual()` · `tono(token, tema?)` | Tokens; `tono` deja pasar un hex |
+| `posicionLibre(terreno, cam, objetivo, op)` · `colisionCamara(esc, terreno, op)` | Colisión de cámara en abiertos (ver arriba) |
 | `hexRGB(hex)` · `apagarColor(hex, f)` | Hex → [r, g, b] 0..1 (sin pasar a lineal) · mezcla hacia su gris |
 | `tapar(material, { shadowSide })` · `sinTapa(material)` | Tapa de corte (doble cara, trasera plana `tapa`, sombra con `BackSide`); la deshace |
 | `retintar(raiz, tema?)` | Cambio de tema: materiales con `userData.token` / `tokenTinta` y la tapa de todos |
@@ -177,7 +242,8 @@ en el espacio de salida y sale tal cual.
 - `crearEscena(…, { estudio: true, corte: m.ter, exposicion })`: mapeo lineal, corte de cámara, fondo papel bajo
   tierra (`esc.fondo`; `retintar(esc.scene)` lo cambia con el tema) y la misma exposición de antes. Si la escena
   cambia el fondo a mano (p. ej. al mostrar la galería), que use `esc.fondo`, no `#050505`.
-- `crearEscena(…, { corte: m.ter })` en toda escena con roca alrededor. **Sin corte, una cámara dentro de la roca ve
+- Abiertos (tajo, talud, afloramiento): `crearEscena(…, { ambiente: "abierto", corte: m.ter })`, sin corte.
+- `crearEscena(…, { ambiente: "cerrado", corte: m.ter })` en toda escena con roca alrededor. **Sin corte, una cámara dentro de la roca ve
   la tapa plana de la pared** (antes la veía a través, por la cara trasera descartada).
 - Rayos X (frente transparente): `sinTapa(mat)` antes de bajar la opacidad; `tapar(mat)` al volver.
 - Calcos finos (pintura de malla, charcos, bocas, gradiente): `userData.calco = "motivo"`.

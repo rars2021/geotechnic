@@ -10,6 +10,8 @@ const lado = (x = 0) => ({ galeria: false, anim: false, x, objetivo: [x - 0.2, 1
 
 export default {
   titulo: "Scoop en la galería",
+  // clasificación del pedido (references/categorias.md): el juez elige corte o colisión de cámara por el ambiente
+  categorias: { ambiente: "cerrado", dominios: ["técnico de equipos", "minero operativo"], proposito: ["estudiar"], escala: "labor", forma: ["3D motor A", "3D motor B"], riesgo: "normal" },
   ceja: "Geotechnic · equipos · escala labor",
   resumen: "Un scoop de 6 yd³ (clase CAT R1600G) limpiando el mineral disparado en una galería de 4,0 × 4,0 m. Cada pieza es un sólido con su pasador: la barra en Z inclina el cucharón, los cilindros van de pasador a pasador y las mangueras de racor a racor. Un juez automático probó todo el ciclo antes de publicar: sin piezas que se atraviesen ni equipo dentro de la roca.",
   alt: "Modelo 3D de un scoop en tonos papel, con contornos finos, en una galería subterránea iluminada por sus faros, con pernos, shotcrete y manga de ventilación.",

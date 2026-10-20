@@ -25,7 +25,7 @@ import { pathToFileURL } from "node:url";
 import { RAIZ, selloDe } from "./codigo.mjs";
 import { juzgarFisica, juzgarConjunto, juzgarConjuntoHilos, firmaCiclo, textoFisica, plantasFisica } from "../juez/fisica.mjs";
 import { juzgarFidelidad, textoFidelidad } from "../juez/fidelidad.mjs";
-import { plantas, textoPlantas, expresionCerradas, leerCerradas, corteDeEjemplo, juzgarImagenes, textoLimpieza, consolaLimpia as esConsolaLimpia } from "../juez/limpieza.mjs";
+import { plantas, textoPlantas, expresionCerradas, leerCerradas, corteDeEjemplo, colisionDeEjemplo, lineasPorAmbiente, leerCamaras, expresionCamara, juzgarImagenes, textoLimpieza, consolaLimpia as esConsolaLimpia } from "../juez/limpieza.mjs";
 
 const args = process.argv.slice(2);
 if (args.includes("--plantas")) {
@@ -55,7 +55,10 @@ const decir = (t) => { console.log(t); informe.textos.push(t); };
 
 // ── física y fidelidad (Node, sobre el montaje del ejemplo)
 let P = null;
-if (existsSync(join(dirEj, "montaje.js"))) {
+// ambiente (references/categorias.md): elige corte o colisión de cámara, y si hay física
+const lineasCam = lineasPorAmbiente(ficha.categorias);
+if (!lineasCam.fisica) decir(`── física y fidelidad: no aplican (${lineasCam.nota})`);
+else if (existsSync(join(dirEj, "montaje.js"))) {
   const mod = await import(pathToFileURL(join(dirEj, "montaje.js")).href);
   const paso = +opt("paso", args.includes("--rapido") ? 0.5 : 0.1);
   P = mod.pruebas(paso);
@@ -118,7 +121,7 @@ if (!args.includes("--sin-realismo")) {
   const pares = [];
   abiertas.forEach((r, i) => {
     const png = join(dirJ, `captura-${i + 1}.png`);
-    pasos.push(["eval", `GEO.igualarVista(${JSON.stringify(r.vista)}); 'ok'`], ["wait", 1200], ["eval", MARCAR], ["wait", 200], ["shot", png, ".geo-lienzo"]);
+    pasos.push(["eval", `GEO.igualarVista(${JSON.stringify(r.vista)}); 'ok'`], ["wait", 1200], ["eval", MARCAR], ["wait", 200], ["shot", png, ".geo-lienzo"], ["eval", expresionCamara(`vista ${i + 1} · ${r.titulo}`)]);
     // fotos cruzadas: TODAS las otras fotos abiertas de la ficha, con su recorte (realismo v3.1: «discrimina»)
     const cruzadas = (ficha.referencias?.abiertas || []).filter((q) => q !== r && q.archivo).map((q) => ({ foto: q.archivo, recorte: q.recorte || null, titulo: q.titulo }));
     pares.push({ captura: png, foto: r.archivo, titulo: r.titulo, recorteCaptura: r.vista.recorte || null, recorteFoto: r.recorte || null, cruzadas });
@@ -129,6 +132,7 @@ if (!args.includes("--sin-realismo")) {
   try { salidaDrive = execFileSync(process.execPath, [join(RAIZ, "scripts", "drive.mjs"), vista, "--actions", join(dirJ, "pasos.json"), "--width", "1300", "--height", "1000"], { encoding: "utf8" }); }
   catch (e) { salidaDrive = String(e.stdout || "") + String(e.stderr || ""); }
   const consolaLimpia = esConsolaLimpia(salidaDrive);
+  limpieza.camarasPagina = leerCamaras(salidaDrive).filter((c) => Array.isArray(c.pos)); // la cámara real tras igualarVista (colisión)
   // capturas vacías (fallo pasajero del navegador sin pantalla: lienzo color fondo): se repite SOLO esa vista, con la
   // página recargada, GEO.escena.marcar() y 1500 ms de espera, hasta 2 veces. Si sigue vacía, limpieza falla.
   const vistasJuez = [{ png: png0, titulo: "vista inicial", vista: null }, ...abiertas.map((r, i) => ({ png: join(dirJ, `captura-${i + 1}.png`), titulo: r.titulo, vista: r.vista }))];
@@ -178,11 +182,16 @@ if (!args.includes("--sin-realismo")) {
 
 // ── limpieza (4.º juez): corte de cámara en Node (con la vista inicial que dio la página, si la hubo) y el resto
 const camIni = limpieza.cerradas?.camara;
-limpieza.corte = await corteDeEjemplo(P?.terreno || null, ficha, camIni?.pos && camIni?.objetivo ? [{ pos: camIni.pos, objetivo: camIni.objetivo, etiqueta: "vista inicial (página)" }] : []);
+const ini = camIni?.pos && camIni?.objetivo ? [{ pos: camIni.pos, objetivo: camIni.objetivo, etiqueta: "vista inicial (página)" }] : [];
+limpieza.camaraLineas = { ambiente: lineasCam.ambiente, nota: lineasCam.nota, error: lineasCam.error || null };
+limpieza.corte = lineasCam.corte ? await corteDeEjemplo(P?.terreno || null, ficha, ini) : { aprobado: true, noAplica: lineasCam.nota, camaras: 0, enRoca: 0, fallas: [] };
+// colisión: la vista inicial va como cámara real (no pasa por posicionLibre: es lo que la página ya hizo)
+limpieza.colision = lineasCam.colision ? await colisionDeEjemplo(P?.terreno || null, ficha, { reales: [...ini, ...(limpieza.camarasPagina || [])], mixto: lineasCam.ambiente === "mixto" }) : null;
 if (args.includes("--sin-realismo")) { limpieza.soloCorte = true; informe.parcial = true; }
 const im = limpieza.imagen;
-limpieza.aprobado = limpieza.soloCorte ? limpieza.corte.aprobado
-  : !!(limpieza.cerradas?.aprobado && limpieza.corte.aprobado && im && !im.error && im.paleta.aprobado && im.ruido.aprobado && limpieza.consola && !limpieza.vacias?.length);
+const camaraOk = !lineasCam.error && limpieza.corte.aprobado && (limpieza.colision ? limpieza.colision.aprobado : true);
+limpieza.aprobado = limpieza.soloCorte ? camaraOk
+  : !!(limpieza.cerradas?.aprobado && camaraOk && im && !im.error && im.paleta.aprobado && im.ruido.aprobado && limpieza.consola && !limpieza.vacias?.length);
 decir(textoLimpieza(limpieza));
 informe.lineas.limpieza = limpieza;
 

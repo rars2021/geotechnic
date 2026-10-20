@@ -2,7 +2,7 @@
 // three.js (WebGL) porque el realismo pide luz, sombra y volumen irregular. Ver references/motor.md.
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
-import { corteCamara, tono } from "./estudio.js";
+import { corteCamara, colisionCamara, tono } from "./estudio.js";
 
 /** ACES lleva el gris medio 0,18 a ≈ 0,21 y 0,5 a ≈ 0,56: en lineal, la misma exposición × 1,15 da medios tonos iguales. */
 export const EXPOSICION_LINEAL = 1.15;
@@ -42,7 +42,9 @@ function domoCielo(c, radio) {
  * Crea la escena en un contenedor (div con tamaño). Devuelve un objeto con todo lo necesario.
  * op.fondo: "cielo" | "subterraneo" | color.  op.sol: { az, alt } en grados (az desde el norte, horario).
  * op.extension: radio (m) que debe cubrir la sombra del sol.  op.niebla: [cerca, lejos] en m (bruma).
- * op.corte: terreno con libre(p) (contrato B → A) → corte de cámara (kit/estudio.js); queda en api.corte.
+ * op.corte (o op.terreno): terreno con libre(p) (contrato B → A). op.ambiente: "cerrado" (corte de cámara, api.corte) |
+ *   "abierto" (colisión de cámara, api.colision; op.colisionOp) | "mixto" (las dos, según terreno.cerrado?.(p)) |
+ *   "aislado" (nada) | "bloque" (api.corte solo con fijar). Sin ambiente, como antes: corte si hay op.corte.
  *   Para margen / paso / max: op.corteOp. El recorte local (material.clippingPlanes) está siempre habilitado.
  * op.estudio: true → acabado de estudio (references/estudio.md): mapeo de tonos lineal (ACES satura el papel en
  *   sombra) y, bajo tierra, fondo del token `fondo` (api.fondo; retintar(scene) lo cambia con el tema).
@@ -136,7 +138,18 @@ export function crearEscena(contenedor, op = {}) {
     },
     renderizar() { renderer.render(scene, camera); sucio = false; },
   };
-  api.corte = op.corte ? corteCamara(api, op.corte, op.corteOp) : null;
+  // ambiente (references/categorias.md, eje 1): cerrado → corte de cámara; abierto → colisión con el terreno;
+  // mixto → colisión afuera y corte dentro del tramo cerrado (terreno.cerrado?.(p)); aislado → nada; bloque → corte
+  // solo con fijar(sección). Sin ambiente: como antes (corte si hay op.corte).
+  const ter = op.corte || op.terreno || null, amb = op.ambiente;
+  api.corte = null; api.colision = null;
+  if (ter && (!amb || amb === "cerrado")) api.corte = corteCamara(api, ter, op.corteOp);
+  else if (ter && amb === "bloque") api.corte = corteCamara(api, ter, { ...op.corteOp, habilitado: () => false });
+  else if (ter && amb === "mixto") {
+    const dentro = (p) => !!ter.cerrado?.(p);
+    api.corte = corteCamara(api, ter, { ...op.corteOp, habilitado: dentro });
+    api.colision = colisionCamara(api, ter, { ...op.colisionOp, habilitado: (p) => !dentro(p) }); // corre antes que el corte
+  } else if (ter && amb === "abierto") api.colision = colisionCamara(api, ter, op.colisionOp);
   function pedir() { if (!cuadro) cuadro = requestAnimationFrame(paso); }
   function paso(ahora) {
     cuadro = 0;

@@ -3,6 +3,7 @@
 import * as THREE from "three";
 import { azar, ruido3, fbm, crestas, suave, clamp, rad, rgb, mezcla, lerp, hash3 } from "./nucleo.js";
 import { relieveBloques, bloqueEn } from "./fracturas.js";
+import { cajaTalud } from "./contrato.js";
 
 /**
  * Perfil de bancos visto en corte (h = distancia horizontal hacia el macizo, z = cota sobre el piso).
@@ -62,15 +63,15 @@ export function mallaTalud(op) {
     for (let k = -4; k <= 4; k++) { const q = enPerfil(perfil, clamp(s + k * 0.35, 0, perfil.largo)); nh += q.nh; nz += q.nz; }
     const L = Math.hypot(nh, nz); nh /= L; nz /= L;
     // cresta y pie más cercanos
-    let dCresta = 1e9, dPie = 1e9, bancoPie = -1;
+    let dCresta = 1e9, dPie = 1e9, bancoPie = -1, iCr = -1, iPie = -1;
     perfil.tramos.forEach((tr, i) => {
       if (tr.tipo !== "cara") return;
       const sPie = perfil.s[i], sCr = perfil.s[i + 1];
-      if (Math.abs(s - sCr) < Math.abs(dCresta)) dCresta = s - sCr;
-      if (Math.abs(s - sPie) < Math.abs(dPie)) { dPie = s - sPie; bancoPie = tr.banco; }
+      if (Math.abs(s - sCr) < Math.abs(dCresta)) { dCresta = s - sCr; iCr = i + 1; }
+      if (Math.abs(s - sPie) < Math.abs(dPie)) { dPie = s - sPie; bancoPie = tr.banco; iPie = i; }
     });
     const cara = p.tramo.tipo === "cara" ? 1 : 0;
-    return { s, ...p, nh, nz, dCresta, dPie, bancoPie, cara };
+    return { s, ...p, nh, nz, dCresta, dPie, bancoPie, cara, iCr, iPie };
   });
   // peso de cara suavizado (para que el relieve no termine en escalón en la esquina)
   fila.forEach((f, j) => {
@@ -87,19 +88,22 @@ export function mallaTalud(op) {
     const f = fila[j];
     for (let i = 0; i < nu; i++) {
       const u = U[i], k = j * nu + i;
-      let h = f.h, z = f.z;
-      // 1) escombros al pie: talud de reposo apoyado en la cara y sobre la berma/piso
+      let h = f.h, z = f.z, enTalud = false;
+      // 1) escombros al pie: talud de reposo apoyado en la cara y sobre la berma/piso. Como MÁXIMO de alturas (la fila
+      //    no se corre en h): delante del pie sube al talud de reposo; sobre la cara, bajo `alto`, queda en el tope del
+      //    talud. Así la malla no se pliega (antes las filas de la cara se corrían sobre el talud y lo cubrían dos veces).
       const alto = escombros.alto * clamp(0.55 + 0.45 * n(u * 0.05, f.bancoPie * 3.1, 0) + 0.35 * n2(u * 0.17, 0, f.bancoPie)) * (f.bancoPie >= 0 ? 1 : 0);
-      if (alto > 0.05 && Math.abs(f.dPie) < 12) {
-        const tr = perfil.tramos.find((t) => t.tipo === "cara" && t.banco === f.bancoPie);
-        const ang = rad(tr.cara);
-        if (f.dPie < 0) { // delante del pie (sobre la berma o el piso): sube al talud de reposo
-          const d = -f.dPie; const T = alto - d * tanRep;
-          if (T > 0) z += T;
-        } else { // sobre la cara: avanza hasta la superficie del talud de reposo
-          const e = f.dPie * Math.sin(ang);
-          if (e < alto) { const dentro = e / Math.tan(ang); const fuera = (alto - e) / tanRep; h -= dentro + fuera; }
-        }
+      if (alto > 0.05 && Math.abs(f.dPie) < 12 && f.iPie >= 0) {
+        const [hP, zP] = perfil.pts[f.iPie], zt = zP + alto - Math.max(0, hP - h) * tanRep;
+        if (zt > z) { z = zt; enTalud = true; }
+      }
+      // 1b) cresta rota (R5): chaflán con ruido a lo largo del rumbo, como MÍNIMO de alturas (sin pliegue)
+      if (retroceso > 0 && f.iCr >= 0 && Math.abs(f.dCresta) < 4 + retroceso * 2) {
+        const [hC, zC] = perfil.pts[f.iCr], tr = perfil.tramos[f.iCr - 1], cot = 1 / Math.tan(rad(tr.cara));
+        const c = retroceso * (0.45 + 0.55 * (0.5 + 0.5 * n(u * 0.12, 0.7, 4.2)));
+        const h0 = hC - c * cot, zch = zC - c + ((h - h0) * c) / (c + c * cot); // recta de (hC − c·cot α, zC − c) a (hC + c, zC)
+        const k = 0.35 * c, dz = z - zch; // mínimo suave (redondea las dos aristas del chaflán)
+        if (dz > -k) z = dz >= k ? zch : z - ((dz + k) * (dz + k)) / (4 * k);
       }
       // posición base
       let x = u, y = z, w = -h;
@@ -111,11 +115,6 @@ export function mallaTalud(op) {
       if (dfn) {
         const b = relieveBloques(dfn, x, y, w, bloques * (0.08 + 0.92 * f.wCara));
         d += b.d; dist = b.dist; fam = b.familia; tono = b.tono; hueco = b.d;
-      }
-      // cresta rota: retrocede la esquina hacia el macizo con ruido a lo largo del rumbo
-      if (Math.abs(f.dCresta) < 4) {
-        const perf = Math.exp(-(f.dCresta * f.dCresta) / 2.2);
-        d -= retroceso * perf * (0.45 + 0.55 * (0.5 + 0.5 * n(u * 0.12, f.dCresta * 0.2, 4.2)));
       }
       d += (0.03 + 0.07 * f.wCara) * fbm(n2, u * 0.6, y * 0.6, w * 0.6, 3);
       if (extra) d += extra(x, y, w, f);
@@ -129,13 +128,13 @@ export function mallaTalud(op) {
       // tono por bloque y oscurecimiento en huecos y juntas abiertas (la sombra que da relieve a la foto)
       const k0 = (1 + (tono - 0.5) * 0.18 * f.wCara) * (1 - 0.35 * f.wCara * clamp((-hueco - 0.3) / 0.5)) * (1 - 0.32 * f.wCara * (1 - suave(0.02, 0.08, dist)));
       c = [c[0] * k0, c[1] * k0, c[2] * k0];
-      const arriba = f.nz > 0.8 || (f.dPie < 0 && f.dPie > -alto / tanRep);
+      const arriba = f.nz > 0.8 || enTalud;
       if (oxidos && dist < 0.6) {
         const o = oxidos(x, y, w) * (1 - suave(0.05, 0.6, dist));
         if (o > 0) c = mezcla(c, rgb(n(x * 0.4, y * 0.4, w * 0.4) > 0 ? "#a88a5c" : "#94704a"), clamp(o * 0.8));
       }
       if (arriba) {
-        const talud = f.dPie < 0 && -f.dPie < alto / tanRep ? 1 : 0;
+        const talud = enTalud ? 1 : 0;
         c = mezcla(c, talud ? finos : polvoBerma, talud ? 0.55 : 0.72 + 0.2 * n(u * 0.2, 0, f.s * 0.2));
         if (huellas && f.tramo.tipo === "piso") {
           const hh = huellas(u, f.h);
@@ -198,7 +197,9 @@ export function geometriasBloque(cuantas = 5, semilla = 4) {
   const r = azar(semilla);
   const out = [];
   for (let q = 0; q < cuantas; q++) {
-    const g = new THREE.IcosahedronGeometry(1, 0).toNonIndexed();
+    // three 0.160: el icosaedro ya viene sin índice; toNonIndexed() solo avisaría por consola
+    const g0 = new THREE.IcosahedronGeometry(1, 0);
+    const g = g0.index ? g0.toNonIndexed() : g0;
     const P = g.attributes.position.array;
     const sx = r.entre(0.7, 1.25), sy = r.entre(0.45, 0.85), sz = r.entre(0.6, 1.1);
     // deformar por vértice compartido (misma posición → mismo desplazamiento) para que no se abran grietas
@@ -311,7 +312,8 @@ export function mediasCanas(talud, banco, op = {}) {
 
 /**
  * Cerros de fondo (heightfield con ruido de crestas). Se ven a través de la bruma: dan escala y lugar.
- * op: { tam: [ancho, fondo], res, alto, base, centro:[x,z], hueco: { x, z, r } (se aplana cerca de la escena) }
+ * op: { tam: [ancho, fondo], res, alto, base, centro:[x,z], hueco: { x, z, r } (se aplana cerca de la escena),
+ *       cerrado: { fondo } (paredes y base: sólido cerrado y orientado; grupo 1 = faldón) }
  */
 export function cerros(op = {}) {
   const { tam = [6000, 6000], res = 180, alto = 900, base = -50, centro = [0, 0], hueco = { x: 0, z: 0, r: 500 }, semilla = 2,
@@ -338,10 +340,13 @@ export function cerros(op = {}) {
     C[i] = c[0]; C[i + 1] = c[1]; C[i + 2] = c[2];
   }
   g.setAttribute("color", new THREE.BufferAttribute(C, 3));
+  // cerrado: paredes y base hasta `cerrado.fondo` (sólido cerrado para el juez de limpieza)
+  if (op.cerrado) { const f = op.cerrado.fondo ?? base - 100; const h = faldonRejilla(g, res + 1, res + 1, f, cr); g.dispose(); return h; }
   return g;
 }
 
-/** Pretil (berma de seguridad) a lo largo de una curva: sección triangular de material suelto. alto y ancho de base en m. */
+/** Pretil (berma de seguridad) a lo largo de una curva: sección triangular de material suelto. alto y ancho de base en m.
+ *  op.cerrado: con base y tapas en los extremos (sólido cerrado y orientado, para el juez de limpieza). */
 export function pretil(curva, op = {}) {
   const { alto = 2, ancho = 3, pasos = 200, semilla = 6, color = "#8f877b" } = op;
   const n = ruido3(semilla);
@@ -361,6 +366,12 @@ export function pretil(curva, op = {}) {
       cols.push(c[0] * v, c[1] * v, c[2] * v);
     });
     if (i < pasos) for (let k = 0; k < 3; k++) { const a = i * 4 + k; idx.push(a, a + 4, a + 1, a + 1, a + 4, a + 5); }
+    // cerrado: la base (de k = 3 a k = 0) en cada tramo
+    if (op.cerrado && i < pasos) { const a = i * 4 + 3, b = i * 4; idx.push(a, a + 4, b, b, a + 4, b + 4); }
+  }
+  if (op.cerrado) { // tapas de los extremos; y todo al revés: las caras de v1 miraban adentro (se dibujaba a doble cara)
+    const u = pasos * 4; idx.push(0, 1, 2, 0, 2, 3, u, u + 2, u + 1, u, u + 3, u + 2);
+    for (let t = 0; t < idx.length; t += 3) { const q = idx[t + 1]; idx[t + 1] = idx[t + 2]; idx[t + 2] = q; }
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
@@ -522,4 +533,101 @@ export function mallaTajo(ter, op = {}) {
   g.setIndex(idx);
   g.addGroup(0, iTop, 0); g.addGroup(iTop, idx.length - iTop, 1);
   return { geometria: g, grupos: { superficie: 0, caja: 1 }, nx, nz, paso: dx, caja: ter.caja, vertices: nTop };
+}
+
+/**
+ * Bloque de un talud: UN sólido cerrado y orientado (references/estudio.md) = la malla de mallaTalud tal cual
+ * (vértices, colores, humedad, región y normales copiados) + cuatro tapas verticales hasta `base` (frente, derecha,
+ * fondo e izquierda, con el color de tapaSeccion: color(x, y, z) × `oscurecer`) + la base. Reemplaza a las tres
+ * tapaSeccion de la escena (que eran cortinas abiertas) y cierra la cara de atrás.
+ * op: { base (−14), color (x,y,z)→rgb lineal (el de la escena), oscurecer (0.82), filas (m entre filas de la tapa, 0.6),
+ *       calma (0..1, solo color: mezcla 50 % × calma hacia el gris de luminancia, en la malla y en las tapas) }
+ * Devuelve { geometria (grupo 0 = talud, 1 = tapas y base), caja (la de terrenoTalud), grupos, talud }.
+ */
+export function bloqueTalud(talud, op = {}) {
+  const { base = -14, color = () => [0.3, 0.3, 0.3], oscurecer = 0.82, filas = 0.6 } = op;
+  const calma = clamp(op.calma ?? 0);
+  const calmo = (c) => { if (calma <= 0) return c; const L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; return mezcla(c, [L, L, L], 0.5 * calma); };
+  const G = talud.geometria, { nu, ns } = talud;
+  const P0 = G.attributes.position.array, N0 = G.attributes.normal.array, C0 = G.attributes.color.array;
+  const H0 = G.attributes.humedad.array, R0 = G.attributes.region.array;
+  const pos = Array.from(P0), nor = Array.from(N0), hum = Array.from(H0), reg = Array.from(R0), col = [];
+  for (let k = 0; k < C0.length; k += 3) { const c = calmo([C0[k], C0[k + 1], C0[k + 2]]); col.push(c[0], c[1], c[2]); }
+  const idx = Array.from(G.index.array), iTalud = idx.length;
+  const vert = (p, n, c, r = 0) => { pos.push(p[0], p[1], p[2]); nor.push(n[0], n[1], n[2]); col.push(c[0], c[1], c[2]); hum.push(0); reg.push(r); return hum.length - 1; };
+  // borde: frente (j = 0, x crece) → derecha (i = nu − 1) → atrás (j = ns − 1, x decrece) → izquierda (i = 0)
+  const anillo = [], normales = [];
+  for (let i = 0; i < nu - 1; i++) { anillo.push(i); normales.push([0, 0, 1]); }
+  for (let j = 0; j < ns - 1; j++) { anillo.push(j * nu + nu - 1); normales.push([1, 0, 0]); }
+  for (let i = nu - 1; i > 0; i--) { anillo.push((ns - 1) * nu + i); normales.push([0, 0, -1]); }
+  for (let j = ns - 1; j > 0; j--) { anillo.push(j * nu); normales.push([-1, 0, 0]); }
+  let ymax = base; for (const k of anillo) ymax = Math.max(ymax, P0[k * 3 + 1]);
+  const K = Math.max(2, Math.ceil((ymax - base) / filas)); // mismas filas en todas las columnas: sin vértices en T
+  const columna = (k, n) => { // de arriba (vértice del talud) a la base
+    const x = P0[k * 3], y = P0[k * 3 + 1], z = P0[k * 3 + 2], out = [];
+    for (let q = 0; q <= K; q++) { const yy = y - ((y - base) * q) / K, c = color(x, yy, z); out.push(vert([x, yy, z], n, calmo([c[0] * oscurecer, c[1] * oscurecer, c[2] * oscurecer]))); }
+    return out;
+  };
+  // El borde del talud puede plegarse (relieve de bloques): el sentido de giro de las tapas NO sale de áreas sino de la
+  // topología: si el talud recorre la arista del borde a→b, la tapa la recorre b→a (y la base sigue a las tapas).
+  const I0 = G.index.array, aristas = new Set();
+  for (let t = 0; t < I0.length; t += 3) for (let e = 0; e < 3; e++) aristas.add(I0[t + e] * 1e7 + I0[t + ((e + 1) % 3)]);
+  const igual = aristas.has(anillo[0] * 1e7 + anillo[1]); // el talud recorre el anillo en su sentido
+  const fondo = [];
+  for (let m = 0; m < anillo.length; m++) {
+    const n = normales[m], A = columna(anillo[m], n), B = columna(anillo[(m + 1) % anillo.length], n);
+    for (let q = 0; q < K; q++) {
+      if (igual) idx.push(B[q], A[q], A[q + 1], B[q], A[q + 1], B[q + 1]); // arriba B→A; abajo A→B
+      else idx.push(A[q], B[q], A[q + 1], B[q], B[q + 1], A[q + 1]); // arriba A→B; abajo B→A
+    }
+    fondo.push(A[K]);
+  }
+  const abajo = [0, -1, 0], cx = (P0[0] + P0[(nu - 1) * 3]) / 2, cz = (P0[2] + P0[((ns - 1) * nu) * 3 + 2]) / 2;
+  const cb = color(cx, base, cz), centro = vert([cx, base, cz], abajo, calmo(cb.map((v) => v * oscurecer)));
+  for (let m = 0; m < fondo.length; m++) { const a = fondo[m], b = fondo[(m + 1) % fondo.length]; if (igual) idx.push(centro, b, a); else idx.push(centro, a, b); }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute("humedad", new THREE.Float32BufferAttribute(hum, 1));
+  g.setAttribute("region", new THREE.Float32BufferAttribute(reg, 1));
+  g.setIndex(idx);
+  g.addGroup(0, iTalud, 0); g.addGroup(iTalud, idx.length - iTalud, 1);
+  return { geometria: g, caja: cajaTalud(talud, base), grupos: { talud: 0, tapas: 1 }, talud };
+}
+
+/**
+ * Cierra una rejilla de alturas (vértice k = j·nx + i, x crece con i, z con j, caras hacia arriba) con cuatro paredes
+ * verticales hasta `fondo` y una base: devuelve una BufferGeometry nueva, cerrada y orientada (la usa cerros({ cerrado })).
+ */
+export function faldonRejilla(g, nx, nz, fondo, colorCaja = [0.3, 0.3, 0.3]) {
+  const P = g.attributes.position.array, pos = Array.from(P), nor = Array.from(g.attributes.normal.array);
+  const C = g.attributes.color ? Array.from(g.attributes.color.array) : null, idx = Array.from(g.index.array), i0 = idx.length;
+  const vert = (p, n) => { pos.push(p[0], p[1], p[2]); nor.push(n[0], n[1], n[2]); if (C) C.push(colorCaja[0], colorCaja[1], colorCaja[2]); return pos.length / 3 - 1; };
+  const tri = (a, b, c, n) => {
+    const ux = pos[b * 3] - pos[a * 3], uy = pos[b * 3 + 1] - pos[a * 3 + 1], uz = pos[b * 3 + 2] - pos[a * 3 + 2];
+    const vx = pos[c * 3] - pos[a * 3], vy = pos[c * 3 + 1] - pos[a * 3 + 1], vz = pos[c * 3 + 2] - pos[a * 3 + 2];
+    if ((uy * vz - uz * vy) * n[0] + (uz * vx - ux * vz) * n[1] + (ux * vy - uy * vx) * n[2] >= 0) idx.push(a, b, c); else idx.push(a, c, b);
+  };
+  const anillo = [], normales = [];
+  for (let i = 0; i < nx - 1; i++) { anillo.push(i); normales.push([0, 0, -1]); }
+  for (let j = 0; j < nz - 1; j++) { anillo.push(j * nx + nx - 1); normales.push([1, 0, 0]); }
+  for (let i = nx - 1; i > 0; i--) { anillo.push((nz - 1) * nx + i); normales.push([0, 0, 1]); }
+  for (let j = nz - 1; j > 0; j--) { anillo.push(j * nx); normales.push([-1, 0, 0]); }
+  const fondoV = [];
+  for (let m = 0; m < anillo.length; m++) {
+    const qa = anillo[m], qb = anillo[(m + 1) % anillo.length], n = normales[m];
+    const ta = vert([P[qa * 3], P[qa * 3 + 1], P[qa * 3 + 2]], n), tb = vert([P[qb * 3], P[qb * 3 + 1], P[qb * 3 + 2]], n);
+    const ba = vert([P[qa * 3], fondo, P[qa * 3 + 2]], n), bb = vert([P[qb * 3], fondo, P[qb * 3 + 2]], n);
+    tri(ta, tb, ba, n); tri(tb, bb, ba, n); fondoV.push(ba);
+  }
+  let cx = 0, cz = 0; for (const v of fondoV) { cx += pos[v * 3]; cz += pos[v * 3 + 2]; }
+  const centro = vert([cx / fondoV.length, fondo, cz / fondoV.length], [0, -1, 0]);
+  for (let m = 0; m < fondoV.length; m++) tri(centro, fondoV[m], fondoV[(m + 1) % fondoV.length], [0, -1, 0]);
+  const h = new THREE.BufferGeometry();
+  h.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  h.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
+  if (C) h.setAttribute("color", new THREE.Float32BufferAttribute(C, 3));
+  h.setIndex(idx); h.addGroup(0, i0, 0); h.addGroup(i0, idx.length - i0, 1);
+  return h;
 }

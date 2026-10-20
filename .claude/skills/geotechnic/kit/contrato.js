@@ -616,3 +616,124 @@ export function terrenoTajo(op = {}) {
     ],
   };
 }
+
+// ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+// Talud (corte de bancos de mallaTalud): contrato B → A exacto contra la malla dibujada.
+
+/**
+ * Caja del bloque de un talud de mallaTalud: x y z = el borde de la malla, y desde `base` hasta 1 m sobre lo más alto.
+ * La usan bloqueTalud (kit/terreno.js) y terrenoTalud: la MISMA caja para el sólido y para `libre`.
+ */
+export function cajaTalud(talud, base = -14) {
+  const P = talud.geometria.attributes.position.array;
+  const min = [Infinity, base, Infinity], max = [-Infinity, -Infinity, -Infinity];
+  for (let k = 0; k < P.length; k += 3) for (const q of [0, 1, 2]) { if (q !== 1) min[q] = Math.min(min[q], P[k + q]); max[q] = Math.max(max[q], P[k + q]); }
+  max[1] += 1;
+  return { min, max, base };
+}
+
+/**
+ * Terreno de un talud (motor B) para el motor A, el juez y la cámara. Exacto contra los triángulos de la malla.
+ * talud: resultado de mallaTalud (o de bloqueTalud: se usa su `talud`). op: { base (−14, la de las tapas), caja,
+ *        celda (1 m: rejilla de triángulos en planta), alcance (12 m: más lejos, |libre| se satura en alcance) }
+ *  piso(x, z): cota de la malla en la vertical de (x, z) (el triángulo más alto que la cruza; fuera de la planta, el borde).
+ *  libre(p): distancia con signo a la superficie (≥ 0 aire, < 0 roca), dentro = bajo la superficie (paridad de cruces
+ *            de la vertical hacia arriba) y dentro de la caja; fuera de la caja, aire (max con la distancia a la caja).
+ */
+export function terrenoTalud(talud, op = {}) {
+  const t = talud.talud || talud;
+  const P = t.geometria.attributes.position.array, I = t.geometria.index.array;
+  const caja = op.caja || talud.caja || cajaTalud(t, op.base ?? -14);
+  const celda = op.celda ?? 1, alcance = op.alcance ?? 12;
+  const x0 = caja.min[0], z0 = caja.min[2], nx = Math.max(1, Math.ceil((caja.max[0] - x0) / celda)), nz = Math.max(1, Math.ceil((caja.max[2] - z0) / celda));
+  const celdas = Array.from({ length: nx * nz }, () => []);
+  const ci = (x) => Math.min(nx - 1, Math.max(0, Math.floor((x - x0) / celda))), cj = (z) => Math.min(nz - 1, Math.max(0, Math.floor((z - z0) / celda)));
+  const nT = I.length / 3;
+  for (let t3 = 0; t3 < nT; t3++) {
+    const a = I[3 * t3] * 3, b = I[3 * t3 + 1] * 3, c = I[3 * t3 + 2] * 3;
+    const i0 = ci(Math.min(P[a], P[b], P[c])), i1 = ci(Math.max(P[a], P[b], P[c])), j0 = cj(Math.min(P[a + 2], P[b + 2], P[c + 2])), j1 = cj(Math.max(P[a + 2], P[b + 2], P[c + 2]));
+    for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) celdas[j * nx + i].push(t3);
+  }
+  /** Cruces de la vertical por (x, z) con los triángulos: alturas, de abajo hacia arriba. */
+  const cruces = (x, z) => {
+    x += 1.37e-7; z += 2.91e-7; // corrida ínfima: la vertical no pasa justo por una arista (la paridad no se duplica)
+    const out = [];
+    for (const t3 of celdas[cj(z) * nx + ci(x)]) {
+      const a = I[3 * t3] * 3, b = I[3 * t3 + 1] * 3, c = I[3 * t3 + 2] * 3;
+      const ax = P[a], az = P[a + 2], bx = P[b], bz = P[b + 2], cx = P[c], cz = P[c + 2];
+      const d = (bz - cz) * (ax - cx) + (cx - bx) * (az - cz); if (Math.abs(d) < 1e-14) continue;
+      const l1 = ((bz - cz) * (x - cx) + (cx - bx) * (z - cz)) / d, l2 = ((cz - az) * (x - cx) + (ax - cx) * (z - cz)) / d, l3 = 1 - l1 - l2;
+      if (l1 < 0 || l2 < 0 || l3 < 0) continue;
+      out.push(l1 * P[a + 1] + l2 * P[b + 1] + l3 * P[c + 1]);
+    }
+    return out.sort((u, v) => u - v);
+  };
+  const dentroPlanta = (x, z) => x >= caja.min[0] && x <= caja.max[0] && z >= caja.min[2] && z <= caja.max[2];
+  const piso = (x, z) => {
+    x = Math.min(caja.max[0] - 1e-6, Math.max(caja.min[0] + 1e-6, x)); z = Math.min(caja.max[2] - 1e-6, Math.max(caja.min[2] + 1e-6, z));
+    const c = cruces(x, z); return c.length ? c[c.length - 1] : caja.base;
+  };
+  // distancia de un punto a un triángulo (Ericson, Real-Time Collision Detection §5.1.5)
+  const dTri = (p, t3) => {
+    const a = I[3 * t3] * 3, b = I[3 * t3 + 1] * 3, c = I[3 * t3 + 2] * 3;
+    const A = [P[a], P[a + 1], P[a + 2]], B = [P[b], P[b + 1], P[b + 2]], C = [P[c], P[c + 1], P[c + 2]];
+    const sub = (u, v) => [u[0] - v[0], u[1] - v[1], u[2] - v[2]], dot = (u, v) => u[0] * v[0] + u[1] * v[1] + u[2] * v[2];
+    const ab = sub(B, A), ac = sub(C, A), ap = sub(p, A), d1 = dot(ab, ap), d2 = dot(ac, ap);
+    let q;
+    if (d1 <= 0 && d2 <= 0) q = A;
+    else {
+      const bp = sub(p, B), d3 = dot(ab, bp), d4 = dot(ac, bp);
+      if (d3 >= 0 && d4 <= d3) q = B;
+      else {
+        const vc = d1 * d4 - d3 * d2;
+        if (vc <= 0 && d1 >= 0 && d3 <= 0) { const v = d1 / (d1 - d3); q = [A[0] + v * ab[0], A[1] + v * ab[1], A[2] + v * ab[2]]; }
+        else {
+          const cp = sub(p, C), d5 = dot(ab, cp), d6 = dot(ac, cp);
+          if (d6 >= 0 && d5 <= d6) q = C;
+          else {
+            const vb = d5 * d2 - d1 * d6;
+            if (vb <= 0 && d2 >= 0 && d6 <= 0) { const w = d2 / (d2 - d6); q = [A[0] + w * ac[0], A[1] + w * ac[1], A[2] + w * ac[2]]; }
+            else {
+              const va = d3 * d6 - d5 * d4;
+              if (va <= 0 && d4 - d3 >= 0 && d5 - d6 >= 0) { const w = (d4 - d3) / (d4 - d3 + (d5 - d6)); q = [B[0] + w * (C[0] - B[0]), B[1] + w * (C[1] - B[1]), B[2] + w * (C[2] - B[2])]; }
+              else { const den = 1 / (va + vb + vc), v = vb * den, w = vc * den; q = [A[0] + ab[0] * v + ac[0] * w, A[1] + ab[1] * v + ac[1] * w, A[2] + ab[2] * v + ac[2] * w]; }
+            }
+          }
+        }
+      }
+    }
+    return Math.hypot(p[0] - q[0], p[1] - q[1], p[2] - q[2]);
+  };
+  /** Distancia sin signo a la superficie (saturada en `alcance`). */
+  const distancia = (p) => {
+    const i = Math.floor((p[0] - x0) / celda), j = Math.floor((p[2] - z0) / celda);
+    let best = alcance, visto = new Set();
+    for (let r = 0; r * celda <= alcance + celda; r++) {
+      if ((r - 1) * celda >= best) break; // los anillos que faltan quedan más lejos que lo hallado
+      for (let jj = j - r; jj <= j + r; jj++) for (let ii = i - r; ii <= i + r; ii++) {
+        if (Math.max(Math.abs(ii - i), Math.abs(jj - j)) !== r || ii < 0 || jj < 0 || ii >= nx || jj >= nz) continue;
+        for (const t3 of celdas[jj * nx + ii]) { if (visto.has(t3)) continue; visto.add(t3); const d = dTri(p, t3); if (d < best) best = d; }
+      }
+    }
+    return best;
+  };
+  const fueraCaja = (p) => {
+    let afuera = 0, adentro = -Infinity;
+    for (let q = 0; q < 3; q++) { const m = (caja.min[q] + caja.max[q]) / 2, e = Math.abs(p[q] - m) - (caja.max[q] - caja.min[q]) / 2; if (e > 0) afuera += e * e; adentro = Math.max(adentro, e); }
+    return afuera > 0 ? Math.sqrt(afuera) : adentro;
+  };
+  return {
+    caja, talud: t, cavidades: [], piso,
+    /** Distancia con signo (m): ≥ 0 en el aire, < 0 en la roca; fuera de la caja del bloque, aire. */
+    libre(p) {
+      const fc = fueraCaja(p);
+      if (fc > 0 || !dentroPlanta(p[0], p[2])) return Math.max(fc, 1e-6);
+      const encima = cruces(p[0], p[2]).filter((y) => y > p[1]).length;
+      const d = (encima % 2 ? -1 : 1) * distancia(p);
+      return Math.max(d, fc);
+    },
+    enCavidad: () => false,
+    /** Caja de la labor para el juez de limpieza (objetivos de cámara en el aire sobre el talud). */
+    region: { min: [caja.min[0], 0, caja.min[2]], max: [caja.max[0], caja.max[1] + 10, caja.max[2]] },
+  };
+}
