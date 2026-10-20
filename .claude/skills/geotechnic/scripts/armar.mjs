@@ -137,7 +137,14 @@ ponerModo(modoActual);
 function juezHtml(inf) {
   const L = inf.lineas, filas = [];
   for (const [n, l] of Object.entries(L)) {
-    if (n.startsWith("fisica")) filas.push(`<tr><td>Física · ${n === "fisicaRango" ? "rango del modelo" : "ciclo en la labor"}</td><td>${l.poses} poses</td><td>${Object.entries(l.lineas).map(([k, v]) => `${k} ${v.ok ? "✓" : "✗"}`).join(" · ")}</td></tr>`);
+    if (n.startsWith("fisica")) {
+      // varias máquinas: «fisicaRango <equipo>» (un rango por modelo) y fisicaCiclo con `instancias` y «entre máquinas»
+      const titulo = n === "fisicaRango" ? "rango del modelo" : n.startsWith("fisicaRango ") ? `rango · ${esc(l.nombre || l.equipo || n.slice(12))}` : "ciclo en la labor";
+      const lineas = Object.entries(l.lineas).filter(([k]) => k !== "entre máquinas");
+      filas.push(`<tr><td>Física · ${titulo}</td><td>${l.poses} poses${l.instancias ? ` × ${l.instancias} máquinas` : ""}</td><td>${lineas.map(([k, v]) => `${k} ${v.ok ? "✓" : "✗"}`).join(" · ")}</td></tr>`);
+      const em = l.lineas["entre máquinas"];
+      if (em) filas.push(`<tr><td>Física · ciclo · entre máquinas ${em.ok ? "✓" : "✗"}</td><td>${l.instancias} máquinas</td><td>ningún sólido de una máquina entra en otro de otra más de 4 mm (${(l.maquinas || []).map((m) => esc(m.id)).join(", ")})</td></tr>`);
+    }
     else if (n.startsWith("fidelidad")) filas.push(`<tr><td>Fidelidad · ${esc(n.slice(10))}</td><td>${l.filas.filter((f) => f.fuente).length} con fuente</td><td>${l.filas.filter((f) => f.fuente).map((f) => `${esc(f.dato)} ${f.medido === null ? "—" : (f.error >= 0 ? "+" : "") + (f.error * 100).toFixed(1) + " %"}`).join(" · ")}</td></tr>`);
     else if (n === "realismo") filas.push(l.informativo
       ? `<tr><td>Realismo: informativo (v3.1)</td><td>${l.pares} fotos</td><td>Se mide y no bloquea: ninguna métrica distingue bien la foto correcta de las otras del tema (AUC correcto/cruzado ${Object.entries(l.metricas || {}).map(([k, m]) => `${esc(k)} ${m.auc == null ? "—" : m.auc.toFixed(2)}`).join(" · ")}; hace falta ≥ 0,8 y acuerdo con el usuario). Por la regla completa pasarían ${l.pasan} de ${l.pares}.</td></tr>`

@@ -277,6 +277,8 @@ export function textoLimpieza(r) {
     out.push(`${ok(im.ruido.aprobado)}ruido     |Laplaciano| medio ≤ ${im.topes.ruido} (0,7 × mediana v2 ${im.topes.ruidoV2})`);
     for (const f of im.filas) out.push(`       ${f.okRuido ? "ok" : "NO"}  ${f.titulo.slice(0, 40).padEnd(40)} ${f.ruido.toFixed(4)}`);
   }
+  if (r.vacias?.length) out.push(`NO   capturas  captura vacía: ${r.vacias.join(", ")} (sigue vacía tras 2 reintentos)`);
+  else if (r.reintentos?.length) out.push(`ok   capturas  repetidas por vacías: ${r.reintentos.join(", ")}`);
   if (r.consola === undefined) out.push("consola   no se midió (sin navegador)");
   else out.push(`${ok(r.consola)}consola   ${r.consola ? "limpia" : "con errores o avisos"}`);
   if (r.soloCorte) out.push("(sin navegador: limpieza solo juzgó corte; cerradas, paleta, ruido y consola quedan sin medir)");
@@ -430,7 +432,7 @@ export async function plantas() {
   // paleta y ruido (imágenes sintéticas en python)
   try {
     const py = JSON.parse(execFileSync("python", ["-I", join(RAIZ, "juez", "limpieza.py"), "--plantas"], { encoding: "utf8", env: { ...process.env, PYTHONIOENCODING: "utf-8" } }));
-    for (const f of py) caso(f.linea, f.nombre, f.debeAprobar, f.aprueba, `S p90 ${f.sP90.toFixed(2)} · ruido ${f.ruido.toFixed(4)}`);
+    for (const f of py) caso(f.linea, f.nombre, f.debeAprobar, f.aprueba, `S p90 ${f.sP90.toFixed(2)} · ruido ${f.ruido.toFixed(4)}${f.vacia ? " · captura vacía" : ""}`);
   } catch (e) { caso("paleta", "juez/limpieza.py --plantas corre", true, false, String(e.message).split("\n")[0]); }
 
   // consola: el mismo criterio que el realismo (la salida de drive.mjs dice «console: clean»)
@@ -443,7 +445,7 @@ export async function plantas() {
 export const consolaLimpia = (salidaDrive) => /console: clean/.test(salidaDrive);
 
 export function textoPlantas(p) {
-  const out = ["── plantas del juez: limpieza y realismo (cada caso debe dar lo esperado)"];
+  const out = ["── plantas del juez: física (varias máquinas), limpieza y realismo (cada caso debe dar lo esperado)"];
   for (const f of p.filas) out.push(`${f.ok ? "ok   " : f.info ? "aviso" : "MAL  "} ${f.linea.padEnd(8)} ${(f.debe ? "pasa " : "falla") + "  "}${f.nombre.padEnd(58)} ${f.detalle}`);
   const info = p.filas.filter((f) => f.info && !f.ok).length;
   out.push(p.aprobado ? `plantas: ${p.filas.filter((f) => f.ok).length}/${p.filas.length} como se esperaba${info ? ` · ${info} aviso(s) informativo(s): kit real o huecos conocidos` : ""}` : `plantas: ${p.filas.filter((f) => !f.ok).length} de ${p.filas.length} NO dan lo esperado`);

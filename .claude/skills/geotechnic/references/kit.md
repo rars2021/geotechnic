@@ -78,7 +78,14 @@ Piezas: `cajaB`, `placa`, `tubo`, `baranda`, `llanta`, `cilindro`, `faro`, `cabi
 
 ## procesos.js
 `MALLAS.casapalca4x4` · `COLORES_GRUPO` · `ordenPerforacion(malla, brazos)` · `lineaTiempo(claves)` ·
-`simularFlota({ palas, destinos, rutas, camiones, velCargado, velVacio, politica, ... })` → `{ eventos, resumen }` · `estadoEn(eventos, camion, t)` · `muestreador(r)`.
+`simularFlota({ palas, destinos, rutas, asignacionFija | camiones, velCargado, velVacio, cuadrado, llenado, politica, umbralCola, previo, despeje, ... })` → `{ eventos, ciclos, colas, resumen }` · `estadoEn(eventos, camion, t)` · `muestreador(r)` (lognormal, normal, normalTruncada, triangular, exponencial, fijo) · `mediaDist(d)` · `ESTADOS_FLOTA` · `cuantil(v, q)`.
+
+`simularFlota` es de eventos discretos: palas y destinos atienden en orden de llegada (FIFO); el despachador decide al
+terminar de descargar (cerrado · libre · condicional con umbral de cola prevista). Una ruta puede ser `km` o
+`{ km, tramos: [{ id, largo, conflictos }], despeje }`: en un tramo nadie adelanta (regla de bloque: nadie entra hasta
+que el de adelante salió del tramo que sigue); una zona de tramos con `conflictos` (cruces, uniones) se cruza de corrido
+sin coincidir con nadie y la espera queda antes; `despeje` = tramos que debe dejar el que sale para que la pala o el
+destino atiendan al siguiente. Los viajes se planifican al salir: el que sale después cede. Uso: `ejemplos/dispatch`.
 
 ## senalar.js
 `senalar(escena, contenedor, piezas, { modo, foco })` → `{ resaltar(id), ponerModo(m), colocar() }`.

@@ -64,3 +64,58 @@ roca: queda tapada por la pared o se dibuja sobre la tapa de corte.
 
 Contrato con caja: `libre(p) = max(libre de v2, distancia con signo a la caja)`: roca = caja ∖ labor. En la labor no
 cambia nada; fuera del bloque es aire (para `planoCorte`: desde afuera se ve el bloque entero, sin corte).
+
+## Tajo abierto (dispatch): `terrenoTajo` + `mallaTajo`
+
+`terrenoTajo(op)` (`kit/contrato.js`, puro) arma el tajo y su contrato B → A; `mallaTajo(ter, op)` (`kit/terreno.js`)
+lo dibuja como **un sólido cerrado y orientado** dentro de `ter.caja` (la misma caja que usa `libre`: fuera es aire).
+
+Mundo: x = este, y = arriba, z = sur. Rumbo como `M.posar`: 0 = hacia +x, 90 = hacia −z (grados).
+
+| Parte | Cómo | Parámetro (por defecto) | Fuente |
+|---|---|---|---|
+| Bancos | Perfil por distancia ρ a un fondo en cápsula; caras planas | `banco { n 6, altura 15, cara 70, berma 8 }` · `fondo { largo 240, radio 70 }` | R9/R10 |
+| Rampa en espiral | Baja con pendiente `g` en el eje; cada pasada corre `ancho` m hacia afuera los bancos de encima; bajo la vía queda roca a la inclinación de la cara; curvas verticales parabólicas arriba y abajo | `rampa { pendiente 0.09, inicio (λ) 0.5, curva 40, bombeoEn 60 }` | Yupanqui Sánchez 2025 (7–11 %) |
+| Sección de vía | 40 m, pretil 3 × 2 m al vacío, bombeo de corona en los 37 m efectivos (solo en la rampa: la meseta va plana) | `via { ancho 40, pretil { alto 2, base 3 }, bombeo 0.03 }` | Ojeda Ore 2022, fig. 2.14 y 2.16 |
+| Fondo y remate | La última pasada sigue al nivel del fondo y se angosta en `remate` m | `rampa { entrada 30, plano 60, remate 200 }` | diseño |
+| Montón | Contra la pared del fondo, a 34° y `alto` m, con extremos en talud | `palas[].monton { alto 10, largo 70, corona 6 }` | R6 |
+| Chancadora | Losa a cota de meseta, muro de tope y tolva hundida detrás | `chancadora { tope { alto 1.5, ancho 1.2 }, tolva { largo 12, ancho 14, hondo 10 } }` | estimado |
+| Botadero | Plataforma de relleno a 34°, pretil en la cresta de descarga, acceso recto al 9 % | `botadero { alto 15, largo 150, ancho 120, acceso { pendiente 0.09, v 25 } }` | R6, R11 |
+| Rutas | Caminos de Dubins (radio acotado) en el fondo, la meseta y la plataforma + carriles de la rampa + maniobra (recta + cuarto de giro en retroceso) | `radio { piso 25, via 40 }` · `maniobra 15` · `holgura 2` · `ejeTrasero 2.655` · `sentido "derecha"` | radio: estimado (793 ≈ 14 m) |
+| Relieve facetado | Solo en caras > 38–55°: `macizo.relieve` a lo largo de la normal; vías, bermas, fondo y plataformas quedan exactos | `macizo`, `relieve` (×1) | igual que galería |
+| Calma | Solo color (mezcla 50 % × calma hacia el gris de luminancia) | `calma` o `macizo.calma` | estudio.md |
+
+Contrato que devuelve:
+
+| Campo | Qué es |
+|---|---|
+| `piso(x, z)` | Cota exacta de la superficie (sin relieve): bajo ruedas y orugas en vías, rampa, bermas, fondo, meseta y plataformas |
+| `libre(p)` | Distancia con signo a la superficie dibujada (≥ 0 aire, < 0 roca, botadero o montón); descuenta el relieve en el pie de la normal; fuera de `caja`, aire |
+| `sitio(x, z)` → `{ y, tipo }` · `tipo(x, z)` | `meseta`, `banco`, `fondo`, `rampa`, `pretil`, `monton`, `botadero`, `chancadora` |
+| `rutas["P1→chancadora"]` | `{ puntos [[x,y,z]…] cada ≈ 2 m sobre el piso, s, largo (m), km, tramos [{ tipo, s0, s1, pendienteMedia, pendienteMax (ventana 20 m), radioMin, reversa }], pendiente { diseno, rampaMedia, rampaMax }, radioMin, en(s) }`. Hay ida cargada (`Pi→destino`) y vuelta vacía (`destino→Pi`) por carriles distintos |
+| `rutas[id].en(s)` | `{ p (en el piso), dir, rumbo (de la nariz: +180 en `retroceso`), pendiente, reversa, tramo }` |
+| `kmRutas()` | `{ "P1→chancadora": km, … }` para `simularFlota({ rutas })` |
+| `zonas.palas[]` | `{ id, punto (centro de la pala en el fondo), rumbo (mira al montón), cuadre { punto, rumbo } (origen del camión al cargar), maniobra { punto, rumbo }, monton { alto, largo, reposo, pie } }` |
+| `zonas.destinos[]` | `{ id, tipo, punto (ORIGEN del camión al descargar), rumbo (su nariz), maniobra, tope }` |
+| `rampa` | `{ pendiente, largo, vueltas, carriles { cargado, vacio }, eje(λ), boca, pie }` |
+| `caja`, `metodologia`, `avisos`, `geometria` | Caja del bloque; tabla para la ficha; avisos de diseño; parámetros usados |
+
+Medido en Node (por defecto, paso 1,5 m): rampa 1039 m, 0,83 vueltas; rutas de 1,5 a 2,5 km; rampa media 8,0 % (carril
+de afuera) y 8,7 % (carril de adentro), máx. 9,8 % en ventana de 20 m; radio mínimo 25 m (fondo) y 90 m (rampa);
+`revisarCerradas` sin fallas (505 000 triángulos, 1,5–2,3 s); camión (`modeloCamion`) asentado en 3170 poses de todas
+las rutas: ruedas entre −2,9 y +0,7 cm del piso.
+
+```js
+// escena o montaje.js (lo mismo en la página y en el juez)
+const mac = macizo({ calma: 1, familias, caja: { min: [-500, -110, -320], max: [500, 45, 280] }, semilla: 7 });
+const ter = terrenoTajo({ macizo: mac });                 // op por defecto: 2 palas, chancadora y botadero
+const blq = mallaTajo(ter, { paso: 1.5 });                // sólido cerrado: grupo 0 superficie, 1 caja
+const roca = new THREE.Mesh(blq.geometria, [matRoca, matCaja]);
+const r = ter.rutas["P1→chancadora"], e = r.en(s);        // pose del camión a s m
+valores._pose = asentar(M, valores, ter, { x: e.p[0], z: e.p[2], rumbo: e.rumbo });
+```
+
+`asentar` con rumbo ≠ 0: plano por mínimos cuadrados con el término cruzado, pendientes giradas al marco de la máquina
+(pf = gx·cos ρ − gz·sin ρ, pl = gx·sin ρ + gz·cos ρ; cabeceo = atan pf, alabeo = −atan pl) y, como la espiral es un
+helicoide (un chasis rígido no apoya todas las ruedas), baja la máquina hasta que ninguna rueda quede en el aire
+(el juez acepta 6 cm hundida y 2 cm en el aire). Con rumbo 0 es la fórmula de v2: scoop y jumbo no cambian.

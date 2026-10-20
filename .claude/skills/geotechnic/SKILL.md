@@ -118,6 +118,8 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `ejemplos/comun.mjs` | `abierta()`, `estudio()`, `cita()`: leen `fuentes.json` y arman las referencias de una ficha |
 | `scripts/drive.mjs` | Capturas en Chrome sin interfaz (de sstutor-anatomia, MIT; ver `scripts/LICENSE-anatomy`) |
 | `ejemplos/talud-tajo` | Corte de talud de tajo (Antamina) · [publicado](https://claude.ai/artifact/9yawDfHqMnZNYZ8oQcCBgz) |
-| `ejemplos/scoop-lhd` | Scoop CAT R1600G (motor A, 260 piezas) en galería, con ciclo de carguío juzgado · [publicado](https://claude.ai/artifact/NYN2ccWp45UG4kF4R9D2cn) |
-| `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 244 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
+| `ejemplos/scoop-lhd` | Scoop CAT R1600G (motor A, 387 piezas, barra en Z y medidas de la hoja CAT) en galería en sección, con ciclo de carguío juzgado · [publicado](https://claude.ai/artifact/NYN2ccWp45UG4kF4R9D2cn) |
+| `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 458 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
+| `ejemplos/dispatch` | Flota en el tajo: 12 camiones CAT 793 y 2 palas P&H 4100 (motor A) sobre `terrenoTajo`, `simularFlota` con colas FIFO y tres políticas, panel de tiempos y colas · [publicado](https://claude.ai/artifact/NNLK6JisqpF5SaFWTinYUV) |
+| `sstutor/` · `scripts/sstutor.mjs` | Paquete commiteable para SSTutor (figura del frente con jumbo, semilla, módulo 3D, test); ver `references/sstutor.md` |
 | `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `estudio.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |

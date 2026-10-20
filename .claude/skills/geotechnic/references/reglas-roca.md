@@ -20,6 +20,8 @@ Las fotos de tesis están en `<DATOS>/geotechnic\figuras\<tema>\` (solo estudio)
 | R11 | Pretil de la vía | Borde de la vía con pretil de material suelto: 2 m de alto, 3 m de base (≈ ¾ de la llanta mayor) | `pretil(curva, { alto, ancho })` | Ojeda Ore 2022, hdl:20.500.14076/22773, fig. 2.14 y 2.16 |
 | R12 | Piso de la vía | Liso y claro, con huellas de llanta paralelas; sin relieve de bloques | `huellasNeumatico` y relieve de bloques ×0,08 en horizontales | Chuquicamata DD 120; Antamina |
 | R13 | Mallas de perforación en el banco | Antes de la voladura, el piso del banco muestra conos de detrito oscuro en malla regular | (pendiente: conos con `monton` en malla) | Chuquicamata DD 120 (web:5d9edf56d591ceba) |
+| R14 | Rampa en espiral | La rampa corta los bancos en diagonal: la pared de encima se corre el ancho de la vía; al vacío, pretil y la cara del banco de abajo (roca, no relleno); pendiente 7–11 % con curvas verticales | `terrenoTajo({ rampa, via })` | Ojeda Ore 2022, hdl:20.500.14076/22773, fig. 2.14 y 2.16; Yupanqui Sánchez 2025, hdl:20.500.14076/29254, pág. 17–18 |
+| R15 | Botadero y montón | Relleno suelto a su ángulo de reposo (≈ 34°); la cresta de descarga del botadero lleva pretil | `terrenoTajo({ botadero, palas[].monton })` | R6 (Perales Orellana 2011, pág. 116); R11 |
 
 ## Macizo, alteración, fallas y agua
 

@@ -41,7 +41,7 @@ Las que tienen ejemplo completo se marcan con ✅.
 | ✅ Perforación de un frente | `MALLAS`, `ordenPerforacion`, `jumbo.apuntar`, `frente` | brazos por mitades, taladros en el macizo (rayos X), secuencia de salida | `reglas-procesos.md` |
 | Voladura | malla + `lineaTiempo` por retardo + `polvo` + `monton` final | grupos que salen en orden, desplazamiento del material, montón resultante | retardos, factor de carga |
 | Carguío y acarreo | `palaElectrica` + `camionAcarreo` + `lineaTiempo` | pases de pala, cuadrado, carga visible en la tolva | tiempos de carga y pases |
-| Dispatch y flota | `simularFlota` + `estadoEn` + caminos (`CatmullRomCurve3`) sobre el tajo + panel HTML de colas | camiones que eligen pala según la política; colas por pala; t/h | Yupanqui Sánchez 2025, tabla 7 |
+| Dispatch y flota ✅ (`ejemplos/dispatch`) | `terrenoTajo` (rutas) + `simularFlota` + camión y pala del motor A + panel HTML de colas | camiones que eligen pala según la política; colas por pala; t/h | Yupanqui Sánchez 2025, tabla 7 |
 | Ventilación | `galeria` + flechas de flujo (partículas con `polvo` sin gravedad) + `mangaVentilacion` | aire fresco por la manga, viciado de vuelta por la galería | caudal (m³/s) de la tesis de ventilación |
 | Relleno | tajeo con `galeria` vertical + `monton` que crece | relleno hidráulico o detrítico subiendo por capas | tesis de relleno (UNI) |
 | Planta (chancado, molienda, flotación) | equipos de planta como `cajaB`/cilindros + materiales; espumas con `polvo` blanco | flujo del mineral; celdas con espuma | capacidades de la planta |

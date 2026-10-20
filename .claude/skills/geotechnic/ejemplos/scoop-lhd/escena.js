@@ -127,9 +127,10 @@ async function montar(ctx) {
   const dib = mallasMaquina(M, EQUIPO_SCOOP.dibujo);
   scene.add(dib.raiz);
   // carga en el cucharón (material suelto: no es un sólido del juez) y faros con luz
-  const carga = monton({ ancho: M.dims.anchoCucharon * 0.84, largo: 1.9, alto: 0.7, color: "#7d786f", bloques: 80, semilla: 3 });
+  const cc = M.dims.cargaCucharon; // forma del cucharón CAT (equipos/scoop)
+  const carga = monton({ ancho: cc.ancho, largo: cc.largo, alto: 0.7, color: "#7d786f", bloques: 80, semilla: 3 });
   for (const o of carga.children) tapar(o.material);
-  carga.position.set(M.dims.K0[0] + 0.95, M.dims.K0[1] - 0.22, 0); carga.visible = false;
+  carga.position.set(...cc.centro); carga.visible = false;
   dib.grupo("cucharon").add(carga);
   for (const s of [1, -1]) {
     const luz = new THREE.SpotLight(LUZ_BLANCA, 12, 45, 0.55, 0.45, 1.6);
@@ -200,13 +201,13 @@ async function montar(ctx) {
   const P = (id, off = [0, 0, 0], g = "base", p = [0, 0, 0]) => () => new THREE.Vector3(...dib.mundo(g, p)).add(new THREE.Vector3(...off));
   const K = M.dims.K0, P0 = M.dims.P0;
   const piezas = [
-    { id: "cucharon", numero: 1, nombre: "Cucharón", definicion: "6 yd³ colmado (≈ 4,5 m³ al ras más colmo). Labio con 6 dientes; penetra el montón y se recoge para no derramar.", ancla: P("cucharon", [0, 0.25, 0], "cucharon", [K[0] + 1.3, K[1] + 0.6, 0.9]) },
-    { id: "brazo", numero: 2, nombre: "Brazos de levante", definicion: "Dos brazos de 3,0 m que giran en las torres del bastidor delantero, a 1,89 m del piso.", ancla: P("brazo", [0, 0.2, 0], "brazo", [P0[0] + 1.4, P0[1], 0.55]) },
+    { id: "cucharon", numero: 1, nombre: "Cucharón", definicion: "6 yd³ (4,6 m³ colmado), 2,6 m de ancho. Labio con 6 dientes y protectores; penetra el montón y se recoge para no derramar.", ancla: P("cucharon", [0, 0.25, 0], "cucharon", [K[0] + 1.3, K[1] + 0.6, 0.9]) },
+    { id: "brazo", numero: 2, nombre: "Brazos de levante", definicion: "Dos brazos de 2,91 m que giran en las torres del bastidor delantero, a 1,72 m del piso.", ancla: P("brazo", [0, 0.2, 0], "brazo", [P0[0] + 1.4, P0[1], 0.55]) },
     { id: "cilindros", numero: 3, nombre: "Barra en Z y cilindros", definicion: "Dos cilindros levantan los brazos; uno central empuja la palanca, que por la biela inclina el cucharón.", ancla: P("cilindros", [0, 0.15, 0], "palanca", [2.14, 2.38, 0]) },
     { id: "articulacion", numero: 4, nombre: "Articulación central", definicion: "Dos pasadores verticales entre los bastidores y dos cilindros de dirección: el scoop gira doblándose ±42,5°.", ancla: P("articulacion", [0, 0.5, 0], "base", [0, 1.1, 0]) },
-    { id: "cabina", numero: 5, nombre: "Cabina del operador", definicion: "Baja y de costado, bajo una capota de 2,31 m: el operador mira hacia ambos sentidos de marcha.", ancla: P("cabina", [0, 0.2, 0], "base", [-0.77, 2.3, 0.85]) },
+    { id: "cabina", numero: 5, nombre: "Cabina del operador", definicion: "Baja y de costado, bajo una capota ROPS de 2,40 m: el operador mira hacia ambos sentidos de marcha.", ancla: P("cabina", [0, 0.2, 0], "base", [-0.77, 2.3, 0.85]) },
     { id: "motor", numero: 6, nombre: "Motor y contrapeso", definicion: "Atrás, sobre el eje trasero: equilibra el cucharón cargado.", ancla: P("motor", [0, 0.2, 0], "base", [-3.8, 2.1, 0]) },
-    { id: "llantas", numero: 7, nombre: "Llantas", definicion: "1,75 m de diámetro, con tacos para piso de roca y barro. Ejes a 3,25 m.", ancla: P("llantas", [0, 0, 0.4], "base", [-1.8, 0.9, 1.1]) },
+    { id: "llantas", numero: 7, nombre: "Llantas", definicion: "1,63 m de diámetro (18.00×25), con tacos para piso de roca y barro. Ejes a 3,54 m.", ancla: P("llantas", [0, 0, 0.4], "base", [-1.8, 0.9, 1.1]) },
     { id: "faros", numero: 8, nombre: "Faros", definicion: "Única luz del frente de trabajo: todo lo que se ve en la foto real lo ilumina el equipo.", ancla: P("faros", [0.2, 0.1, 0], "delantero", [2.25, 1.93, 1.08]) },
     { id: "contorno", numero: 9, nombre: "Contorno sobreexcavado", definicion: "Galería de 4,0 × 4,0 m. Los bloques caen siguiendo las tres familias de juntas: el contorno queda facetado.", ancla: () => new THREE.Vector3(8, 3.7, 1.3), region: { material: matRoca, valor: 2 } },
     { id: "pernos", numero: 10, nombre: "Pernos con placa", definicion: "Sostenimiento en malla de 1,5 m en tresbolillo: la placa aprieta la roca suelta contra el macizo.", ancla: () => new THREE.Vector3(2, 3.6, -1.2), objetos: [pern] },

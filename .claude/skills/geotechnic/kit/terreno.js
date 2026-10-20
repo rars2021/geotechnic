@@ -424,3 +424,102 @@ export function tapaSeccion(talud, { borde = "derecha", base = -12, color = () =
   g.computeVertexNormals();
   return g;
 }
+
+/** Código de región de cada tipo de superficie del tajo (atributo `region` de mallaTajo; 0 = caras de la caja). */
+export const REGIONES_TAJO = { caja: 0, meseta: 1, banco: 2, cara: 3, fondo: 4, rampa: 5, pretil: 6, monton: 7, botadero: 8, chancadora: 9 };
+
+/**
+ * Bloque del tajo: UN sólido cerrado y orientado (references/estudio.md) con la superficie de terrenoTajo arriba
+ * (rejilla de `paso` m; en cada celda, la diagonal que mejor sigue la superficie), cuatro caras verticales y la base,
+ * todo dentro de `ter.caja` (la misma caja del contrato: fuera de ella `libre` es aire).
+ * Las caras empinadas llevan el relieve facetado del macizo (ter.relieveEn, el mismo que descuenta `libre`); vías,
+ * bermas, fondo, meseta y plataformas quedan exactos (= piso). Color por tipo; `calma` (o macizo.calma) solo toca el color.
+ * op: { paso (1.5 m), colores: { roca, polvo, via, pretil, fondo, finos, meseta, botadero, concreto, tolva }, calma }
+ * Devuelve { geometria (grupos: 0 superficie, 1 caja), grupos, nx, nz, paso, caja, vertices }.
+ */
+export function mallaTajo(ter, op = {}) {
+  const paso = op.paso ?? 1.5, mac = ter.macizo || null, calma = clamp(op.calma ?? mac?.calma ?? 0);
+  const C = { roca: "#9a9790", polvo: "#c4c2ba", via: "#cbc5b8", pretil: "#a7a49c", fondo: "#bdb8ad", meseta: "#b9ae98",
+    botadero: "#a99f8c", concreto: "#b8b5ad", tolva: "#5f5c57", finos: "#aeaba3", ...(op.colores || {}) };
+  const K = Object.fromEntries(Object.entries(C).map(([k, v]) => [k, rgb(v)]));
+  const calmo = (c) => { if (calma <= 0) return c; const L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; return mezcla(c, [L, L, L], 0.5 * calma); };
+  const [x0, yB, z0] = ter.caja.min, [x1, , z1] = ter.caja.max;
+  const nx = Math.max(2, Math.round((x1 - x0) / paso) + 1), nz = Math.max(2, Math.round((z1 - z0) / paso) + 1);
+  const dx = (x1 - x0) / (nx - 1), dz = (z1 - z0) / (nz - 1);
+  const Hs = new Float64Array(nx * nz), tipos = new Array(nx * nz);
+  for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) { const s = ter.sitio(x0 + i * dx, z0 + j * dz); Hs[j * nx + i] = s.y; tipos[j * nx + i] = s.tipo; }
+  const pos = [], col = [], reg = [], idx = [];
+  const tanCara = Math.tan(rad(38));
+  // ── superficie
+  for (let j = 0; j < nz; j++) for (let i = 0; i < nx; i++) {
+    const k = j * nx + i, x = x0 + i * dx, z = z0 + j * dz, y = Hs[k];
+    const iA = Math.max(0, i - 1), iB = Math.min(nx - 1, i + 1), jA = Math.max(0, j - 1), jB = Math.min(nz - 1, j + 1);
+    const gx = (Hs[j * nx + iB] - Hs[j * nx + iA]) / ((iB - iA) * dx), gz = (Hs[jB * nx + i] - Hs[jA * nx + i]) / ((jB - jA) * dz);
+    const borde = i < 2 || j < 2 || i > nx - 3 || j > nz - 3;
+    const L = Math.hypot(gx, 1, gz), n = [-gx / L, 1 / L, -gz / L];
+    const d = borde ? 0 : ter.relieveEn(x, z, gx, gz, y);
+    pos.push(x + n[0] * d, y + n[1] * d, z + n[2] * d);
+    let t = tipos[k];
+    const empinada = Math.hypot(gx, gz) > tanCara;
+    if (empinada && (t === "banco" || t === "meseta" || t === "fondo")) t = "cara";
+    const roca = mac ? mac.color(x, y, z) : K.roca;
+    let c;
+    if (t === "cara") { const tono = mac ? mac.relieve(x, y, z, 1).tono : 0.5, k0 = 1 + (tono - 0.5) * 0.18 * (1 - calma / 2); c = roca.map((v) => v * k0); }
+    else if (t === "banco") c = mezcla(roca, K.polvo, 0.72);
+    else if (t === "fondo") c = mezcla(K.fondo, K.finos, 0.3);
+    else if (t === "rampa") c = K.via;
+    else if (t === "pretil") c = K.pretil;
+    else if (t === "monton") c = mezcla(roca.map((v) => v * 0.9), K.finos, 0.45);
+    else if (t === "botadero") c = empinada ? K.botadero.map((v) => v * 0.92) : mezcla(K.botadero, K.polvo, 0.4);
+    else if (t === "chancadora") c = y < ter.cota - 0.5 ? K.tolva : K.concreto;
+    else c = K.meseta;
+    c = calmo(c); col.push(c[0], c[1], c[2]); reg.push(REGIONES_TAJO[t] ?? 1);
+  }
+  for (let j = 0; j < nz - 1; j++) for (let i = 0; i < nx - 1; i++) {
+    const a = j * nx + i, b = a + 1, c = a + nx, e = c + 1;
+    const hc = ter.altura(x0 + (i + 0.5) * dx, z0 + (j + 0.5) * dz);
+    if (Math.abs((Hs[a] + Hs[e]) / 2 - hc) < Math.abs((Hs[b] + Hs[c]) / 2 - hc)) idx.push(a, c, e, a, e, b); // diagonal a–e
+    else idx.push(a, c, b, b, c, e); // diagonal b–c (las dos caras miran arriba)
+  }
+  const nTop = pos.length / 3, iTop = idx.length;
+  const gt = new THREE.BufferGeometry(); // normales suavizadas de la superficie
+  gt.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3)); gt.setIndex(idx); gt.computeVertexNormals();
+  const nor = Array.from(gt.attributes.normal.array);
+  gt.dispose();
+  // ── caja: cuatro paredes y la base, con sus propios vértices (las aristas se cosen por posición con la superficie)
+  const vert = (p, n, c) => { pos.push(p[0], p[1], p[2]); nor.push(n[0], n[1], n[2]); col.push(c[0], c[1], c[2]); reg.push(0); return pos.length / 3 - 1; };
+  const tri = (a, b, c, n) => { // cara delantera hacia n
+    const ux = pos[b * 3] - pos[a * 3], uy = pos[b * 3 + 1] - pos[a * 3 + 1], uz = pos[b * 3 + 2] - pos[a * 3 + 2];
+    const vx = pos[c * 3] - pos[a * 3], vy = pos[c * 3 + 1] - pos[a * 3 + 1], vz = pos[c * 3 + 2] - pos[a * 3 + 2];
+    const s = (uy * vz - uz * vy) * n[0] + (uz * vx - ux * vz) * n[1] + (ux * vy - uy * vx) * n[2];
+    if (s >= 0) idx.push(a, b, c); else idx.push(a, c, b);
+  };
+  const cCaja = calmo(mezcla(K.roca, [0.08, 0.08, 0.08], 0.25));
+  const anillo = []; // borde de la superficie: norte (z0, x crece), este, sur (x decrece), oeste
+  for (let i = 0; i < nx - 1; i++) anillo.push(i);
+  for (let j = 0; j < nz - 1; j++) anillo.push(j * nx + nx - 1);
+  for (let i = nx - 1; i > 0; i--) anillo.push((nz - 1) * nx + i);
+  for (let j = nz - 1; j > 0; j--) anillo.push(j * nx);
+  const ladoDe = (m) => (m < nx - 1 ? [0, 0, -1] : m < nx - 1 + nz - 1 ? [1, 0, 0] : m < 2 * (nx - 1) + nz - 1 ? [0, 0, 1] : [-1, 0, 0]);
+  const base = [];
+  for (let m = 0; m < anillo.length; m++) {
+    const qa = anillo[m], qb = anillo[(m + 1) % anillo.length], n = ladoDe(m);
+    const pa = [pos[qa * 3], pos[qa * 3 + 1], pos[qa * 3 + 2]], pb = [pos[qb * 3], pos[qb * 3 + 1], pos[qb * 3 + 2]];
+    const ta = vert(pa, n, cCaja), tb = vert(pb, n, cCaja), ba = vert([pa[0], yB, pa[2]], n, cCaja), bb = vert([pb[0], yB, pb[2]], n, cCaja);
+    tri(ta, tb, ba, n); tri(tb, bb, ba, n);
+    base.push([pa[0], pa[2]]);
+  }
+  const b0 = pos.length / 3, abajo = [0, -1, 0];
+  for (const [x, z] of base) vert([x, yB, z], abajo, cCaja);
+  const centro = vert([(x0 + x1) / 2, yB, (z0 + z1) / 2], abajo, cCaja);
+  for (let m = 0; m < base.length; m++) tri(centro, b0 + m, b0 + ((m + 1) % base.length), abajo);
+  const g = new THREE.BufferGeometry();
+  g.setAttribute("position", new THREE.Float32BufferAttribute(pos, 3));
+  g.setAttribute("normal", new THREE.Float32BufferAttribute(nor, 3));
+  g.setAttribute("color", new THREE.Float32BufferAttribute(col, 3));
+  g.setAttribute("humedad", new THREE.Float32BufferAttribute(new Float32Array(pos.length / 3), 1));
+  g.setAttribute("region", new THREE.Float32BufferAttribute(reg, 1));
+  g.setIndex(idx);
+  g.addGroup(0, iTop, 0); g.addGroup(iTop, idx.length - iTop, 1);
+  return { geometria: g, grupos: { superficie: 0, caja: 1 }, nx, nz, paso: dx, caja: ter.caja, vertices: nTop };
+}
