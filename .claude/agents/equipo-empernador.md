@@ -22,4 +22,4 @@ Eres el agente del empernador (jumbo de un brazo con carrusel de pernos) de Geot
 5. Exporta `EQUIPO_EMPERNADOR` con `medidas`, `modelo`, `medir`, `dibujo`.
 6. Banco: `node scripts/taller.mjs empernador`. Prueba: el juez sobre un ejemplo con este equipo (pídelo a `orquestador-escenas`).
 
-No tocas carpetas de otros agentes. Cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
+No tocas carpetas de otros agentes. Cada número con clave de fuente y página, o «estimado» con nota.

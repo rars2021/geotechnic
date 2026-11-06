@@ -4,7 +4,7 @@
   "fecha": "2026-10-18",
   "estado": "borrador para revisión del usuario (G1)",
   "descripcion": "Vocabulario de condiciones del terreno minero para el catálogo de fuentes y la skill geotechnic. Cada valor genera el tag geo:<dimensión>:<valor>. 'es' y 'en' son términos de búsqueda (título, resumen, palabras clave, texto); 'preferir' son palabras que aparecen en leyendas de figuras (si falta, se usan 'es' y 'en'); 'se_ve' es lo que la figura debería mostrar; 'numeros' son los parámetros que lo gobiernan.",
-  "normalizacion": "Se compara en minúsculas y sin tildes (tesis.norm de el catálogo de fuentes: NFKD sin diacríticos). Los términos se escriben con tildes para que se lean bien. figuras.capturar hoy compara 'preferir' solo en minúsculas: el modo atlas de G2 debe normalizar también las leyendas.",
+  "normalizacion": "Se compara en minúsculas y sin tildes (tesis.norm del catálogo de fuentes: NFKD sin diacríticos). Los términos se escriben con tildes para que se lean bien. figuras.capturar hoy compara 'preferir' solo en minúsculas: el modo atlas de G2 debe normalizar también las leyendas.",
   "tag": "geo:<dimension>:<valor>",
   "contexto": {
     "nota": "Para etiquetar en G2 el documento debe tener además una de estas raíces (evita «Quebrada X», «Cerro de Pasco» como topónimos, carreteras, etc.). Se aplica a D10 y D11, y a cualquier valor con más de 1000 documentos.",

@@ -1,7 +1,7 @@
 ---
 name: geotechnic
 description: Dibuja cualquier tema de minería o geología con apariencia casi real y números verdaderos, en 3D interactivo (three.js) publicado como Artifact en tema claro y oscuro. Úsala para modelar un equipo (scoop, camión, pala, jumbo, perforadora, cargador, empernador, shotcrete, volquete), mostrar un corte de talud o un macizo con fracturas, alteración, fallas, agua, hielo o polvo, una labor subterránea con su sostenimiento, o un proceso animado (perforación de un frente, voladura, carguío y acarreo, dispatch, ventilación, relleno, planta, relaves), a cualquier escala (cerro, tajo, banco, labor, frente, testigo, probeta). Sirve a SSTutor (cada relación es una pieza o región señalable, modos completo y en blanco) y a cualquier otro uso. No reemplaza a sstutor-anatomia, que sigue para objetos mecánicos isométricos de laboratorio.
-compatibility: Claude Code. Node.js 20+ (npm install en la carpeta de la skill trae three 0.160 para el juez); Python con numpy y Pillow para el realismo; Chrome o Edge para verificar (scripts/drive.mjs). Las fotos de referencia se reúnen con el catálogo de fuentes (<REPOS>catalogo/).
+compatibility: Claude Code. Node.js 20+ (npm install en la carpeta de la skill trae three 0.160 para el juez); Python con numpy y Pillow para el realismo; Chrome o Edge para verificar (scripts/drive.mjs). Las fotos de referencia viven fuera del repo, en la carpeta de la variable GEOTECHNIC_DATOS.
 ---
 
 # Geotechnic
@@ -28,7 +28,7 @@ todo se dibuja en un solo mundo three.js, con un modo «lámina» que agrega las
 
 | Qué | Regla |
 |---|---|
-| Números | Cada medida, ángulo, capacidad o tiempo sale de una fuente con clave el catálogo de fuentes y página. Va en la tabla «de dónde sale cada número» de la página. |
+| Números | Cada medida, ángulo, capacidad o tiempo sale de una fuente con clave de fuente y página. Va en la tabla «de dónde sale cada número» de la página. |
 | Sin fuente | Se marca **estimado** o **ilustrativo** en esa misma tabla. Nunca se presenta como dato. |
 | Formas | Cada rasgo visual sigue una regla de `references/reglas-*.md`, aprendida mirando fotos reales. |
 | Lectura | El texto bajo el dibujo sale del mismo modelo que mueve la escena (ángulo interrampa, taladros perforados, retardo). |
@@ -68,12 +68,12 @@ Ejemplos de pedidos que funcionan:
    minería ilegal), propósito, escala, forma y riesgo. El ambiente decide el corte: **solo los cerrados se cortan; los
    abiertos usan colisión de cámara, como Anatomy**. La minería ilegal se desalienta: nunca procedimientos; sí impactos,
    consecuencias y la vía de formalización.
-1. **Reúne referencias con el catálogo de fuentes** (`references/fotos.md`):
-   - Figuras de tesis y papers: `leyendas.py` + `capturar.py` sobre los textos de el catálogo de fuentes (leyenda → página → recorte).
-   - Fotos abiertas: Wikimedia Commons u otra fuente CC, registradas en el catálogo de fuentes con `catalogo.py sembrar <url> --titulo … --tipo imagen`.
-   - Todo va a `<DATOS>/geotechnic\figuras\<tema>\` (estudio) y `…\<tema>\abiertas\` (incrustables), cada carpeta con su `fuentes.json`.
+1. **Reúne referencias** (`references/fotos.md`):
+   - Figuras de tesis y papers: búscalas en tu catálogo de fuentes y anota clave y página; quedan como referencia de estudio, no se incrustan.
+   - Fotos abiertas: Wikimedia Commons u otra fuente CC (`scripts/fotos/commons_*.py`), cada una con su licencia en `fuentes.json`.
+   - Todo va a `$GEOTECHNIC_DATOS/figuras/<tema>/` (estudio) y `…/<tema>/abiertas/` (incrustables), cada carpeta con su `fuentes.json`.
 2. **Mira las fotos de verdad** (léelas con la herramienta Read, con hojas de contacto) y anota rasgos y proporciones. Si un rasgo es nuevo, va a `references/reglas-*.md` con su fuente.
-3. **Junta los números** en las tesis del catálogo (`textos\` de el catálogo de fuentes): grep, lectura de la página, clave de la ficha.
+3. **Junta los números** en las tesis de tu catálogo: lectura de la página y clave de la ficha.
 4. **Equipos** (agente `equipo-<equipo>`): modelo en el motor A con sus medidas (`equipos/<equipo>/`), probado en el
    taller (`node scripts/taller.mjs <equipo>`) hasta que el juez aprueba su rango y su fidelidad.
 5. **Escribe el ejemplo** en `ejemplos/<tema>/` (agente `orquestador-escenas`):
@@ -120,12 +120,11 @@ La pieza en `foco` (SSTutor) lleva el número en rojo. Detalle en `references/ki
 | `kit/procesos.js` | Mallas de perforación reales, orden de perforación, líneas de tiempo, simulación de flota (dispatch) |
 | `kit/senalar.js` | Plaquitas, resaltado y modos |
 | `scripts/armar.mjs` | Junta kit + ejemplo en una página (sin doctype) y copia o incrusta (`--incrustar`) las fotos abiertas |
-| `scripts/fotos/` | Reunir figuras de tesis (`leyendas.py`, `capturar.py`) y fotos abiertas (`commons_*.py`, `registrar_ttdata.py`) |
+| `scripts/fotos/` | Fotos abiertas de Wikimedia Commons (`commons_*.py`) y hojas de contacto (`hoja.py`) |
 | `ejemplos/comun.mjs` | `abierta()`, `estudio()`, `cita()`: leen `fuentes.json` y arman las referencias de una ficha |
 | `scripts/drive.mjs` | Capturas en Chrome sin interfaz (de sstutor-anatomia, MIT; ver `scripts/LICENSE-anatomy`) |
-| `ejemplos/talud-tajo` | Corte de talud de tajo (Antamina) · [publicado](https://claude.ai/artifact/9yawDfHqMnZNYZ8oQcCBgz) |
-| `ejemplos/scoop-lhd` | Scoop CAT R1600G (motor A, 387 piezas, barra en Z y medidas de la hoja CAT) en galería en sección, con ciclo de carguío juzgado · [publicado](https://claude.ai/artifact/NYN2ccWp45UG4kF4R9D2cn) |
-| `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 458 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión · [publicado](https://claude.ai/artifact/ExfpKUHYm9oJmTS1fw91y3) |
-| `ejemplos/dispatch` | Flota en el tajo: 12 camiones CAT 793 y 2 palas P&H 4100 (motor A) sobre `terrenoTajo`, `simularFlota` con colas FIFO y tres políticas, panel de tiempos y colas · [publicado](https://claude.ai/artifact/NNLK6JisqpF5SaFWTinYUV) |
-| `sstutor/` · `scripts/sstutor.mjs` | Paquete commiteable para SSTutor (figura del frente con jumbo, semilla, módulo 3D, test); ver `references/sstutor.md` |
+| `ejemplos/talud-tajo` | Corte de talud de tajo (Antamina) |
+| `ejemplos/scoop-lhd` | Scoop CAT R1600G (motor A, 387 piezas, barra en Z y medidas de la hoja CAT) en galería en sección, con ciclo de carguío juzgado |
+| `ejemplos/frente-jumbo` | Jumbo de dos brazos (motor A, 458 piezas) perforando 41 taladros con cinemática inversa y turnos anticolisión |
+| `ejemplos/dispatch` | Flota en el tajo: 12 camiones CAT 793 y 2 palas P&H 4100 (motor A) sobre `terrenoTajo`, `simularFlota` con colas FIFO y tres políticas, panel de tiempos y colas |
 | `references/` | `arquitectura.md` (motores, contrato, juez, agentes, decisión sobre Anatomy), `motor-a.md`, `motor-b.md`, `juez.md`, `estudio.md`, `categorias.md`, `agentes.md`, `motor.md` (por qué three.js), `kit.md` (API), `reglas-*.md`, `temas.md`, `fotos.md`, `verificar.md` |

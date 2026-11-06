@@ -23,7 +23,7 @@ export function montajeScoop() {
     ruido: { amplitud: 0.07, longitud: 2.5, octavas: 3 }, aspereza: { amplitud: 0.03, longitud: 0.5 },
     litologia: ["#7e7a71", "#716d65", "#8a857b"], alteracion: [{ f: oxidos, paleta: ["#8c6e4c", "#7d6145"], peso: 0.55 }],
     agua: { base: 0.05, juntas: 0.45, piso: 0.6, zonas: [{ f: oxidos, peso: 0.25 }] },
-    fuentes: { familias: "Eulogio Huamán (2024), Retamas (MARSA), pág. 83 · el catálogo de fuentes hdl:20.500.14076/27684" },
+    fuentes: { familias: "Eulogio Huamán (2024), Retamas (MARSA), pág. 83 · hdl:20.500.14076/27684" },
   });
   const gal = galeria({
     seccion: seccionBaul(4.0, 4.0), largo: LARGO, inicio: X0, paso: 0.11, sobreexcavacion: 0.22, macizo: mac,

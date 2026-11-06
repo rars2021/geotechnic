@@ -1,6 +1,6 @@
 {
   "version": "2026-10-19",
-  "nota": "Temas para el loop de pruebas de Geotechnic. Rutas de imágenes en <DATOS>/geotechnic; claves el catálogo de fuentes con página. Figuras de tesis: solo estudio. Ver representacion-visual.md y rubrica.md.",
+  "nota": "Temas para el loop de pruebas de Geotechnic. Rutas de imágenes en $GEOTECHNIC_DATOS; claves el catálogo de fuentes con página. Figuras de tesis: solo estudio. Ver representacion-visual.md y rubrica.md.",
   "temas": [
     {
       "id": "falla-planar-corte",
@@ -27,9 +27,9 @@
         "estereograma"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\daylighted_slope_along_the_baguio_bua_itogon_road.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\jointed_diorite_outcrop_dalupirip_itogon_benguet_01.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2025_lopez_nicolaz_optimizacion_geotecni_p56.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\daylighted_slope_along_the_baguio_bua_itogon_road.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\jointed_diorite_outcrop_dalupirip_itogon_benguet_01.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2025_lopez_nicolaz_optimizacion_geotecni_p56.jpg",
         "hdl:20.500.14076/28951 pág. 56"
       ],
       "numeros_clave": [
@@ -77,8 +77,8 @@
         "persona de escala"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\butte_granite_joints_2012_1440.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\jointed_and_weathered_granite_geodil_number_2208.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\butte_granite_joints_2012_1440.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\jointed_and_weathered_granite_geodil_number_2208.jpg"
       ],
       "numeros_clave": [
         {
@@ -119,9 +119,9 @@
         "camión de escala"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\mina_cerro_de_pasco1.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\minas_de_tintaya_peru.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\big_rock_candy_mountain_marysvale_utah_19970724.jpg"
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\abiertas\\mina_cerro_de_pasco1.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\abiertas\\minas_de_tintaya_peru.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\big_rock_candy_mountain_marysvale_utah_19970724.jpg"
       ],
       "numeros_clave": [
         {
@@ -167,10 +167,10 @@
         "camión de escala"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\antamina_mine_tailings_pond.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\tajos_abiertos_y_presa_de_relaves_de_antamina.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\highland_valley_copper_mine_tailings_former_bethlehem_mine.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\minas_de_tintaya_peru.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\antamina_mine_tailings_pond.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\abiertas\\tajos_abiertos_y_presa_de_relaves_de_antamina.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\highland_valley_copper_mine_tailings_former_bethlehem_mine.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\abiertas\\minas_de_tintaya_peru.jpg"
       ],
       "numeros_clave": [
         {
@@ -221,11 +221,11 @@
         "pieza ≥ 10 cm"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\drill_core_boxes_onkalo_1.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2022_riveros_alvarado_control_de_calidad_p87.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2023_condorpusa_cordova_caracterizacion__p38.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\logueo\\2022_ruiz_borja_interpretacion_gen_p93.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\logueo\\2025_chavez_palacin_analisis_del_c_p67.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\abiertas\\drill_core_boxes_onkalo_1.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\tesis\\2022_riveros_alvarado_control_de_calidad_p87.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\tesis\\2023_condorpusa_cordova_caracterizacion__p38.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\logueo\\2022_ruiz_borja_interpretacion_gen_p93.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\logueo\\2025_chavez_palacin_analisis_del_c_p67.jpg"
       ],
       "numeros_clave": [
         {
@@ -238,7 +238,7 @@
         },
         {
           "dato": "RQD = Σ piezas ≥ 10 cm / largo de corrida",
-          "fuente": "definición estándar de RQD (Deere), sin clave el catálogo de fuentes; hdl:20.500.12918/8033 pág. 38 para fractura natural"
+          "fuente": "definición estándar de RQD (Deere), sin clave hdl:20.500.12918/8033 pág. 38 para fractura natural"
         }
       ],
       "dificultad": 2,
@@ -271,8 +271,8 @@
         "escala gráfica"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\broken_drill_core_butte_mining_district_montana_usa_1.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2022_riveros_alvarado_control_de_calidad_p87.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\broken_drill_core_butte_mining_district_montana_usa_1.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\tesis\\2022_riveros_alvarado_control_de_calidad_p87.jpg"
       ],
       "numeros_clave": [
         {
@@ -315,8 +315,8 @@
         "goteo"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\adit_icicles_50312853716.jpg",
-        "<DATOS>/geotechnic\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\adit_icicles_50312853716.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg"
       ],
       "numeros_clave": [
         {
@@ -360,9 +360,9 @@
         "piso"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\maxville_limestone_black_17_mine_4.jpg",
-        "<DATOS>/geotechnic\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\fibre_reinforced_shotcrete.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\maxville_limestone_black_17_mine_4.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\fibre_reinforced_shotcrete.jpg"
       ],
       "numeros_clave": [
         {
@@ -406,9 +406,9 @@
         "bofedal"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\acid_mine_drainage_at_tilt_cove.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\iron_precipitate_on_quaker_run.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\shinarump_mine_waste_rock.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\acid_mine_drainage_at_tilt_cove.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\iron_precipitate_on_quaker_run.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\shinarump_mine_waste_rock.jpg"
       ],
       "numeros_clave": [
         {
@@ -449,9 +449,9 @@
         "borde difuso"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\big_rock_candy_mountain_marysvale_utah_19970724.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2015_norabuena_huahuachampi_analisis_de__p113.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\hydrothermally_altered_volcanic_rocks_quaternary_inspiration.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\big_rock_candy_mountain_marysvale_utah_19970724.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\tesis\\2015_norabuena_huahuachampi_analisis_de__p113.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\hydrothermally_altered_volcanic_rocks_quaternary_inspiration.jpg"
       ],
       "numeros_clave": [
         {
@@ -492,9 +492,9 @@
         "berma"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2023_cisneros_eufracio_reevaluacion_geot_p133.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2023_cisneros_eufracio_reevaluacion_geot_p211.jpg",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\tesis\\2015_norabuena_huahuachampi_analisis_de__p113.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\tesis\\2023_cisneros_eufracio_reevaluacion_geot_p133.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2023_cisneros_eufracio_reevaluacion_geot_p211.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\tesis\\2015_norabuena_huahuachampi_analisis_de__p113.jpg"
       ],
       "numeros_clave": [
         {
@@ -544,11 +544,11 @@
         "tolva del camión"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\p_h_4100xpb_shovel.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\p_h_4100xpb_shovel_4.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\bucyrus_822_shovel_continental_mine_butte_montana_usa_11.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\carguio\\2022_tenorio_enciso_mejora_en_la_product_p33.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\machinery_hannans_north_tourist_mine_2016_01.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\p_h_4100xpb_shovel.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\p_h_4100xpb_shovel_4.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\bucyrus_822_shovel_continental_mine_butte_montana_usa_11.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\carguio\\2022_tenorio_enciso_mejora_en_la_product_p33.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\machinery_hannans_north_tourist_mine_2016_01.jpg"
       ],
       "numeros_clave": [
         {
@@ -604,8 +604,8 @@
         "tolva del camión"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\carguio\\2023_cortez_tanta_determinacion_de_la_se_p46.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\machinery_hannans_north_tourist_mine_2016_03.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\carguio\\2023_cortez_tanta_determinacion_de_la_se_p46.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\machinery_hannans_north_tourist_mine_2016_03.jpg",
         "hdl:20.500.14076/2098 pág. 75"
       ],
       "numeros_clave": [
@@ -649,8 +649,8 @@
         "malla de taladros"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\narva_mine_blasthole_drilling.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2014_lucano_chuan_mejoramiento_del_calcu_p25.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\narva_mine_blasthole_drilling.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\perforacion\\2014_lucano_chuan_mejoramiento_del_calcu_p25.jpg",
         "hdl:20.500.14076/4581 pág. 64",
         "hdl:20.500.14076/14760 pág. 77"
       ],
@@ -699,9 +699,9 @@
         "placa"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\boltec_2.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\boltec_2.jpg",
         "hdl:20.500.14076/1367 pág. 102",
-        "<DATOS>/geotechnic\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg"
+        "$GEOTECHNIC_DATOS\\figuras\\scoop\\2021_vega_merino_analisis_de_las_demoras_p30.jpg"
       ],
       "numeros_clave": [
         {
@@ -743,9 +743,9 @@
       ],
       "referencias": [
         "hdl:20.500.12394/4685 págs. 67-68",
-        "<DATOS>/geotechnic\\investigacion\\terreno-roca\\fibre_reinforced_shotcrete.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\terreno-roca\\fibre_reinforced_shotcrete.jpg",
         "hdl:20.500.12394/11540 pág. 79",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2018_quispe_matos_evaluacion_geomecanica_p68.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\perforacion\\2018_quispe_matos_evaluacion_geomecanica_p68.jpg"
       ],
       "numeros_clave": [
         {
@@ -792,10 +792,10 @@
         "cilindro de volteo"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\figuras\\scoop\\abiertas\\load_haul_dump_cobar_2017_01.jpg",
-        "<DATOS>/geotechnic\\figuras\\scoop\\abiertas\\sandvik_lh517_lhd.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\big_nickel_mining_35992475746.jpg",
-        "<DATOS>/geotechnic\\investigacion\\evaluacion\\skulmowski2022_p8_fig2.jpg"
+        "$GEOTECHNIC_DATOS\\figuras\\scoop\\abiertas\\load_haul_dump_cobar_2017_01.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\scoop\\abiertas\\sandvik_lh517_lhd.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\big_nickel_mining_35992475746.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\evaluacion\\skulmowski2022_p8_fig2.jpg"
       ],
       "numeros_clave": [
         {
@@ -843,10 +843,10 @@
         "estado del ciclo"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2022_tenorio_enciso_mejora_en_la_product_p45.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2023_moromisato_gibu_analisis_de_variabl_p49.jpg",
-        "<DATOS>/geotechnic\\figuras\\dispatch\\2014_castillo_calderon_factor_equivalent_p28.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2022_ojeda_ore_simulacion_de_rutas_de_re_p31.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\dispatch\\2022_tenorio_enciso_mejora_en_la_product_p45.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\dispatch\\2023_moromisato_gibu_analisis_de_variabl_p49.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\dispatch\\2014_castillo_calderon_factor_equivalent_p28.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\dispatch\\2022_ojeda_ore_simulacion_de_rutas_de_re_p31.jpg"
       ],
       "numeros_clave": [
         {
@@ -894,10 +894,10 @@
         "marina"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2024_vargas_rojas_analisis_de_las_operac_p36.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\boltec_2.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2023_nunez_soras_caracterizacion_geomeca_p115.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2022_sapallanay_rashuaman_mejoramiento_d_p44.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\subterraneo\\2024_vargas_rojas_analisis_de_las_operac_p36.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\boltec_2.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\perforacion\\2023_nunez_soras_caracterizacion_geomeca_p115.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\subterraneo\\2022_sapallanay_rashuaman_mejoramiento_d_p44.jpg"
       ],
       "numeros_clave": [
         {
@@ -950,11 +950,11 @@
         "eje de simetría"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2023_ozgur_y_lmaz_drilling_and_bla_p11.jpg",
-        "<DATOS>/geotechnic\\figuras\\jumbo\\2021_zanabria_mejia_analisis_del_monitor_p26.jpg",
-        "<DATOS>/geotechnic\\figuras\\jumbo\\2023_nunez_soras_caracterizacion_geomeca_p113.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2021_acero_vergara_propuesta_de_un_p69.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\perforacion\\2023_nunez_soras_caracterizacion_geomeca_p115.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\voladura\\2023_ozgur_y_lmaz_drilling_and_bla_p11.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\jumbo\\2021_zanabria_mejia_analisis_del_monitor_p26.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\jumbo\\2023_nunez_soras_caracterizacion_geomeca_p113.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\voladura\\2021_acero_vergara_propuesta_de_un_p69.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\perforacion\\2023_nunez_soras_caracterizacion_geomeca_p115.jpg"
       ],
       "numeros_clave": [
         {
@@ -1006,11 +1006,11 @@
         "INICIO"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2011_perales_orellana_planeamiento_p119.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2022_verastegui_marquino_factores__p100.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2021_ruiz_damian_evaluacion_tecnic_p49.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\voladura\\2022_valverde_aguirre_reduccion_de_p90.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\abiertas\\voladura_antamina_panoramio.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\voladura\\2011_perales_orellana_planeamiento_p119.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\voladura\\2022_verastegui_marquino_factores__p100.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\voladura\\2021_ruiz_damian_evaluacion_tecnic_p49.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\voladura\\2022_valverde_aguirre_reduccion_de_p90.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\abiertas\\voladura_antamina_panoramio.jpg"
       ],
       "numeros_clave": [
         {
@@ -1058,10 +1058,10 @@
         "charco"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2022_collantes_diaz_analisis_psicrometri_p40.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2025_huaira_rondo_modelo_matematico_de_r_p25.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2025_povis_rodriguez_analisis_de_circuit_p88.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\coal_mine_ventilation_fan.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\subterraneo\\2022_collantes_diaz_analisis_psicrometri_p40.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\subterraneo\\2025_huaira_rondo_modelo_matematico_de_r_p25.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\subterraneo\\2025_povis_rodriguez_analisis_de_circuit_p88.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\coal_mine_ventilation_fan.jpg"
       ],
       "numeros_clave": [
         {
@@ -1109,10 +1109,10 @@
         "muro de seguridad"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2022_quezada_valuis_analisis_comparativo_p68.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2014_lucano_chuan_mejoramiento_del_calcu_p29.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2022_rojas_ramirez_desarrollo_del_plan_d_p45.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\crusher_plant_panoramio.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\planta\\2022_quezada_valuis_analisis_comparativo_p68.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\planta\\2014_lucano_chuan_mejoramiento_del_calcu_p29.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\planta\\2022_rojas_ramirez_desarrollo_del_plan_d_p45.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\crusher_plant_panoramio.jpg"
       ],
       "numeros_clave": [
         {
@@ -1162,12 +1162,12 @@
         "reciclo"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\planta\\2021_ordonez_ylachoque_optimizacion_del__p24.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\tega_product_picture.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\delkor_bqr_flotation_cells_maxgen.jpg",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\prominenthill_flotation.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\flujo\\2024_acevedo_sinche_reduccion_del__p38.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2022_charlotte_e_gibson_michael_ch_p4_4.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\planta\\2021_ordonez_ylachoque_optimizacion_del__p24.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\tega_product_picture.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\delkor_bqr_flotation_cells_maxgen.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\prominenthill_flotation.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\flujo\\2024_acevedo_sinche_reduccion_del__p38.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2022_charlotte_e_gibson_michael_ch_p4_4.jpg"
       ],
       "numeros_clave": [
         {
@@ -1209,9 +1209,9 @@
         "holgura"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\lhd_benchmark_mapa_nivel.png",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\abiertas\\big_nickel_mining_35992475746.jpg",
-        "<DATOS>/geotechnic\\figuras\\scoop\\abiertas\\load_haul_dump_cobar_2017_01.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\lhd_benchmark_mapa_nivel.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\abiertas\\big_nickel_mining_35992475746.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\scoop\\abiertas\\load_haul_dump_cobar_2017_01.jpg"
       ],
       "numeros_clave": [
         {
@@ -1255,7 +1255,7 @@
       ],
       "referencias": [
         "hdl:20.500.14076/29222 págs. 43-44",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\subterraneo\\2025_lopez_requelme_reduccion_de_costos__p30.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\subterraneo\\2025_lopez_requelme_reduccion_de_costos__p30.jpg",
         "hdl:20.500.14076/28634 pág. 29",
         "hdl:20.500.14076/22442 pág. 54"
       ],
@@ -1300,10 +1300,10 @@
         "leyenda"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\estereo\\2017_cruzado_peralta_evaluacion_ge_p27.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\estereo\\2019_aceijas_perez_geomecanica_apl_p78.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\stero_projection_structural_geology.png",
-        "<DATOS>/geotechnic\\figuras\\talud\\2020_alvarez_tovar_evaluacion_geomecanic_p79.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\estereo\\2017_cruzado_peralta_evaluacion_ge_p27.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\estereo\\2019_aceijas_perez_geomecanica_apl_p78.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\abiertas\\stero_projection_structural_geology.png",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2020_alvarez_tovar_evaluacion_geomecanic_p79.jpg"
       ],
       "numeros_clave": [
         {
@@ -1353,11 +1353,11 @@
         "escala gráfica"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\karstterrainusgs.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\abiertas\\floridan_block_diagram.png",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\seccion\\2021_mejia_mauricio_estudio_del_co_p93.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\seccion\\2013_quispe_aguilar_plan_de_minado_p25.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\fgdc\\hoja_fgdc.png"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\abiertas\\karstterrainusgs.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\abiertas\\floridan_block_diagram.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\seccion\\2021_mejia_mauricio_estudio_del_co_p93.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\seccion\\2013_quispe_aguilar_plan_de_minado_p25.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\fgdc\\hoja_fgdc.png"
       ],
       "numeros_clave": [
         {
@@ -1405,10 +1405,10 @@
         "código de unidad"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\columna\\2021_cerron_acosta_evaluacion_geom_p31.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\columna\\2021_sanchez_llanos_estudio_geolog_p48.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\simbolo\\2024_begazo_montes_caracterizacion_p66.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\fgdc\\hoja_fgdc.png"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\columna\\2021_cerron_acosta_evaluacion_geom_p31.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\columna\\2021_sanchez_llanos_estudio_geolog_p48.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\simbolo\\2024_begazo_montes_caracterizacion_p66.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\fgdc\\hoja_fgdc.png"
       ],
       "numeros_clave": [
         {
@@ -1450,9 +1450,9 @@
         "leyenda"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\simbolo\\2021_anchelia_huamanta_reduccion_d_p70.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\simbolo\\2021_anchelia_huamanta_reduccion_d_p80.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2015_cabrera_aquije_planificacion_minera_p69.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\simbolo\\2021_anchelia_huamanta_reduccion_d_p70.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\simbolo\\2021_anchelia_huamanta_reduccion_d_p80.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2015_cabrera_aquije_planificacion_minera_p69.jpg"
       ],
       "numeros_clave": [
         {
@@ -1495,9 +1495,9 @@
         "modo de falla"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\figuras\\talud\\2025_lopez_nicolaz_optimizacion_geotecni_p25.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2025_ludena_montesinos_analisis_de_p64.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2011_perales_orellana_planeamiento_de_mi_p63.jpg"
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2025_lopez_nicolaz_optimizacion_geotecni_p25.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\mapeo\\2025_ludena_montesinos_analisis_de_p64.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2011_perales_orellana_planeamiento_de_mi_p63.jpg"
       ],
       "numeros_clave": [
         {
@@ -1544,10 +1544,10 @@
         "zona geomecánica"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\labores\\2025_lozada_barrera_analisis_del_r_p68.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2023_ordonez_moreano_clasificacion_p43.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2015_marcos_alvarez_evaluacion_eco_p29.jpg",
-        "<DATOS>/geotechnic\\investigacion\\convenciones\\mapeo\\2021_canchari_gutierrez_evaluacion_p80.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\labores\\2025_lozada_barrera_analisis_del_r_p68.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\mapeo\\2023_ordonez_moreano_clasificacion_p43.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\mapeo\\2015_marcos_alvarez_evaluacion_eco_p29.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\convenciones\\mapeo\\2021_canchari_gutierrez_evaluacion_p80.jpg"
       ],
       "numeros_clave": [
         {
@@ -1588,9 +1588,9 @@
         "mapa"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\abiertas\\capa_que_buza_r_o_abajo.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\abiertas\\block_diagrams_stratigraphic_relations.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p2_0.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\abiertas\\capa_que_buza_r_o_abajo.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\abiertas\\block_diagrams_stratigraphic_relations.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p2_0.jpg"
       ],
       "numeros_clave": [
         {
@@ -1629,10 +1629,10 @@
         "sección candidata"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p5_3.jpg",
-        "<DATOS>/geotechnic\\investigacion\\evaluacion\\bond2021_p3_fig1.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2020_aarohi_pathak_jack_shen_kuen__p6_2.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p7_4.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p5_3.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\evaluacion\\bond2021_p3_fig1.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2020_aarohi_pathak_jack_shen_kuen__p6_2.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2016_kristin_michod_gagnier_thomas_p7_4.jpg"
       ],
       "numeros_clave": [
         {
@@ -1673,9 +1673,9 @@
         "eje en km"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\abiertas\\block_diagram_showcasing_earthquake_hypocenter.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2022_jessica_helen_pugsley_john_an_p7_1.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2021_piyaphong_chenrai_case_study__p5_2.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\abiertas\\block_diagram_showcasing_earthquake_hypocenter.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2022_jessica_helen_pugsley_john_an_p7_1.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2021_piyaphong_chenrai_case_study__p5_2.jpg"
       ],
       "numeros_clave": [
         {
@@ -1717,10 +1717,10 @@
         "persona de escala"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2021_ane_bang_kittilsen_terje_midt_p5_0.jpg",
-        "<DATOS>/geotechnic\\investigacion\\pedagogia\\2021_ane_bang_kittilsen_terje_midt_p10_3.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2017_caruanambo_cortez_evaluacion_geomec_p17.jpg",
-        "<DATOS>/geotechnic\\figuras\\dispatch\\abiertas\\big_truck_looks_small_in_an_open_pit_mine.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2021_ane_bang_kittilsen_terje_midt_p5_0.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\pedagogia\\2021_ane_bang_kittilsen_terje_midt_p10_3.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2017_caruanambo_cortez_evaluacion_geomec_p17.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\dispatch\\abiertas\\big_truck_looks_small_in_an_open_pit_mine.jpg"
       ],
       "numeros_clave": [
         {
@@ -1767,11 +1767,11 @@
         "topografía original"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\figuras\\talud\\2015_cabrera_aquije_planificacion_minera_p69.jpg",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p74.png",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p93.png",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p109.png",
-        "<DATOS>/geotechnic\\figuras\\talud\\2014_calampa_pinedo_descripcion_de_una_m_p90.jpg"
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2015_cabrera_aquije_planificacion_minera_p69.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p74.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p93.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2015_cabrera_aquije_planificacion_p109.png",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2014_calampa_pinedo_descripcion_de_una_m_p90.jpg"
       ],
       "numeros_clave": [
         {
@@ -1828,10 +1828,10 @@
         "derrame"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\figuras\\dispatch\\abiertas\\mina_de_chuquicamata_calama_chile_2016_02_01_dd_118.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2022_ojeda_ore_simulacion_de_rutas_de_re_p38.jpg",
-        "<DATOS>/geotechnic\\figuras\\talud\\2022_ojeda_ore_simulacion_de_rutas_de_re_p40.jpg",
-        "<DATOS>/geotechnic\\figuras\\dispatch\\2013_pelaez_vera_incremento_del_performa_p95.jpg"
+        "$GEOTECHNIC_DATOS\\figuras\\dispatch\\abiertas\\mina_de_chuquicamata_calama_chile_2016_02_01_dd_118.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2022_ojeda_ore_simulacion_de_rutas_de_re_p38.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2022_ojeda_ore_simulacion_de_rutas_de_re_p40.jpg",
+        "$GEOTECHNIC_DATOS\\figuras\\dispatch\\2013_pelaez_vera_incremento_del_performa_p95.jpg"
       ],
       "numeros_clave": [
         {
@@ -1892,13 +1892,13 @@
         "tolva de descarga"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\investigacion\\completitud\\headframe_of_campi_shaft.jpg",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\1401870_ii_skip_shaft_headframe_geevor_mine_levant_section_s.jpg",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\homestake_mine_yates_shaft_headframe_hoisting_room.jpg",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p32.png",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p24.png",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p42.png",
-        "<DATOS>/geotechnic\\investigacion\\equipos-procesos\\dispatch\\2022_garcia_vera_evaluacion_del_sistema__p45.jpg"
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\headframe_of_campi_shaft.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\1401870_ii_skip_shaft_headframe_geevor_mine_levant_section_s.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\homestake_mine_yates_shaft_headframe_hoisting_room.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p32.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p24.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2022_garcia_vera_evaluacion_p42.png",
+        "$GEOTECHNIC_DATOS\\investigacion\\equipos-procesos\\dispatch\\2022_garcia_vera_evaluacion_del_sistema__p45.jpg"
       ],
       "numeros_clave": [
         {
@@ -1949,8 +1949,8 @@
         "talud de la capa"
       ],
       "referencias": [
-        "<DATOS>/geotechnic\\figuras\\talud\\2025_flores_gutierrez_evaluacion_de_la_t_p40.jpg",
-        "<DATOS>/geotechnic\\investigacion\\completitud\\2025_flores_gutierrez_evaluacion_p41.png"
+        "$GEOTECHNIC_DATOS\\figuras\\talud\\2025_flores_gutierrez_evaluacion_de_la_t_p40.jpg",
+        "$GEOTECHNIC_DATOS\\investigacion\\completitud\\2025_flores_gutierrez_evaluacion_p41.png"
       ],
       "numeros_clave": [
         {

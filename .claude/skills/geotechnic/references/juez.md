@@ -198,7 +198,7 @@ de la tolva) ya no ahorra nada. El juez no inventa la cota. La vía buena sigue 
 ## Realismo v3.1: la captura debe parecerse más a SU foto que a las otras
 
 Por qué: la investigación visual (`investigacion/representacion-visual.md` V1–V3 y N1; `investigacion/rubrica.md` K2 y
-§5; scripts en `<DATOS>/geotechnic\investigacion\evaluacion\scripts\`) midió capturas contra las fotos
+§5; scripts en `$GEOTECHNIC_DATOS\investigacion\evaluacion\scripts\`) midió capturas contra las fotos
 equivocadas del mismo tema. Las métricas globales no distinguen la foto correcta: AUC de bordes 0,50, colorido 0,50,
 Bhattacharyya 0,53–0,58 y luminancia 0,71, y en el scoop aprueba el 45 % de los pares cruzados. La estructura separa algo
 mejor: HOG 0,68–0,73, SSIM 0,50–0,65 y chamfer de Canny 0,60–0,61.

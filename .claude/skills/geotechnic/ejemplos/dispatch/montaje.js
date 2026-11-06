@@ -45,7 +45,7 @@ export const DIST_DISPATCH = {
   descarga: { tipo: "normal", media: 1.8, desv: 0.4, min: 0.5 },
   velVacio: { tipo: "triangular", min: 22, moda: 25, max: 28 },
   llenado: { tipo: "normalTruncada", media: 0.99, desv: 0.02, min: 0.93, max: 1.05 },
-  cuadrado: { tipo: "fijo", valor: 0.7 }, // estimado (ninguna tesis de el catálogo de fuentes lo da aparte)
+  cuadrado: { tipo: "fijo", valor: 0.7 }, // estimado (ninguna tesis del catálogo lo da aparte)
 };
 
 /** ¿Se tocan las huellas (rectángulos orientados, separación de ejes) de dos camiones con su origen en a y b? */

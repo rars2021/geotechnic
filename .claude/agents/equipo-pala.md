@@ -22,4 +22,4 @@ Eres el agente del pala eléctrica de cables (clase P&H 4100, 44–56 m³) de Ge
 5. Exporta `EQUIPO_PALA` con `medidas`, `modelo`, `medir`, `dibujo`.
 6. Banco: `node scripts/taller.mjs pala`. Prueba: el juez sobre un ejemplo con este equipo (pídelo a `orquestador-escenas`).
 
-No tocas carpetas de otros agentes. Cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
+No tocas carpetas de otros agentes. Cada número con clave de fuente y página, o «estimado» con nota.

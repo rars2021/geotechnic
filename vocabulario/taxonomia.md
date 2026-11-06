@@ -1,6 +1,6 @@
 # Taxonomía geotechnic · v0.1 (2026-10-18)
 
-_Generado por `vista.py` desde `taxonomia.json`; no se edita a mano. Estado: borrador para revisión del usuario (G1)._
+_Generado desde `taxonomia.json`; no se edita a mano. Estado: borrador para revisión del usuario (G1)._
 
 Vocabulario de condiciones del terreno minero para el catálogo de fuentes y la skill geotechnic. Cada valor genera el tag geo:<dimensión>:<valor>. 'es' y 'en' son términos de búsqueda (título, resumen, palabras clave, texto); 'preferir' son palabras que aparecen en leyendas de figuras (si falta, se usan 'es' y 'en'); 'se_ve' es lo que la figura debería mostrar; 'numeros' son los parámetros que lo gobiernan.
 

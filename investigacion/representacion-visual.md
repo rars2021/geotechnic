@@ -7,7 +7,7 @@ Fecha: 19-10-2026.
 ## Cómo leer este informe
 
 - Cada regla lleva su evidencia: clave el catálogo de fuentes + página, o URL + licencia.
-- Las rutas de imágenes son relativas a `<DATOS>/geotechnic\`. El detalle de cada imagen está en `fuentes.json`.
+- Las rutas de imágenes son relativas a `$GEOTECHNIC_DATOS\`. El detalle de cada imagen está en `fuentes.json`.
 - Figuras de tesis y papers sin licencia abierta: **referencia de estudio**. No se incrustan.
 - Fotos de Commons (CC0, dominio público, CC BY, CC BY-SA) y figuras CC BY: se pueden incrustar con atribución.
 - Las reglas ya escritas en la skill (R1–R13, M1–M9, L1–L6 de `reglas-roca.md`) no se repiten. Aquí se citan solo para
@@ -195,7 +195,7 @@ Leído en la skill (solo lectura, 19-10-2026). Cada punto dice el dueño probabl
 | N16 | Solo hay 3 ejemplos (talud, scoop, jumbo). No hay testigos, relaves, planta, dispatch, voladura, ventilación ni convenciones (sección, bloque, columna). | `ejemplos/` | `temas.json` | orquestador-escenas |
 | N17 | La paleta se mide sobre el recorte, no sobre la máquina: un recorte holgado la debilita (lo dice el propio juez). | `references/juez.md` «Paleta en v2» | C14 | juez, orquestador-escenas |
 | N18 | El color del agua no depende del cielo; no existe la playa de relave. | `kit/volumenes.js` → `agua`, `kit/escena.js` | T10 | roca-terreno |
-| N19 | Las fotos nuevas de `investigacion\` no están registradas en el catálogo de fuentes (`registrar_ttdata.py` solo lee `figuras\`). | `scripts/fotos/` | — | juez (o quien mantenga fotos) |
+| N19 | Las fotos nuevas de `investigacion\` no están registradas en el catálogo de fuentes. | `scripts/fotos/` | — | juez (o quien mantenga fotos) |
 
 ## 10. Límites de esta síntesis
 
@@ -216,7 +216,7 @@ Leído en la skill (solo lectura, 19-10-2026). Cada punto dice el dueño probabl
 
 ## 11. Revisión de completitud (19-10-2026)
 
-Verificación al azar de reglas abriendo el texto (`catalogo\textos\`, marcas «=== pág N ===») o la imagen.
+Verificación al azar de reglas abriendo el texto (texto de la tesis, marcas «=== pág N ===») o la imagen.
 
 | Regla | Qué se abrió | Resultado |
 |---|---|---|

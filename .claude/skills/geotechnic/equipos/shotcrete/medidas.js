@@ -1,4 +1,4 @@
-// Agente equipo-shotcrete · medidas con fuente (Lanzador de shotcrete). Cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
+// Agente equipo-shotcrete · medidas con fuente (Lanzador de shotcrete). Cada número con clave de fuente y página, o «estimado» con nota.
 // El modelo sigue en kit/equipos.js (v1, sin juez): pendiente pasarlo al motor A (references/motor-a.md).
 export const MEDIDAS_SHOTCRETE = {
   equipo: "Lanzador de shotcrete",

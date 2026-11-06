@@ -1,7 +1,7 @@
 # Reglas visuales · roca, taludes y labores
 
 Cada regla salió de mirar fotos reales. La columna Fuente da la clave el catálogo de fuentes y la página, o la foto abierta.
-Las fotos de tesis están en `<DATOS>/geotechnic\figuras\<tema>\` (solo estudio); las abiertas en `…\abiertas\`.
+Las fotos de tesis están en `$GEOTECHNIC_DATOS\figuras\<tema>\` (solo estudio); las abiertas en `…\abiertas\`.
 
 ## Talud y bancos
 

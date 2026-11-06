@@ -1,4 +1,4 @@
-// Agente equipo-empernador · medidas con fuente (Empernador (un brazo con carrusel)). Cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
+// Agente equipo-empernador · medidas con fuente (Empernador (un brazo con carrusel)). Cada número con clave de fuente y página, o «estimado» con nota.
 // El modelo sigue en kit/equipos.js (v1, sin juez): pendiente pasarlo al motor A (references/motor-a.md).
 export const MEDIDAS_EMPERNADOR = {
   equipo: "Empernador (un brazo con carrusel)",

@@ -22,7 +22,7 @@ export function montajeJumbo(op = {}) {
     caja: { min: [X0 - 2, -2, -5], max: [XF + 6, 7, 5] }, semilla: 21,
     ruido: { amplitud: 0.06, longitud: 2.5, octavas: 3 }, aspereza: { amplitud: 0.03, longitud: 0.5 },
     litologia: ["#7f7a71", "#726d65", "#8b857b"], agua: { base: 0.05, juntas: 0.35, piso: 0.6 },
-    fuentes: { familias: "Eulogio Huamán (2024), Retamas (MARSA) · el catálogo de fuentes hdl:20.500.14076/27684 (usadas como ejemplo)" },
+    fuentes: { familias: "Eulogio Huamán (2024), Retamas (MARSA) · hdl:20.500.14076/27684 (usadas como ejemplo)" },
   });
   const gal = galeria({
     seccion: seccionBaul(malla.seccion.ancho, malla.seccion.alto), largo: XF - X0, inicio: X0, paso: 0.11, sobreexcavacion: 0.2, macizo: mac,

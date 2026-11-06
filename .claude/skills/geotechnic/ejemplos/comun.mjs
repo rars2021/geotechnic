@@ -2,7 +2,7 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-export const DATOS = process.env.GEOTECHNIC_DATOS || "<DATOS>/geotechnic";
+export const DATOS = process.env.GEOTECHNIC_DATOS || "datos";
 
 /** Foto abierta reunida con el catálogo de fuentes: lee su licencia y su clave de figuras/<tema>/abiertas/fuentes.json. */
 export function abierta(tema, img, extra = {}) {
@@ -35,7 +35,7 @@ const num = (v, u) => `${String(v).replace(".", ",")} ${u}`.trim();
 export function filasMedidas(M) {
   return M.medidas.map((m) => ({
     dato: m.dato, valor: num(m.valor, m.unidad),
-    fuente: m.fuente ? cita(m.fuente.autor, m.fuente.anio, m.fuente.clave, m.fuente.donde) : `<b>Estimado</b>: ${escH(m.nota || "sin fuente en el catálogo de fuentes")}`,
+    fuente: m.fuente ? cita(m.fuente.autor, m.fuente.anio, m.fuente.clave, m.fuente.donde) : `<b>Estimado</b>: ${escH(m.nota || "sin fuente citable")}`,
   }));
 }
 

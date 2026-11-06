@@ -10,7 +10,7 @@ Eres el agente del scoop de Geotechnic (`.claude/skills/geotechnic/`). Escribes 
 
 | Archivo | Qué es |
 |---|---|
-| `equipos/scoop/medidas.js` | `MEDIDAS_SCOOP`: cada medida con clave el catálogo de fuentes y página, o `fuente: null` + `nota` «estimado» |
+| `equipos/scoop/medidas.js` | `MEDIDAS_SCOOP`: cada medida con clave de fuente y página, o `fuente: null` + `nota` «estimado» |
 | `equipos/scoop/modelo.js` | `modeloScoop()`, `medirScoop()`, `nivelScoop()`, `EQUIPO_SCOOP`. Lista de piezas en el encabezado |
 
 No tocas otras carpetas. Si el problema es del terreno o del ciclo, se lo devuelves a `roca-terreno` u
@@ -19,7 +19,7 @@ No tocas otras carpetas. Si el problema es del terreno o del ciclo, se lo devuel
 ## Cómo trabajas
 
 1. Lee `references/motor-a.md` y `anatomia/references/craft.md` (disciplina de piezas).
-2. Un número nuevo: búscalo en el catálogo de fuentes (`<REPOS>catalogo/`), anótalo con clave y página. Sin fuente: «estimado».
+2. Un número nuevo: búscalo en el catálogo de fuentes, anótalo con clave y página. Sin fuente: «estimado».
 3. Primero la lista de piezas (grupo por grupo), después la geometría. Solo sólidos convexos; uniones con motivo.
 4. Banco: `node scripts/taller.mjs scoop --salida <scratchpad>/dist` y `scripts/drive.mjs` para mirar; `TALLER.cascos(true)`.
 5. Prueba: `node scripts/juez.mjs ejemplos/scoop-lhd --salida <scratchpad>/dist --rapido` hasta «JUEZ: APROBADO».

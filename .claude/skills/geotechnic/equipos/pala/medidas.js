@@ -1,4 +1,4 @@
-// Agente equipo-pala · medidas con fuente (Pala eléctrica de cables clase P&H 4100). Cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
+// Agente equipo-pala · medidas con fuente (Pala eléctrica de cables clase P&H 4100). Cada número con clave de fuente y página, o «estimado» con nota.
 // Modelo en el motor A: equipos/pala/modelo.js (modeloPala). El v1 de kit/equipos.js (palaElectrica) queda para escenas viejas.
 // «Medido»: leído en la fig. 4.17 de Arzapalo Gonzales (2022), plano de rango del P&H 4100XPC (especificaciones Komatsu
 // Mining) con grilla de 2 m; la figura es de baja resolución (≈ 0,08 m por píxel): tolerancias de 5–8 %.

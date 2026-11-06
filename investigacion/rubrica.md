@@ -156,7 +156,7 @@ Cada criterio dice qué mide el juez automático (líneas de `references/juez.md
 ## 3. Registro de cada puntaje
 
 Una carpeta por tema y un archivo por evaluador y ronda:
-`<DATOS>/geotechnic\puntajes\<tema-id>\<evaluador>-<AAAA-MM-DD>.json`
+`$GEOTECHNIC_DATOS\puntajes\<tema-id>\<evaluador>-<AAAA-MM-DD>.json`
 (datos fuera del repo, como pide `agentes.md`). Evaluador: `usuario`, `agente-a`, `agente-b`, `juez`.
 
 ```json
@@ -192,7 +192,7 @@ Una carpeta por tema y un archivo por evaluador y ronda:
 ## 4. De un puntaje bajo a una tarea
 
 Toda nota ≤ 2 abre una tarea; nota 0 en K1, K2 o K7 la marca `bloquea: true`. La tarea va a
-`<DATOS>/geotechnic\puntajes\tareas.jsonl`, una línea por tarea:
+`$GEOTECHNIC_DATOS\puntajes\tareas.jsonl`, una línea por tarea:
 
 ```json
 {"tema":"pala-electrica-carguio","criterio":"K3","nota":2,"dueño":"equipo-pala","hallazgo":"falta el cable de cola","regla":"E3","evidencia":"Bucyrus 822 (CC BY 2.0)","umbral":"nota ≥ 3","bloquea":false,"estado":"abierta"}
@@ -250,7 +250,7 @@ fotos, sin ver la ficha ni las notas del otro. Luego el usuario con la hoja ráp
 y par cruzado, y Spearman ≥ 0,5 con la nota del usuario en su criterio. Si no, queda informativa.
 
 **Cuándo repetir.** Tras cada cambio de la skill que toque un criterio, tras cambiar el modelo de los agentes, y cada
-10 temas nuevos. Cada ronda guarda `<DATOS>/geotechnic\puntajes\calibracion-<n>.json` con kappa, ICC, IC, sesgo
+10 temas nuevos. Cada ronda guarda `$GEOTECHNIC_DATOS\puntajes\calibracion-<n>.json` con kappa, ICC, IC, sesgo
 y decisiones por criterio.
 
 ## 6. Hoja rápida para el usuario
@@ -286,4 +286,4 @@ El orquestador pasa cada fila a JSON (`"evaluador": "usuario"`) y abre las tarea
   doi:10.1007/s11251-021-09541-w págs. 8, 12; doi:10.1007/s41651-020-00071-6 págs. 5-6.
 - Acuerdo entre evaluadores: doi:10.1007/s11251-022-09611-7 págs. 12-13; Koo y Li 2016 (https://pmc.ncbi.nlm.nih.gov/articles/PMC4913118/).
 - Agente como juez: arXiv 2312.14867. Métricas perceptuales: arXiv 1801.03924, arXiv 2004.07728.
-- Experimento de pares cruzados: `<DATOS>/geotechnic\investigacion\evaluacion\scripts\`.
+- Experimento de pares cruzados: `$GEOTECHNIC_DATOS\investigacion\evaluacion\scripts\`.

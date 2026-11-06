@@ -1,5 +1,5 @@
 // Agente equipo-jumbo · medidas con fuente del jumbo de dos brazos (clase Boomer E2C).
-// Las que no tienen fuente en el catálogo de fuentes dicen «estimado»: el juez las informa pero no bloquea con ellas.
+// Las que no tienen fuente citable dicen «estimado»: el juez las informa pero no bloquea con ellas.
 // Revisión 2026-10-19: el catálogo de fuentes no tiene la ficha técnica del Boomer E2C (el PDF de Epiroc no se pudo bajar). Lo único
 // dimensional es la lista genérica de Huapaya Hurtado (2024, pág. 26 del PDF) para jumbos frontales: largo 9–12 m,
 // alto con caseta 2,6–3 m, ancho 1,8–2 m, radio de giro 4,4–5,5 m. Un aviso de equipo usado (no es ficha, no está en

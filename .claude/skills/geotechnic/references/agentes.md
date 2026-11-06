@@ -42,8 +42,8 @@ paralelo (son independientes) y después 2.
 
 ## Reglas comunes
 
-- La verdad primero: cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
-- Datos pesados fuera del repo (`<DATOS>/geotechnic`).
+- La verdad primero: cada número con clave de fuente y página, o «estimado» con nota.
+- Datos pesados fuera del repo (`$GEOTECHNIC_DATOS`).
 - No tocar SSTutor ni `sstutor-anatomia` (Anatomy se usa desde la copia en `anatomia/`).
 - Modos completo y en blanco; una relación por pieza señalable; tema claro y oscuro; Artifacts privados.
 - Estudio: colores de `PALETA` (nunca sueltos), un solo acento, toda malla cerrada salvo calcos declarados.

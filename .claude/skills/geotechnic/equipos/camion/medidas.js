@@ -1,4 +1,4 @@
-// Agente equipo-camion · medidas con fuente (Camión de acarreo clase CAT 793). Cada número con clave el catálogo de fuentes y página, o «estimado» con nota.
+// Agente equipo-camion · medidas con fuente (Camión de acarreo clase CAT 793). Cada número con clave de fuente y página, o «estimado» con nota.
 // El modelo está en equipos/camion/modelo.js (motor A). El v1 de kit/equipos.js (camionAcarreo) queda para escenas viejas.
 export const MEDIDAS_CAMION = {
   equipo: "Camión de acarreo clase CAT 793",

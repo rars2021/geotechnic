@@ -1,4 +1,4 @@
-# datos pesados viven en <DATOS>/geotechnic
+# datos pesados viven fuera del repo ($GEOTECHNIC_DATOS)
 *.tif
 *.las
 *.laz
